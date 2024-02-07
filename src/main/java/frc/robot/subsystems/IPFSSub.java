@@ -9,6 +9,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.PickupConstants;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -33,8 +35,8 @@ public class IPFSSub extends SubsystemBase {
   /** Creates a new IPFSSub. */
   public IPFSSub() {
   TLShooterMotor = new CANSparkMax(ShooterConstants.TLShooterMotor, MotorType.kBrushless);
-  TLShooterMotor.setInverted(true);
   TRShooterMotor = new CANSparkMax(ShooterConstants.TRShooterMotor, MotorType.kBrushless);
+  TRShooterMotor.setInverted(true);
   BLShooterMotor = new CANSparkMax(ShooterConstants.BLShooterMotor, MotorType.kBrushless);
   BRShooterMotor = new CANSparkMax(ShooterConstants.BRShooterMotor, MotorType.kBrushless);
   Feeder = new CANSparkMax(PickupConstants.PFeederMotor, MotorType.kBrushless);
@@ -84,6 +86,8 @@ public class IPFSSub extends SubsystemBase {
     SmartDashboard.putNumber("TRSpeed", TRVelocity());
     SmartDashboard.putNumber("BLSpeed", BLVelocity());
     SmartDashboard.putNumber("BRSpeed", BRVelocity());
+    SmartDashboard.putNumber("Speed", 0);
+    SmartDashboard.putNumber("SpeedTest", SmartDashboard.getNumber("Speed", 0));
 
   }
 }

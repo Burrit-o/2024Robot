@@ -17,7 +17,8 @@ public class Shoot extends Command {
   public Shoot(IPFSSub subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
-    m_driverController = new CommandXboxController(1);
+    addRequirements(m_subsystem);
+    m_driverController = new CommandXboxController(0);
   }
 
   // Called when the command is initially scheduled.
@@ -27,12 +28,14 @@ public class Shoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    ((IPFSSub) m_subsystem).Shoot(m_driverController.getRawAxis(5));
+    ((IPFSSub) m_subsystem).Shoot(m_driverController.getRawAxis(3));
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+
+  }
 
   // Returns true when the command should end.
   @Override

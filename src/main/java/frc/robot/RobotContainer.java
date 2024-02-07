@@ -12,6 +12,9 @@ import frc.robot.commands.Shoot;
 import frc.robot.subsystems.IPFSSub;
 import frc.robot.commands.Intake;
 import frc.robot.commands.RunAll;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -52,6 +55,8 @@ public class RobotContainer {
     xButton.whileTrue(new Intake(m_IPFSSub));
     Trigger rBumper = m_driverController.rightBumper();
     rBumper.whileTrue(new RunAll(m_IPFSSub));
+    
+
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     /*new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));*/
