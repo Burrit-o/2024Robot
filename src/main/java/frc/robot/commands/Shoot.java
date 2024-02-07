@@ -17,7 +17,7 @@ public class Shoot extends Command {
   public Shoot(IPFSSub subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
-    addRequirements(m_subsystem);
+    addRequirements(m_subsystem); 
     m_driverController = new CommandXboxController(0);
   }
 
@@ -33,9 +33,7 @@ public class Shoot extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
