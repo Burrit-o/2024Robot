@@ -25,9 +25,8 @@ public class RunAll extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    ((IPFSSub) m_subsystem).Feed(0.25);
+    ((IPFSSub) m_subsystem).Feed(0.5);
     ((IPFSSub) m_subsystem).Intake(0.5);
-    ((IPFSSub) m_subsystem).Shoot(0.75);
   }
 
   // Called once the command ends or is interrupted.
@@ -35,7 +34,6 @@ public class RunAll extends Command {
   public void end(boolean interrupted) {
      ((IPFSSub) m_subsystem).Feed(0);
     ((IPFSSub) m_subsystem).Intake(0);
-    ((IPFSSub) m_subsystem).Shoot(0);
   }
 
   // Returns true when the command should end.
