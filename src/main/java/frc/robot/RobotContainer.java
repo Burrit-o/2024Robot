@@ -54,8 +54,8 @@ public class RobotContainer {
     aButton.whileTrue(new Feed(m_IPFSSub));
     Trigger xButton = m_driverController.x();
     xButton.whileTrue(new Intake(m_IPFSSub));
-    Trigger rBumper = m_driverController.rightBumper();
-    rBumper.whileTrue(new RunAll(m_IPFSSub));
+    Trigger lBumper = m_driverController.leftBumper();
+    lBumper.whileTrue(new RunAll(m_IPFSSub));
     
 
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
