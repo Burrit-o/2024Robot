@@ -4,16 +4,16 @@
 
 package frc.robot;
 
+import frc.robot.Constants.LiftConstants;
 import frc.robot.Constants.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.Feed;
-import frc.robot.commands.Shoot;
 import frc.robot.subsystems.IPFSSub;
-import frc.robot.commands.Intake;
-import frc.robot.commands.RunAll;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.FeedandFireAmp;
+import frc.robot.commands.FeedandFireSpeak;
+import frc.robot.commands.Pickup;
+import frc.robot.commands.SetHeight;
+
 
 
 /**
@@ -27,14 +27,13 @@ public class RobotContainer {
   private final IPFSSub m_IPFSSub;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final CommandXboxController m_operatorController =
+      new CommandXboxController(OperatorConstants.kOperatorControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     m_IPFSSub = new IPFSSub();
-    m_IPFSSub.setDefaultCommand(new Shoot(m_IPFSSub));
     configureBindings();
   }
 
@@ -50,13 +49,21 @@ public class RobotContainer {
   private void configureBindings() {
 
       
-    Trigger aButton = m_driverController.a();
-    aButton.whileTrue(new Feed(m_IPFSSub));
-    Trigger xButton = m_driverController.x();
-    xButton.whileTrue(new Intake(m_IPFSSub));
-    Trigger lBumper = m_driverController.leftBumper();
-    lBumper.whileTrue(new RunAll(m_IPFSSub));
-    
+    Trigger rBumper = m_operatorController.rightBumper();
+    rBumper.whileTrue(new FeedandFireSpeak(m_IPFSSub));
+    Trigger lBumper = m_operatorController.leftBumper();
+    lBumper.whileTrue(new FeedandFireAmp(m_IPFSSub));
+    Trigger aButton = m_operatorController.a();
+    aButton.whileTrue(new Pickup(m_IPFSSub));
+
+    Trigger DPadUp = m_operatorController.povUp();
+    Trigger DPadDown = m_operatorController.povDown();
+    Trigger DPadLeft = m_operatorController.povLeft();
+    Trigger DPadRight = m_operatorController.povRight();
+    DPadUp.whileTrue(new SetHeight(m_IPFSSub, LiftConstants.ClimbTop));
+    DPadDown.whileTrue(new SetHeight(m_IPFSSub, LiftConstants.ClimbBottom));
+    DPadLeft.whileTrue(new SetHeight(m_IPFSSub, LiftConstants.Stow));
+    DPadRight.whileTrue(new SetHeight(m_IPFSSub, LiftConstants.Short));
 
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     /*new Trigger(m_exampleSubsystem::exampleCondition)
@@ -64,7 +71,7 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-   // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+   // m_operatorController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
 
   /**

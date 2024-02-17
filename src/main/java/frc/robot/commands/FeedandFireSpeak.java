@@ -4,39 +4,46 @@
 
 package frc.robot.commands;
 
-
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants.LiftConstants;
 import frc.robot.subsystems.IPFSSub;
 
-public class Feed extends Command {
-  private final Subsystem m_subsystem;
-  /** Creates a new Feed. */
-  public Feed(IPFSSub subsystem) {
+public class FeedandFireSpeak extends Command {
+  private final IPFSSub m_subsystem;
+  /** Creates a new FeedandFire. */
+  public FeedandFireSpeak(IPFSSub subsystem) {
     m_subsystem = subsystem;
-    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(m_subsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_subsystem.setLiftSetpoint(LiftConstants.SpeakerHeight);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    ((IPFSSub) m_subsystem).Feed(0.25);
+    m_subsystem.runLiftSetpoint();
+    m_subsystem.Feed(0.167);
+    m_subsystem.Shoot(1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-        ((IPFSSub) m_subsystem).Feed(0);
-
+    m_subsystem.Feed(0);
+    m_subsystem.Shoot(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (Math.abs(LiftConstants.SpeakerHeight-m_subsystem.CurrentHeight()) <= 20) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
