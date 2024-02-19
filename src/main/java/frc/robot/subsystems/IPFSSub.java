@@ -36,7 +36,7 @@ public class IPFSSub extends SubsystemBase {
   private final RelativeEncoder BLEncoder;
   private final RelativeEncoder BREncoder;
 
-  private final DigitalInput PickupSensor;  
+  public final DigitalInput PickupSensor;  
   private final TimeOfFlight LiftHeight;
 
   public PIDController LiftSetpoint;

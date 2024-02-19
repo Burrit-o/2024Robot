@@ -42,9 +42,9 @@ public class Pickup extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(LiftConstants.PickupHeight-m_subsystem.CurrentHeight()) <= 20) {
+    if (m_subsystem.PickupSensor.get()){
       return true;
-    } else {
+    }else{
       return false;
     }
   }
