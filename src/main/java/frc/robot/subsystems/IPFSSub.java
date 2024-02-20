@@ -122,6 +122,10 @@ public class IPFSSub extends SubsystemBase {
     return LiftHeight.getRange();
   }
 
+  public boolean haveNote() {
+    return PickupSensor.get();
+  }
+
     @Override
 
   public void periodic() {
