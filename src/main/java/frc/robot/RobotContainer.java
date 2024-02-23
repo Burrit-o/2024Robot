@@ -6,9 +6,11 @@ package frc.robot;
 
 import frc.robot.Constants.LiftConstants;
 import frc.robot.Constants.OperatorConstants;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.IPFSSub;
+import frc.robot.subsystems.Lift;
 import frc.robot.commands.FeedandFireAmp;
 import frc.robot.commands.FeedandFireSpeak;
 import frc.robot.commands.Pickup;
@@ -25,6 +27,7 @@ import frc.robot.commands.SetHeight;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final IPFSSub m_IPFSSub;
+  private final Lift m_Lift;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_operatorController =
@@ -34,7 +37,9 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     m_IPFSSub = new IPFSSub();
+    m_Lift = new Lift();
     configureBindings();
+    m_Lift.setDefaultCommand(new SetHeight(m_Lift, LiftConstants.Stow));
   }
 
   /**
@@ -51,19 +56,26 @@ public class RobotContainer {
       
     Trigger rBumper = m_operatorController.rightBumper();
     rBumper.whileTrue(new FeedandFireSpeak(m_IPFSSub));
+    rBumper.onTrue(new InstantCommand(() -> m_Lift.setLiftSetpoint(LiftConstants.SpeakerHeight)));
+
     Trigger lBumper = m_operatorController.leftBumper();
     lBumper.whileTrue(new FeedandFireAmp(m_IPFSSub));
+    lBumper.onTrue(new InstantCommand(() -> m_Lift.setLiftSetpoint(LiftConstants.AmpHeight)));
+    
     Trigger aButton = m_operatorController.a();
     aButton.whileTrue(new Pickup(m_IPFSSub));
+    aButton.onTrue(new InstantCommand(() -> m_Lift.setLiftSetpoint(LiftConstants.PickupHeight)));
+
 
     Trigger DPadUp = m_operatorController.povUp();
     Trigger DPadDown = m_operatorController.povDown();
     Trigger DPadLeft = m_operatorController.povLeft();
     Trigger DPadRight = m_operatorController.povRight();
-    DPadUp.whileTrue(new SetHeight(m_IPFSSub, LiftConstants.ClimbTop));
-    DPadDown.whileTrue(new SetHeight(m_IPFSSub, LiftConstants.ClimbBottom));
-    DPadLeft.whileTrue(new SetHeight(m_IPFSSub, LiftConstants.Stow));
-    DPadRight.whileTrue(new SetHeight(m_IPFSSub, LiftConstants.Short));
+    DPadUp.onTrue(new InstantCommand(() -> m_Lift.setLiftSetpoint(LiftConstants.ClimbTop)));
+    DPadDown.onTrue(new InstantCommand(() -> m_Lift.setLiftSetpoint(LiftConstants.ClimbBottom)));
+    DPadLeft.onTrue(new InstantCommand(() -> m_Lift.setLiftSetpoint(LiftConstants.Stow)));
+    DPadRight.onTrue(new InstantCommand(() -> m_Lift.setLiftSetpoint(LiftConstants.Short)));
+
 
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     /*new Trigger(m_exampleSubsystem::exampleCondition)
