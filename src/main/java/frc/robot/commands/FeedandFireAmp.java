@@ -4,39 +4,49 @@
 
 package frc.robot.commands;
 
-
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.IPFSSub;
 
-public class Feed extends Command {
-  private final Subsystem m_subsystem;
-  /** Creates a new Feed. */
-  public Feed(IPFSSub subsystem) {
+public class FeedandFireAmp extends Command {
+  private final IPFSSub m_subsystem;
+  private final Timer m_timer;
+  /** Creates a new FeedandFire. */
+  public FeedandFireAmp(IPFSSub subsystem) {
     m_subsystem = subsystem;
-    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(m_subsystem);
+    m_timer = new Timer();
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_timer.start();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    ((IPFSSub) m_subsystem).Feed(0.25);
+    m_subsystem.Feed(0.167);
+    m_subsystem.Shoot(1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-        ((IPFSSub) m_subsystem).Feed(0);
-
+    m_subsystem.Feed(0);
+    m_subsystem.Shoot(0);
+    m_timer.stop();
+    m_timer.reset();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (m_timer.get() >= 3){
+      return true;
+    }else{
+      return false;
+    }
   }
 }

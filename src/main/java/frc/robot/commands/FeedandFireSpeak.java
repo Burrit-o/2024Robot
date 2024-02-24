@@ -4,40 +4,47 @@
 
 package frc.robot.commands;
 
-
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.IPFSSub;
 
-public class Shoot extends Command {
-  private final Subsystem m_subsystem;
-  private final CommandXboxController m_driverController;
-  /** Creates a new Shoot. */
-  public Shoot(IPFSSub subsystem) {
-    // Use addRequirements() here to declare subsystem dependencies.
+public class FeedandFireSpeak extends Command {
+  private final IPFSSub m_subsystem;
+  private final Timer m_timer;
+  /** Creates a new FeedandFire. */
+  public FeedandFireSpeak(IPFSSub subsystem) {
     m_subsystem = subsystem;
-    addRequirements(m_subsystem); 
-    m_driverController = new CommandXboxController(0);
+    addRequirements(m_subsystem);
+    m_timer = new Timer();
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_timer.start();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    ((IPFSSub) m_subsystem).Shoot(m_driverController.getRawAxis(3));
+    m_subsystem.Feed(0.167);
+    m_subsystem.Shoot(1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_subsystem.Feed(0);
+    m_subsystem.Shoot(0);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (m_timer.get() >= 3) {
+      return true;
+    }else{
+      return false;
+    }
   }
 }

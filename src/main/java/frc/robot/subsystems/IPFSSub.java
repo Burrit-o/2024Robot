@@ -7,11 +7,9 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import frc.robot.Constants.ShooterConstants;
-import frc.robot.Constants.PickupConstants;
-import edu.wpi.first.util.sendable.SendableBuilder;
+import com.revrobotics.CANSparkBase.IdleMode;
+import frc.robot.Constants.IPFSConstants;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -21,29 +19,49 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 public class IPFSSub extends SubsystemBase {
   private final CANSparkMax TLShooterMotor;
   private final CANSparkMax Feeder;
+  private final CANSparkMax Feeder2;
   private final CANSparkMax TRShooterMotor;
   private final CANSparkMax BLShooterMotor;
   private final CANSparkMax BRShooterMotor;
-  private final CANSparkMax IntakeMotor;
+  private final CANSparkMax IntakeMotorTop;
+  private final CANSparkMax IntakeMotorBottom;
+  
   
   private final RelativeEncoder TLEncoder; 
   private final RelativeEncoder TREncoder;
   private final RelativeEncoder BLEncoder;
   private final RelativeEncoder BREncoder;
 
-  private final DigitalInput PickupSensor;
-  
+  public final DigitalInput PickupSensor;  
 
 
   /** Creates a new IPFSSub. */
   public IPFSSub() {
-  TLShooterMotor = new CANSparkMax(ShooterConstants.TLShooterMotor, MotorType.kBrushless);
-  TRShooterMotor = new CANSparkMax(ShooterConstants.TRShooterMotor, MotorType.kBrushless);
+  TLShooterMotor = new CANSparkMax(IPFSConstants.TLShooterMotor, MotorType.kBrushless);
+  TRShooterMotor = new CANSparkMax(IPFSConstants.TRShooterMotor, MotorType.kBrushless);
   TRShooterMotor.setInverted(true);
-  BLShooterMotor = new CANSparkMax(ShooterConstants.BLShooterMotor, MotorType.kBrushless);
-  BRShooterMotor = new CANSparkMax(ShooterConstants.BRShooterMotor, MotorType.kBrushless);
-  Feeder = new CANSparkMax(PickupConstants.PFeederMotor, MotorType.kBrushless);
-  IntakeMotor = new CANSparkMax(PickupConstants.PickupMotor, MotorType.kBrushless);
+  TLShooterMotor.setIdleMode(IdleMode.kBrake);
+  TRShooterMotor.setIdleMode(IdleMode.kBrake);
+
+  BLShooterMotor = new CANSparkMax(IPFSConstants.BLShooterMotor, MotorType.kBrushless);
+  BRShooterMotor = new CANSparkMax(IPFSConstants.BRShooterMotor, MotorType.kBrushless);
+  BRShooterMotor.setInverted(true);
+  BLShooterMotor.setIdleMode(IdleMode.kBrake);
+  BRShooterMotor.setIdleMode(IdleMode.kBrake);
+
+  Feeder = new CANSparkMax(IPFSConstants.LFeederMotor, MotorType.kBrushless);
+  Feeder2 = new CANSparkMax(IPFSConstants.RFeederMotor, MotorType.kBrushless);
+  Feeder2.setInverted(true);
+  Feeder.setIdleMode(IdleMode.kBrake);
+  Feeder2.setIdleMode(IdleMode.kBrake);
+
+  
+  IntakeMotorTop = new CANSparkMax(IPFSConstants.PickupMotorTop, MotorType.kBrushless);
+  IntakeMotorBottom = new CANSparkMax(IPFSConstants.PickupMotorTop, MotorType.kBrushless);
+  IntakeMotorBottom.setInverted(true);
+  IntakeMotorTop.setIdleMode(IdleMode.kBrake);
+  IntakeMotorBottom.setIdleMode(IdleMode.kBrake);  
+
   
   PickupSensor = new DigitalInput (1);
 
@@ -74,26 +92,29 @@ public class IPFSSub extends SubsystemBase {
     //left shooter motor temporarily off due to spark max issues
     TLShooterMotor.set(speed);
     TRShooterMotor.set(speed);
+    BLShooterMotor.set(speed);
+    BRShooterMotor.set(speed);
   }
   
   public void Feed(double speed) {
     Feeder.set(speed);
+    Feeder2.set(speed);
   }
 
   public void Intake(double speed) {
-   IntakeMotor.set(speed);
+   IntakeMotorTop.set(speed);
+   IntakeMotorBottom.set(speed);
   }
-    @Override
 
+
+  public boolean haveNote() {
+    return PickupSensor.get();
+  }
+
+    @Override
 
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("TLSpeed", TLVelocity());
-    SmartDashboard.putNumber("TRSpeed", TRVelocity());
-    SmartDashboard.putNumber("BLSpeed", BLVelocity());
-    SmartDashboard.putNumber("BRSpeed", BRVelocity());
-    SmartDashboard.putNumber("Speed", 0);
-    SmartDashboard.putNumber("SpeedTest", SmartDashboard.getNumber("Speed", 0));
     SmartDashboard.putBoolean("PickupSensor", PickupSensor.get());
 
   }

@@ -4,37 +4,35 @@
 
 package frc.robot.commands;
 
-
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.IPFSSub;
+import frc.robot.subsystems.Lift;
 
-
-public class RunAll extends Command {
-  private final Subsystem m_subsystem;
-  /** Creates a new RunAll. */
-  public RunAll(IPFSSub subsystem) {
-    m_subsystem = subsystem;
+public class SetHeight extends Command {
+  private final Lift m_Lift;
+  private final double m_setpoint;
+  /** Creates a new SetHeight. */
+  public SetHeight(Lift lift, double setpoint) {
+      m_Lift = lift;
+      m_setpoint = setpoint;
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(m_Lift);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_Lift.setLiftSetpoint(m_setpoint);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    ((IPFSSub) m_subsystem).Feed(0.5);
-    ((IPFSSub) m_subsystem).Intake(0.5);
+    m_Lift.runLiftSetpoint();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-     ((IPFSSub) m_subsystem).Feed(0);
-    ((IPFSSub) m_subsystem).Intake(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
