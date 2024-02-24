@@ -10,13 +10,17 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LiftConstants;
 
 public class Lift extends SubsystemBase {
   private final CANSparkMax LeftLiftMotor, RightLiftMotor;
   private PIDController LiftSetpoint;
-  private final TimeOfFlight LiftHeight;
+  private final TimeOfFlight ToF, BackupToF;
+  private final double meanHeight;
+  private final double LiftHeight;
+  private final double BackupLiftHeight;
 
 
   /** Creates a new Lift. */
@@ -29,7 +33,14 @@ public class Lift extends SubsystemBase {
 
     LiftSetpoint = new PIDController(.08, .008, 0);
 
-    LiftHeight = new TimeOfFlight(LiftConstants.ToFSensor);
+    ToF = new TimeOfFlight(LiftConstants.ToFSensor);
+    BackupToF = new TimeOfFlight(LiftConstants.BackupToFSensor);
+    LiftHeight = ToF.getRange();
+    BackupLiftHeight = BackupToF.getRange();
+
+    meanHeight = (LiftHeight + BackupLiftHeight)/2;
+
+
 
 
   }
@@ -45,14 +56,25 @@ public class Lift extends SubsystemBase {
   }
 
   public void runLiftSetpoint() {
-    setLift(LiftSetpoint.calculate(LiftHeight.getRange()));
+    setLift(LiftSetpoint.calculate(currentHeight()));
   }
 
-  public double CurrentHeight() {
-    return LiftHeight.getRange();
+  public double currentHeight() {
+    if (LiftHeight > meanHeight + BackupToF.getRangeSigma() ||  LiftHeight < meanHeight - BackupToF.getRangeSigma())
+
+     {return BackupLiftHeight;}
+
+    else if (BackupLiftHeight > meanHeight + ToF.getRangeSigma() ||  BackupLiftHeight < meanHeight - ToF.getRangeSigma())
+
+     {return LiftHeight;}
+
+    else {return meanHeight;}
   }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("LiftHeight", LiftHeight);
+    SmartDashboard.putNumber("BackupLiftHeight", BackupLiftHeight);
+
   }
 }

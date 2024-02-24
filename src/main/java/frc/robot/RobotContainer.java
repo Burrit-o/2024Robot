@@ -39,7 +39,7 @@ public class RobotContainer {
     m_IPFSSub = new IPFSSub();
     m_Lift = new Lift();
     configureBindings();
-    m_Lift.setDefaultCommand(new SetHeight(m_Lift, LiftConstants.Stow));
+    m_Lift.setDefaultCommand(new SetHeight(m_Lift, LiftConstants.defaultStartingHeight));
   }
 
   /**
@@ -61,7 +61,7 @@ public class RobotContainer {
     Trigger lBumper = m_operatorController.leftBumper();
     lBumper.whileTrue(new FeedandFireAmp(m_IPFSSub));
     lBumper.onTrue(new InstantCommand(() -> m_Lift.setLiftSetpoint(LiftConstants.AmpHeight)));
-    
+
     Trigger aButton = m_operatorController.a();
     aButton.whileTrue(new Pickup(m_IPFSSub));
     aButton.onTrue(new InstantCommand(() -> m_Lift.setLiftSetpoint(LiftConstants.PickupHeight)));
@@ -76,14 +76,6 @@ public class RobotContainer {
     DPadLeft.onTrue(new InstantCommand(() -> m_Lift.setLiftSetpoint(LiftConstants.Stow)));
     DPadRight.onTrue(new InstantCommand(() -> m_Lift.setLiftSetpoint(LiftConstants.Short)));
 
-
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    /*new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));*/
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-   // m_operatorController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
 
   /**

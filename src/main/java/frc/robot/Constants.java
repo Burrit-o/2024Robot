@@ -18,21 +18,20 @@ public final class Constants {
     public static final int kOperatorControllerPort = 1;
   }
 
-  public class PickupConstants {
-    public static final int PickupMotor = 50;
-    public static final int PFeederMotor = 51;
-    //public static final int SFeederMotor = 52;
-  }
-
-  public class ShooterConstants {
+  public class IPFSConstants {
     public static final int TLShooterMotor = 60;
     public static final int TRShooterMotor = 61;
     public static final int BLShooterMotor = 62;
     public static final int BRShooterMotor = 63;
+    public static final int PickupMotorTop = 64;
+    public static final int PickupMotorBottom = 65;
+    public static final int LFeederMotor = 66;
+    public static final int RFeederMotor = 67;
   }
 
   public class LiftConstants {
     public static final int ToFSensor = 53;
+    public static final int BackupToFSensor = 56;
     public static final int LeftLiftMotor = 54;
     public static final int RightLiftMotor = 55;
 
@@ -44,6 +43,7 @@ public final class Constants {
     public static final double Short = 50;
     public static final double PickupHeight = 50;
     public static final double Stow = 150;
+    public static final double defaultStartingHeight = Stow;
   }
 }
 
