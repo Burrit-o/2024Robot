@@ -56,7 +56,7 @@ public class RobotContainer {
       
     Trigger rBumper = m_operatorController.rightBumper();
     rBumper.whileTrue(new FeedandFireSpeak(m_IPFSSub));
-    rBumper.onTrue(new InstantCommand(() -> m_Lift.setLiftSetpoint(LiftConstants.SpeakerHeight)));
+    //rBumper.onTrue(new InstantCommand(() -> m_Lift.setLiftSetpoint(LiftConstants.SpeakerHeight)));
 
     Trigger lBumper = m_operatorController.leftBumper();
     lBumper.whileTrue(new FeedandFireAmp(m_IPFSSub));
@@ -64,7 +64,7 @@ public class RobotContainer {
 
     Trigger aButton = m_operatorController.a();
     aButton.whileTrue(new Pickup(m_IPFSSub));
-    aButton.onTrue(new InstantCommand(() -> m_Lift.setLiftSetpoint(LiftConstants.PickupHeight)));
+   // aButton.onTrue(new InstantCommand(() -> m_Lift.setLiftSetpoint(LiftConstants.PickupHeight)));
 
 
     Trigger DPadUp = m_operatorController.povUp();

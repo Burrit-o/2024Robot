@@ -19,19 +19,19 @@ public final class Constants {
   }
 
   public class IPFSConstants {
-    public static final int TLShooterMotor = 60;
-    public static final int TRShooterMotor = 61;
-    public static final int BLShooterMotor = 62;
-    public static final int BRShooterMotor = 63;
-    public static final int PickupMotorTop = 64;
-    public static final int PickupMotorBottom = 65;
-    public static final int LFeederMotor = 66;
-    public static final int RFeederMotor = 67;
+    public static final int TLShooterMotor = 50;
+    public static final int TRShooterMotor = 51;
+    public static final int BLShooterMotor = 52;
+    public static final int BRShooterMotor = 53;
+    public static final int PickupMotorTop = 56;
+    public static final int PickupMotorBottom = 57;
+    public static final int LFeederMotor = 58;
+    public static final int RFeederMotor = 59;
   }
 
   public class LiftConstants {
-    public static final int ToFSensor = 53;
-    public static final int BackupToFSensor = 56;
+    public static final int ToFSensor = 62;
+    public static final int BackupToFSensor = 61;
     public static final int LeftLiftMotor = 54;
     public static final int RightLiftMotor = 55;
 

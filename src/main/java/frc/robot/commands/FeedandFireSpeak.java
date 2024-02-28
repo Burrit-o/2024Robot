@@ -27,13 +27,15 @@ public class FeedandFireSpeak extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.Feed(0.167);
+    m_subsystem.Feed(1);
     m_subsystem.Shoot(1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_timer.stop();
+    m_timer.reset();
     m_subsystem.Feed(0);
     m_subsystem.Shoot(0);
   }
