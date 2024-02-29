@@ -71,14 +71,14 @@ public final class Constants {
         public static final boolean kFrontRightDriveAbsoluteEncoderReversed = false;
         public static final boolean kBackRightDriveAbsoluteEncoderReversed = false;
 
-        /*public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = 109.86 * Math.PI/180.0;
+        public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = 109.86 * Math.PI/180.0;
         public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = 240.47 * Math.PI/180.0;
         public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = 334.86 * Math.PI/180.0;
-        public static final double kBackRightDriveAbsoluteEncoderOffsetRad = 191.16 * Math.PI/180.0;*/
-        public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = 167.695 * Math.PI/180.0;
-        public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = 45.0 * Math.PI/180.0;
-        public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = 284.15 * Math.PI/180.0;
-        public static final double kBackRightDriveAbsoluteEncoderOffsetRad = 245.25 * Math.PI/180.0;
+        public static final double kBackRightDriveAbsoluteEncoderOffsetRad = 191.16 * Math.PI/180.0;
+        // public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = 167.695 * Math.PI/180.0;
+        // public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = 45.0 * Math.PI/180.0;
+        // public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = 284.15 * Math.PI/180.0;
+        // public static final double kBackRightDriveAbsoluteEncoderOffsetRad = 245.25 * Math.PI/180.0;
 
 
         public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
@@ -91,22 +91,22 @@ public final class Constants {
         public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3;
 
         /* (Also Incorrect) Feedforward constants from SysID run on 2/19/24 */
-        //public static final double kSLeft = 0.95317;
-        //public static final double kVLeft = 0.26112;
-        //public static final double kALeft = 1.0539;
+        public static final double kSLeft = 0.95317;
+        public static final double kVLeft = 0.26112;
+        public static final double kALeft = 1.0539;
 
-        //public static final double kSRight = 0.48604;
-        //public static final double kVRight = 1.7619;
-        //public static final double kARight = 0.66864;
+        public static final double kSRight = 0.48604;
+        public static final double kVRight = 1.7619;
+        public static final double kARight = 0.66864;
 
         /* (Incorrect) Feedforward constants from Daedalus */
-         public static final double kSLeft = 0.097576;
+         /*public static final double kSLeft = 0.097576;
          public static final double kVLeft = 2.6933;
          public static final double kALeft = 0.26236;
 
          public static final double kSRight = 0.099437;
          public static final double kVRight = 2.6173;
-         public static final double kARight = 0.11195;
+         public static final double kARight = 0.11195;*/
 
         // Drive/Rotation gain
         public static final double kRotGain = 2;
@@ -183,15 +183,18 @@ public final class Constants {
     public static final int BackupToFSensor = 61;
     public static final int LeftLiftMotor = 54;
     public static final int RightLiftMotor = 55;
+    public static final int TopLim = 3;
+    public static final int BottomLim = 2;
 
     //Setpoint Heights, totally random at the moment, once tested will be replaced
-    public static final double ClimbTop = 500;
+    public static final double ClimbTop = 425;
     public static final double ClimbBottom = 100;
-    public static final double AmpHeight = 450;
+    public static final double AmpHeight = 300;
     public static final double SpeakerHeight = 300;
-    public static final double Short = 50;
-    public static final double PickupHeight = 50;
-    public static final double Stow = 150;
+    public static final double Short = 70;
+    public static final double PickupHeight = 70;
+    public static final double Stow = 250;
+    //stow is 250 usually
     public static final double defaultStartingHeight = Stow;
   }
 }

@@ -30,6 +30,7 @@ import frc.robot.subsystems.Lift;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.commands.AprilTagAlignCmd;
 import frc.robot.commands.FeedandFireSpeak;
+import frc.robot.commands.ManualLift;
 import frc.robot.commands.NoteAlignCmd;
 import frc.robot.commands.Pickup;
 import frc.robot.commands.SetHeight;
@@ -67,7 +68,9 @@ public class RobotContainer {
     m_IPFSSub = new IPFSSub();
     m_Lift = new Lift();
     configureBindings();
-    m_Lift.setDefaultCommand(new SetHeight(m_Lift, LiftConstants.defaultStartingHeight));
+    //m_Lift.setDefaultCommand(new SetHeight(m_Lift, LiftConstants.defaultStartingHeight));
+    m_Lift.setDefaultCommand(new ManualLift(m_Lift));
+
 
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
                                 swerveSubsystem,
@@ -139,7 +142,7 @@ public class RobotContainer {
     Trigger OPdDPad = m_operatorController.povDown();
     Trigger OPlDPad = m_operatorController.povLeft();
     //Trigger OPrDPad = m_operatorController.povRight();
-    OPuDPad.onTrue(new ParallelDeadlineGroup(new Pickup(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftSetpoint(LiftConstants.PickupHeight))));
+    //OPuDPad.onTrue(new ParallelDeadlineGroup(new Pickup(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftSetpoint(LiftConstants.PickupHeight))));
     
     // Press and hold the B button to Pathfind to Roughly Source. Releasing button should cancel the command
      OPdDPad.whileTrue(AutoBuilder.pathfindToPose(

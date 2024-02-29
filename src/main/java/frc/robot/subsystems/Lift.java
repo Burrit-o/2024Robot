@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LiftConstants;
@@ -18,9 +19,10 @@ public class Lift extends SubsystemBase {
   private final CANSparkMax LeftLiftMotor, RightLiftMotor;
   private PIDController LiftSetpoint;
   private final TimeOfFlight ToF, BackupToF;
-  private final double meanHeight;
   private final double LiftHeight;
   private final double BackupLiftHeight;
+  private final DigitalInput TopLim;
+  private final DigitalInput BottomLim;
 
 
   /** Creates a new Lift. */
@@ -31,15 +33,16 @@ public class Lift extends SubsystemBase {
     LeftLiftMotor.setIdleMode(IdleMode.kBrake);
     RightLiftMotor.setIdleMode(IdleMode.kBrake);
 
-    LiftSetpoint = new PIDController(.08, .008, 0);
+    LiftSetpoint = new PIDController(.003, 0.00225, 0.000075);
 
     ToF = new TimeOfFlight(LiftConstants.ToFSensor);
     BackupToF = new TimeOfFlight(LiftConstants.BackupToFSensor);
     LiftHeight = ToF.getRange();
     BackupLiftHeight = BackupToF.getRange();
 
-    meanHeight = (LiftHeight + BackupLiftHeight)/2;
-
+    //meanHeight = (LiftHeight + BackupLiftHeight)/2;
+    TopLim = new DigitalInput(3);
+    BottomLim = new DigitalInput(2);
 
 
 
@@ -47,8 +50,22 @@ public class Lift extends SubsystemBase {
 
 
   public void setLift(double speed) {
-    LeftLiftMotor.set(speed);
-    RightLiftMotor.set(speed);
+    if (speed < 0) {
+      if (!TopLim.get()) {
+          LeftLiftMotor.set(0);
+          RightLiftMotor.set(0);   
+      } else {
+          LeftLiftMotor.set(speed);
+          RightLiftMotor.set(speed);      }
+  } else {
+      if (!BottomLim.get()) {
+          LeftLiftMotor.set(0);
+          RightLiftMotor.set(0);      
+      } else {
+          LeftLiftMotor.set(speed);
+          RightLiftMotor.set(speed);      
+      }
+    }
   }
 
   public void setLiftSetpoint(double setpoint){
@@ -56,11 +73,11 @@ public class Lift extends SubsystemBase {
   }
 
   public void runLiftSetpoint() {
-    setLift(LiftSetpoint.calculate(currentHeight()));
+    setLift(-LiftSetpoint.calculate(currentHeight()));
   }
 
   public double currentHeight() {
-    if (LiftHeight > meanHeight + BackupToF.getRangeSigma() ||  LiftHeight < meanHeight - BackupToF.getRangeSigma())
+   /*  if (LiftHeight > meanHeight + BackupToF.getRangeSigma() ||  LiftHeight < meanHeight - BackupToF.getRangeSigma())
 
      {return BackupLiftHeight;}
 
@@ -68,14 +85,15 @@ public class Lift extends SubsystemBase {
 
      {return LiftHeight;}
 
-    else {return meanHeight;}
+    else {return meanHeight;}*/
+    return BackupToF.getRange();
   }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("LiftHeight", LiftHeight);
-    SmartDashboard.putNumber("BackupLiftHeight", BackupLiftHeight);
-    SmartDashboard.putNumber("MeanHeight", currentHeight());
+    SmartDashboard.putNumber("LiftHeight", ToF.getRange());
+    SmartDashboard.putNumber("BackupLiftHeight", BackupToF.getRange());
+    SmartDashboard.putNumber("MeanHeight", (ToF.getRange()+BackupToF.getRange()+30)/2);
 
   }
 }

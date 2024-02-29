@@ -4,46 +4,40 @@
 
 package frc.robot.commands;
 
-
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.subsystems.Lift;
 
-import frc.robot.subsystems.IPFSSub;
-
-
-public class Pickup extends Command {
-  private final IPFSSub m_subsystem;
-  /** Creates a new RunAll. */
-  public Pickup(IPFSSub subsystem) {
-    m_subsystem = subsystem;
+public class ManualLift extends Command {
+  Lift lift;
+  CommandXboxController m_opController;
+  /** Creates a new ManualLift. */
+  public ManualLift(Lift subsystem) {
+    lift = subsystem;
+    m_opController = new CommandXboxController(1);
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(lift);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.Feed(0.5);
-    m_subsystem.Intake(0.5);
+    lift.setLift(m_opController.getRawAxis(5)/3);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-     m_subsystem.Feed(0);
-     m_subsystem.Intake(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (!m_subsystem.haveNote()){
-      return true;
-    }else{
-      return false;
-    }
+    return false;
   }
 }
