@@ -75,6 +75,7 @@ public class Lift extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("LiftHeight", LiftHeight);
     SmartDashboard.putNumber("BackupLiftHeight", BackupLiftHeight);
+    SmartDashboard.putNumber("MeanHeight", currentHeight());
 
   }
 }

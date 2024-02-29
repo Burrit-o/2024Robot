@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 7.146016232118054,
+      "y": 4.11050362756931
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "StBack"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Scoring Paths ",
+  "choreoAuto": false
+}
