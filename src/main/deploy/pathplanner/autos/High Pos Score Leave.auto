@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "SpeakerClose"
+            "name": "FireSpeaker"
           }
         },
         {
@@ -26,6 +26,6 @@
       ]
     }
   },
-  "folder": "HML Shoot SP LEAVE",
+  "folder": null,
   "choreoAuto": false
 }
