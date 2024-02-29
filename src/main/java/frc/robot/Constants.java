@@ -179,8 +179,8 @@ public final class Constants {
   }
 
   public class LiftConstants {
-    public static final int ToFSensor = 63;
-    public static final int BackupToFSensor = 64;
+    public static final int ToFSensor = 62;
+    public static final int BackupToFSensor = 61;
     public static final int LeftLiftMotor = 54;
     public static final int RightLiftMotor = 55;
 
