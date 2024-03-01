@@ -22,7 +22,6 @@ public class SetHeight extends Command {
   @Override
   public void initialize() {
     m_Lift.setLiftPID(Setpoint.STOW);
-  
   }
 
   // Called every time the scheduler runs while the command is scheduled.

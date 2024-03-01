@@ -85,7 +85,7 @@ public class SwerveSubsystem extends SubsystemBase {
     private final NetworkTable pickupLLTable = NetworkTableInstance.getDefault().getTable(LimeLightConstants.kllPickup);
     //Uncomment when we get Limelights renamed
     //private final NetworkTable pickupLLTable = NetworkTableInstance.getDefault().getTable(LimeLightConstants.kllPickup);
-    private final NetworkTable shooterLLTable = NetworkTableInstance.getDefault().getTable("limelight");
+    private final NetworkTable shooterLLTable = NetworkTableInstance.getDefault().getTable(LimeLightConstants.kllShoot);
     private double tv;
     private double ta;
     private double tl;
@@ -195,7 +195,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
         //results = LimelightHelpers.getLatestResults("Limelight-shoot");
 
-        limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-shoot");
+        limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue(LimeLightConstants.kllShoot);
 
     }
 

@@ -58,7 +58,7 @@ public class RobotContainer {
         protected final static SendableChooser<ledMode> LED_Chooser=new SendableChooser<>();
 
 
-        public final LEDs m_LEDs;
+        //public final LEDs m_LEDs;
 
         private final Joystick m_driveController = new Joystick(OIConstants.kDriverControllerPort);
         private final CommandXboxController m_operatorController =
@@ -70,7 +70,7 @@ public class RobotContainer {
     m_IPFSSub = new IPFSSub();
     m_Lift = new Lift();
     configureBindings();
-    m_Lift.setDefaultCommand(new SetHeight(m_Lift, Setpoint.STOW));
+    //m_Lift.setDefaultCommand(new SetHeight(m_Lift, Setpoint.PICKUP));
    // m_Lift.setDefaultCommand(new ManualLift(m_Lift));
 
 
@@ -110,7 +110,7 @@ public class RobotContainer {
           
                 SmartDashboard.putData("LED COLORS", LED_Chooser);
 
-                m_LEDs = new LEDs();
+                //m_LEDs = new LEDs();
   }
 
   /**
@@ -139,9 +139,9 @@ public class RobotContainer {
     Trigger OPrBumper = m_operatorController.rightBumper();
     Trigger OPMenu = m_operatorController.start();
 
-    OPrBumper.whileTrue(new ManualLift(m_Lift));
+    OPrBumper.toggleOnTrue(new ManualLift(m_Lift));
     OPMenu.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.STOW)));
-    //OPlBumper.whileTrue(new Pickup(m_IPFSSub));
+    OPlBumper.whileTrue(new FeedandFireSpeak(m_IPFSSub));
 
 
 
@@ -149,7 +149,7 @@ public class RobotContainer {
     Trigger OPdDPad = m_operatorController.povDown();
     //Trigger OPlDPad = m_operatorController.povLeft();
     //Trigger OPrDPad = m_operatorController.povRight();
-    OPuDPad.onTrue(new ParallelDeadlineGroup(new Pickup(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.PICKUP))));
+    OPuDPad.whileTrue(new ParallelDeadlineGroup(new Pickup(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.PICKUP))));
     
     // Press and hold the B button to Pathfind to Roughly Source. Releasing button should cancel the command
      OPdDPad.whileTrue(AutoBuilder.pathfindToPose(
