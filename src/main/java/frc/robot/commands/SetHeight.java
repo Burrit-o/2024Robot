@@ -5,15 +5,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.LiftConstants.Setpoint;
 import frc.robot.subsystems.Lift;
 
 public class SetHeight extends Command {
   private final Lift m_Lift;
-  private final double m_setpoint;
+  private final double m_Setpoint;
   /** Creates a new SetHeight. */
   public SetHeight(Lift lift, double setpoint) {
       m_Lift = lift;
-      m_setpoint = setpoint;
+      m_Setpoint = setpoint;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_Lift);
   }
@@ -21,7 +22,7 @@ public class SetHeight extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_Lift.setLiftSetpoint(m_setpoint);
+    m_Lift.setLiftPID(Setpoint.STOW);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -23,6 +23,10 @@ public class Lift extends SubsystemBase {
   private final double BackupLiftHeight;
   private final DigitalInput TopLim;
   private final DigitalInput BottomLim;
+  private double kp;
+  private double ki;
+  private double kd;
+
 
 
   /** Creates a new Lift. */
@@ -33,7 +37,6 @@ public class Lift extends SubsystemBase {
     LeftLiftMotor.setIdleMode(IdleMode.kBrake);
     RightLiftMotor.setIdleMode(IdleMode.kBrake);
 
-    LiftSetpoint = new PIDController(.003, 0.00225, 0.000075);
 
     ToF = new TimeOfFlight(LiftConstants.ToFSensor);
     BackupToF = new TimeOfFlight(LiftConstants.BackupToFSensor);
@@ -68,13 +71,36 @@ public class Lift extends SubsystemBase {
     }
   }
 
-  public void setLiftSetpoint(double setpoint){
-    LiftSetpoint.setSetpoint(setpoint);
-  }
 
   public void runLiftSetpoint() {
     setLift(-LiftSetpoint.calculate(currentHeight()));
   }
+
+  public void setLiftPID(LiftConstants.Setpoint m_Setpoint) {
+    LiftConstants.Setpoint setpoint = m_Setpoint;
+    double height;
+    switch (setpoint) {
+        case AMP: kp = 0; ki = 0; kd = 0; height = LiftConstants.AmpHeight ;
+      break;
+        case SPEAKER: kp = 0; ki = 0; kd = 0; height = LiftConstants.SpeakerHeight ;
+      break;
+        case STOW: kp = 0; ki = 0; kd = 0; height = LiftConstants.Stow ;
+      break;
+        case PICKTOP : kp = 0; ki = 0; kd = 0; height = LiftConstants.ClimbTop ;
+      break;
+        case PICKBOTTOM: kp = 0; ki = 0; kd = 0; height = LiftConstants.ClimbBottom ;
+      break;
+        case PICKUP: kp = 0; ki = 0; kd = 0; height = LiftConstants.PickupHeight ;
+      break;
+        default:kp = 0; ki = 0; kd = 0; height = LiftConstants.Stow;
+    } 
+    LiftSetpoint = new PIDController(kp, ki, kd);
+    LiftSetpoint.setSetpoint(height);
+    
+    }
+
+
+  
 
   public double currentHeight() {
    /*  if (LiftHeight > meanHeight + BackupToF.getRangeSigma() ||  LiftHeight < meanHeight - BackupToF.getRangeSigma())

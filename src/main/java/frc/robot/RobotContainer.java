@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.LEDConstants.ledMode;
+import frc.robot.Constants.LiftConstants.Setpoint;
 import frc.robot.Constants.LiftConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.OperatorConstants;
@@ -68,7 +69,7 @@ public class RobotContainer {
     m_IPFSSub = new IPFSSub();
     m_Lift = new Lift();
     configureBindings();
-    //m_Lift.setDefaultCommand(new SetHeight(m_Lift, LiftConstants.defaultStartingHeight));
+    //m_Lift.setDefaultCommand(new SetHeight(m_Lift, Setpoint.STOW));
     m_Lift.setDefaultCommand(new ManualLift(m_Lift));
 
 
@@ -142,7 +143,7 @@ public class RobotContainer {
     Trigger OPdDPad = m_operatorController.povDown();
     Trigger OPlDPad = m_operatorController.povLeft();
     //Trigger OPrDPad = m_operatorController.povRight();
-    //OPuDPad.onTrue(new ParallelDeadlineGroup(new Pickup(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftSetpoint(LiftConstants.PickupHeight))));
+    //OPuDPad.onTrue(new ParallelDeadlineGroup(new Pickup(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.PICKUP))));
     
     // Press and hold the B button to Pathfind to Roughly Source. Releasing button should cancel the command
      OPdDPad.whileTrue(AutoBuilder.pathfindToPose(
