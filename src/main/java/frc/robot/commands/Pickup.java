@@ -44,7 +44,6 @@ public class Pickup extends Command {
       return true;
     }else{
       return false;
-    }*/
-    return false;
+    }
   }
 }
