@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "SpeakerClose"
+            "name": "FireSpeaker"
           }
         },
         {
@@ -22,10 +22,16 @@
           "data": {
             "pathName": "Low Drive Out"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RestingPos"
+          }
         }
       ]
     }
   },
-  "folder": "HML Shoot SP LEAVE",
+  "folder": null,
   "choreoAuto": false
 }

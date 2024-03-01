@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "SpeakerClose"
+            "name": "FireSpeaker"
           }
         },
         {
@@ -32,12 +32,18 @@
         {
           "type": "named",
           "data": {
-            "name": "SpeakerClose"
+            "name": "FireSpeaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RestingPos"
           }
         }
       ]
     }
   },
-  "folder": "HML 2-note auto",
+  "folder": null,
   "choreoAuto": false
 }

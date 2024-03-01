@@ -12,20 +12,20 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "AmpClose"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Shoot Amp "
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FireAmp"
           }
         }
       ]
     }
   },
-  "folder": "Scoring Paths ",
+  "folder": null,
   "choreoAuto": false
 }

@@ -30,6 +30,7 @@ import frc.robot.subsystems.IPFSSub;
 import frc.robot.subsystems.Lift;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.commands.AprilTagAlignCmd;
+import frc.robot.commands.FeedandFireAmp;
 import frc.robot.commands.FeedandFireSpeak;
 import frc.robot.commands.ManualLift;
 import frc.robot.commands.NoteAlignCmd;
@@ -81,8 +82,13 @@ public class RobotContainer {
                                 () -> !m_driveController.getRawButton(5))); // LB
 
                  //Register named commands
-              NamedCommands.registerCommand("NoteAlignedCmd", new NoteAlignCmd(swerveSubsystem));
               NamedCommands.registerCommand("AprilTagAlignCmd", new AprilTagAlignCmd(swerveSubsystem));
+              NamedCommands.registerCommand("FireSpeaker", new ParallelDeadlineGroup( new FeedandFireSpeak(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.SPEAKER))));
+              NamedCommands.registerCommand("FireAmp", new ParallelDeadlineGroup( new FeedandFireAmp(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.AMP))));
+              NamedCommands.registerCommand("Pickup", new ParallelDeadlineGroup( new Pickup(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.PICKUP))));
+              NamedCommands.registerCommand("RestingPos", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.STOW)));
+              // NamedCommands.registerCommand("ClimberHigh", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.PICKTOP)));
+              // NamedCommands.registerCommand("ClimberLow", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.PICKBOTTOM)));
 
               // Build an auto chooser. This will use Commands.none() as the default option.
               autoChooser = AutoBuilder.buildAutoChooser();
