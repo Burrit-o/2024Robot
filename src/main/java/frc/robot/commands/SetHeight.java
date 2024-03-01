@@ -10,11 +10,9 @@ import frc.robot.subsystems.Lift;
 
 public class SetHeight extends Command {
   private final Lift m_Lift;
-  private final double m_Setpoint;
   /** Creates a new SetHeight. */
   public SetHeight(Lift lift, double setpoint) {
       m_Lift = lift;
-      m_Setpoint = setpoint;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_Lift);
   }
