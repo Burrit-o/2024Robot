@@ -40,10 +40,11 @@ public class Pickup extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (!m_subsystem.haveNote()){
+    if (m_subsystem.haveNote()){
       return true;
     }else{
       return false;
-    }
+    }*/
+    return false;
   }
 }
