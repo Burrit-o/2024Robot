@@ -69,8 +69,8 @@ public class RobotContainer {
     m_IPFSSub = new IPFSSub();
     m_Lift = new Lift();
     configureBindings();
-    //m_Lift.setDefaultCommand(new SetHeight(m_Lift, Setpoint.STOW));
-    m_Lift.setDefaultCommand(new ManualLift(m_Lift));
+    m_Lift.setDefaultCommand(new SetHeight(m_Lift, Setpoint.AMP));
+   // m_Lift.setDefaultCommand(new ManualLift(m_Lift));
 
 
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(

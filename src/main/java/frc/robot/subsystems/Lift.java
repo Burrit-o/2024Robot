@@ -77,12 +77,15 @@ public class Lift extends SubsystemBase {
   }
 
   public void setLiftPID(LiftConstants.Setpoint m_Setpoint) {
+    //    LiftSetpoint = new PIDController(.003, 0.00225, 0.000075);
+
     LiftConstants.Setpoint setpoint = m_Setpoint;
     double height;
     switch (setpoint) {
-        case AMP: kp = 0; ki = 0; kd = 0; height = LiftConstants.AmpHeight ;
+        case AMP: kp = 0.00287; ki = 0.000875; kd = 0.00007; height = LiftConstants.AmpHeight ;
       break;
-        case SPEAKER: kp = 0; ki = 0; kd = 0; height = LiftConstants.SpeakerHeight ;
+        // case SPEAKER: kp = 0.00315; ki = 0.001125; kd = 0.000075; height = LiftConstants.SpeakerHeight ;
+        case SPEAKER: kp = 0.00283; ki = 0.00085; kd = 0.00007; height = LiftConstants.SpeakerHeight ;
       break;
         case STOW: kp = 0; ki = 0; kd = 0; height = LiftConstants.Stow ;
       break;
