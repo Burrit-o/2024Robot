@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LiftConstants;
@@ -18,9 +19,14 @@ public class Lift extends SubsystemBase {
   private final CANSparkMax LeftLiftMotor, RightLiftMotor;
   private PIDController LiftSetpoint;
   private final TimeOfFlight ToF, BackupToF;
-  private final double meanHeight;
   private final double LiftHeight;
   private final double BackupLiftHeight;
+  private final DigitalInput TopLim;
+  private final DigitalInput BottomLim;
+  private double kp;
+  private double ki;
+  private double kd;
+
 
 
   /** Creates a new Lift. */
@@ -31,15 +37,15 @@ public class Lift extends SubsystemBase {
     LeftLiftMotor.setIdleMode(IdleMode.kBrake);
     RightLiftMotor.setIdleMode(IdleMode.kBrake);
 
-    LiftSetpoint = new PIDController(.08, .008, 0);
 
     ToF = new TimeOfFlight(LiftConstants.ToFSensor);
     BackupToF = new TimeOfFlight(LiftConstants.BackupToFSensor);
     LiftHeight = ToF.getRange();
     BackupLiftHeight = BackupToF.getRange();
 
-    meanHeight = (LiftHeight + BackupLiftHeight)/2;
-
+    //meanHeight = (LiftHeight + BackupLiftHeight)/2;
+    TopLim = new DigitalInput(3);
+    BottomLim = new DigitalInput(2);
 
 
 
@@ -47,20 +53,60 @@ public class Lift extends SubsystemBase {
 
 
   public void setLift(double speed) {
-    LeftLiftMotor.set(speed);
-    RightLiftMotor.set(speed);
+    if (speed < 0) {
+      if (!TopLim.get()) {
+          LeftLiftMotor.set(0);
+          RightLiftMotor.set(0);   
+      } else {
+          LeftLiftMotor.set(speed);
+          RightLiftMotor.set(speed);      }
+  } else {
+      if (!BottomLim.get()) {
+          LeftLiftMotor.set(0);
+          RightLiftMotor.set(0);      
+      } else {
+          LeftLiftMotor.set(speed);
+          RightLiftMotor.set(speed);      
+      }
+    }
   }
 
-  public void setLiftSetpoint(double setpoint){
-    LiftSetpoint.setSetpoint(setpoint);
-  }
 
   public void runLiftSetpoint() {
-    setLift(LiftSetpoint.calculate(currentHeight()));
+    setLift(-LiftSetpoint.calculate(currentHeight()));
   }
 
+  public void setLiftPID(LiftConstants.Setpoint m_Setpoint) {
+    //    LiftSetpoint = new PIDController(.003, 0.00225, 0.000075);
+
+    LiftConstants.Setpoint setpoint = m_Setpoint;
+    double height;
+    switch (setpoint) {
+        case AMP: kp = 0.00287; ki = 0.000875; kd = 0.00007; height = LiftConstants.AmpHeight ;
+      break;
+        // case SPEAKER: kp = 0.00315; ki = 0.001125; kd = 0.000075; height = LiftConstants.SpeakerHeight ;
+        case SPEAKER: kp = 0.00283; ki = 0.00085; kd = 0.00007; height = LiftConstants.SpeakerHeight ;
+      break;
+        case STOW: kp = 0; ki = 0; kd = 0; height = LiftConstants.Stow ;
+      break;
+        case PICKTOP : kp = 0; ki = 0; kd = 0; height = LiftConstants.ClimbTop ;
+      break;
+        case PICKBOTTOM: kp = 0; ki = 0; kd = 0; height = LiftConstants.ClimbBottom ;
+      break;
+        case PICKUP: kp = 0; ki = 0; kd = 0; height = LiftConstants.PickupHeight ;
+      break;
+        default:kp = 0; ki = 0; kd = 0; height = LiftConstants.Stow;
+    } 
+    LiftSetpoint = new PIDController(kp, ki, kd);
+    LiftSetpoint.setSetpoint(height);
+    
+    }
+
+
+  
+
   public double currentHeight() {
-    if (LiftHeight > meanHeight + BackupToF.getRangeSigma() ||  LiftHeight < meanHeight - BackupToF.getRangeSigma())
+   /*  if (LiftHeight > meanHeight + BackupToF.getRangeSigma() ||  LiftHeight < meanHeight - BackupToF.getRangeSigma())
 
      {return BackupLiftHeight;}
 
@@ -68,13 +114,15 @@ public class Lift extends SubsystemBase {
 
      {return LiftHeight;}
 
-    else {return meanHeight;}
+    else {return meanHeight;}*/
+    return BackupToF.getRange();
   }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("LiftHeight", LiftHeight);
-    SmartDashboard.putNumber("BackupLiftHeight", BackupLiftHeight);
+    SmartDashboard.putNumber("LiftHeight", ToF.getRange());
+    SmartDashboard.putNumber("BackupLiftHeight", BackupToF.getRange());
+    SmartDashboard.putNumber("MeanHeight", (ToF.getRange()+BackupToF.getRange()+30)/2);
 
   }
 }

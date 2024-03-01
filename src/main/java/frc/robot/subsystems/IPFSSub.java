@@ -39,7 +39,6 @@ public class IPFSSub extends SubsystemBase {
   public IPFSSub() {
   TLShooterMotor = new CANSparkMax(IPFSConstants.TLShooterMotor, MotorType.kBrushless);
   TRShooterMotor = new CANSparkMax(IPFSConstants.TRShooterMotor, MotorType.kBrushless);
-  TRShooterMotor.setInverted(false);
   TLShooterMotor.setInverted(true);
   TLShooterMotor.setIdleMode(IdleMode.kCoast);
   TRShooterMotor.setIdleMode(IdleMode.kCoast);
@@ -53,14 +52,13 @@ public class IPFSSub extends SubsystemBase {
   Feeder = new CANSparkMax(IPFSConstants.LFeederMotor, MotorType.kBrushless);
   Feeder2 = new CANSparkMax(IPFSConstants.RFeederMotor, MotorType.kBrushless);
   Feeder.setInverted(true);
-  Feeder2.setInverted(false);
   Feeder.setIdleMode(IdleMode.kBrake);
   Feeder2.setIdleMode(IdleMode.kBrake);
 
   
   IntakeMotorTop = new CANSparkMax(IPFSConstants.PickupMotorTop, MotorType.kBrushless);
   IntakeMotorBottom = new CANSparkMax(IPFSConstants.PickupMotorBottom, MotorType.kBrushless);
-  IntakeMotorBottom.setInverted(false);
+  IntakeMotorTop.setInverted(true);
   IntakeMotorTop.setIdleMode(IdleMode.kBrake);
   IntakeMotorBottom.setIdleMode(IdleMode.kBrake);  
 
