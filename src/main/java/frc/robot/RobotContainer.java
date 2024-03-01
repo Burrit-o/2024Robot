@@ -124,32 +124,32 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //LB = Short
-    //RB = Stow
+    //RB = Manual Override
     //uDPad = Pickup
-    //dDPad = Climb Back
-    //lDPad = Climb Left
-    //rDPad = Climb Right
     //A = Amp
     //X = Hi
     //Y = Mid
     //B = Low
+    //Start/Menu = stow
     Trigger OPaButton = m_operatorController.a();
     Trigger OPbButton = m_operatorController.b();
     Trigger OPyButton = m_operatorController.y();
     Trigger OPxButton = m_operatorController.x();
     Trigger OPlBumper = m_operatorController.leftBumper();
     Trigger OPrBumper = m_operatorController.rightBumper();
+    Trigger OPMenu = m_operatorController.start();
 
-    OPrBumper.onTrue(new FeedandFireSpeak(m_IPFSSub));
-    OPlBumper.whileTrue(new Pickup(m_IPFSSub));
+    OPrBumper.whileTrue(new ManualLift(m_Lift));
+    OPMenu.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.STOW)));
+    //OPlBumper.whileTrue(new Pickup(m_IPFSSub));
 
 
 
     Trigger OPuDPad = m_operatorController.povUp();
     Trigger OPdDPad = m_operatorController.povDown();
-    Trigger OPlDPad = m_operatorController.povLeft();
+    //Trigger OPlDPad = m_operatorController.povLeft();
     //Trigger OPrDPad = m_operatorController.povRight();
-    //OPuDPad.onTrue(new ParallelDeadlineGroup(new Pickup(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.PICKUP))));
+    OPuDPad.onTrue(new ParallelDeadlineGroup(new Pickup(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.PICKUP))));
     
     // Press and hold the B button to Pathfind to Roughly Source. Releasing button should cancel the command
      OPdDPad.whileTrue(AutoBuilder.pathfindToPose(
@@ -163,15 +163,15 @@ public class RobotContainer {
     ));
 
   // Press and hold the Y button to Pathfind to (1.83, 3.0, 0 degrees). Releasing button should cancel the command
-  OPlDPad.whileTrue(AutoBuilder.pathfindToPose(
-      new Pose2d(2.88, 6.99, Rotation2d.fromDegrees(0)), 
-      new PathConstraints(
-        1.0, 1.0, 
-        Units.degreesToRadians(180), Units.degreesToRadians(270)
-      ), 
-      0, 
-      2.0
-    ));
+  // OPlDPad.whileTrue(AutoBuilder.pathfindToPose(
+  //     new Pose2d(2.88, 6.99, Rotation2d.fromDegrees(0)), 
+  //     new PathConstraints(
+  //       1.0, 1.0, 
+  //       Units.degreesToRadians(180), Units.degreesToRadians(270)
+  //     ), 
+  //     0, 
+  //     2.0
+  //   ));
 
   //Press and hold the X button to Pathfind to the start of the "AMP-Path" path. Releasing the button should cancel the command
   OPaButton.whileTrue(AutoBuilder.pathfindThenFollowPath(
