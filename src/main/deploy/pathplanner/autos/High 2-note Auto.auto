@@ -12,15 +12,22 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "deadline",
           "data": {
-            "name": "FireSpeaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "SpeakerSetpoint"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "FireSpeaker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SpeakerSetpoint"
+                }
+              }
+            ]
           }
         },
         {
@@ -33,6 +40,25 @@
           "type": "path",
           "data": {
             "pathName": "SpHigh"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "FireSpeaker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SpeakerSetpoint"
+                }
+              }
+            ]
           }
         }
       ]
