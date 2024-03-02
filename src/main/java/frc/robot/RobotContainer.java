@@ -40,6 +40,7 @@ import frc.robot.commands.ManualLift;
 import frc.robot.commands.NoteAlignCmd;
 import frc.robot.commands.Pickup;
 import frc.robot.commands.SetHeight;
+import frc.robot.commands.CheckHeight;
 import frc.robot.commands.SwerveJoystickCmd;
 
 
@@ -90,7 +91,8 @@ public class RobotContainer {
               // NamedCommands.registerCommand("FireAmp", new ParallelDeadlineGroup( new FeedandFireAmp(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.AMP))));
               // NamedCommands.registerCommand("Pickup", new ParallelDeadlineGroup( new Pickup(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.PICKUP))));
               NamedCommands.registerCommand("PickupSetpoint", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.STOW)));
-              NamedCommands.registerCommand("SpeakerSetpoint", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.SPEAKER)));
+              NamedCommands.registerCommand("SpeakerSetpoint", new SetHeight(m_Lift, LiftConstants.Setpoint.SPEAKER));
+              NamedCommands.registerCommand("CheckHeight", new CheckHeight(m_Lift));
               NamedCommands.registerCommand("FireSpeaker", new FeedandFireSpeak(m_IPFSSub));
               NamedCommands.registerCommand("Pickup", new Pickup(m_IPFSSub));
               //NamedCommands.registerCommand("NoteAlignedCmd", new NoteAlignCmd(swerveSubsystem));

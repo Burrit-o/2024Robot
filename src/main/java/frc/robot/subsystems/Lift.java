@@ -26,8 +26,7 @@ public class Lift extends SubsystemBase {
   private double kp;
   private double ki;
   private double kd;
-
-
+  private double height;
 
   /** Creates a new Lift. */
   public Lift() {
@@ -51,6 +50,9 @@ public class Lift extends SubsystemBase {
 
   }
 
+  public double getSetHeight() {
+    return LiftSetpoint.getSetpoint();
+  }
 
   public void setLift(double speed) {
     if (speed < 0) {
@@ -80,7 +82,6 @@ public class Lift extends SubsystemBase {
     //    LiftSetpoint = new PIDController(.003, 0.00225, 0.000075);
 
     LiftConstants.Setpoint setpoint = m_Setpoint;
-    double height;
     switch (setpoint) {
         case AMP: kp = 0.00287; ki = 0.000875; kd = 0.00007; height = LiftConstants.AmpHeight ;
       break;
