@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.LEDConstants.ledMode;
 import frc.robot.Constants.LiftConstants.Setpoint;
+import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.LiftConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.OperatorConstants;
@@ -28,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+// import frc.robot.LEDs;
 import frc.robot.subsystems.IPFSSub;
 import frc.robot.subsystems.Lift;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -52,15 +54,13 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final IPFSSub m_IPFSSub;
   private final Lift m_Lift;
+  // public final LEDs m_LEDs;
    private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
         private final SendableChooser<Command> autoChooser;
 
 
         protected final static SendableChooser<ledMode> LED_Chooser=new SendableChooser<>();
-
-
-        //public final LEDs m_LEDs;
 
         private final Joystick m_driveController = new Joystick(OIConstants.kDriverControllerPort);
         private final CommandXboxController m_operatorController =
@@ -71,6 +71,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     m_IPFSSub = new IPFSSub();
     m_Lift = new Lift();
+    // m_LEDs = new LEDs(LEDConstants.LEDlength, LEDConstants.LEDport);
     configureBindings();
     m_Lift.setDefaultCommand(new SetHeight(m_Lift, Setpoint.PICKUP));
    // m_Lift.setDefaultCommand(new ManualLift(m_Lift));
