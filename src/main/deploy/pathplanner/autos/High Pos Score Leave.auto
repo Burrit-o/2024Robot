@@ -18,15 +18,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "High Drive Out"
+            "name": "SpeakerSetpoint"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "RestingPos"
+            "pathName": "High Drive Out"
           }
         }
       ]

@@ -12,9 +12,22 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "deadline",
           "data": {
-            "name": "FireSpeaker"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "FireSpeaker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SpeakerSetpoint"
+                }
+              }
+            ]
           }
         },
         {
@@ -30,15 +43,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "deadline",
           "data": {
-            "name": "FireSpeaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "RestingPos"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "FireSpeaker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SpeakerSetpoint"
+                }
+              }
+            ]
           }
         }
       ]

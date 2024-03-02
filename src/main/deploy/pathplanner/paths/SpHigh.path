@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 1.807618934386805,
-        "y": 6.608120450283454
+        "x": 0.71,
+        "y": 6.71
       },
       "prevControl": {
-        "x": 2.5199579990304826,
-        "y": 6.764835044505062
+        "x": 1.4223320031138433,
+        "y": 6.866746688639001
       },
       "nextControl": null,
       "isLocked": false,
@@ -35,13 +35,19 @@
       "name": "New Event Marker",
       "waypointRelativePos": 1.0,
       "command": {
-        "type": "sequential",
+        "type": "deadline",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
                 "name": "FireSpeaker"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "SpeakerSetpoint"
               }
             }
           ]
@@ -57,7 +63,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 34.380344723844885,
+    "rotation": 58.8907329778008,
     "rotateFast": false
   },
   "reversed": false,

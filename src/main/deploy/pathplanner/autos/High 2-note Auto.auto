@@ -18,6 +18,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "SpeakerSetpoint"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "High Drive Out"
@@ -27,18 +33,6 @@
           "type": "path",
           "data": {
             "pathName": "SpHigh"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "FireSpeaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "RestingPos"
           }
         }
       ]
