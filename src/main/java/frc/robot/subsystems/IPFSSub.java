@@ -40,7 +40,7 @@ public class IPFSSub extends SubsystemBase {
   private final LEDs m_LEDs;
   /** Creates a new IPFSSub. */
   public IPFSSub() {
-  m_LEDs = new LEDs(LEDConstants.LEDlength, LEDConstants.LEDport);
+  m_LEDs = new LEDs(LEDConstants.LEDlength, LEDConstants.LeftLEDport, LEDConstants.RightLEDport);
   TLShooterMotor = new CANSparkMax(IPFSConstants.TLShooterMotor, MotorType.kBrushless);
   TRShooterMotor = new CANSparkMax(IPFSConstants.TRShooterMotor, MotorType.kBrushless);
   TLShooterMotor.setInverted(true);

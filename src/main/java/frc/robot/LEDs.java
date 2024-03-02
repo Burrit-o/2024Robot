@@ -25,7 +25,7 @@ import frc.robot.subsystems.IPFSSub;
 public class LEDs extends SubsystemBase {
       /** Creates a new LED. */
 private AddressableLEDBuffer m_ledBuffer; 
-private AddressableLED m_led;
+private AddressableLED m_leftLed, m_rightLed;
 private ledMode curr_color;
 private boolean new_change;
 private AddressableLEDBuffer red_ledBuffer;
@@ -43,12 +43,13 @@ Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
 }*/
   
 //Constructor for LEDs class
-public LEDs(int length, int port) {
+public LEDs(int length, int leftPort, int rightPort) {
   
   new_change = false;
   curr_color = ledMode.PURPLE;
   m_ledBuffer = new AddressableLEDBuffer(length);
-  m_led = new AddressableLED(port);
+  m_leftLed = new AddressableLED(leftPort);
+  // m_rightLed = new AddressableLED(rightPort);
   red_ledBuffer = new AddressableLEDBuffer(length);
   blue_ledBuffer = new AddressableLEDBuffer(length);
   green_ledBuffer = new AddressableLEDBuffer(length);
@@ -114,7 +115,8 @@ switch (m_mode) {
 public void setColor (LEDConstants.ledMode mode) { 
   LEDConstants.ledMode m_led_mode = mode;
   setLEDmode(m_led_mode);
-  m_led.setData(m_ledBuffer);
+  m_leftLed.setData(m_ledBuffer);
+  // m_rightLed.setData(m_ledBuffer);
 }
 
 public void changeColor (ledMode colorChange){
@@ -123,9 +125,13 @@ public void changeColor (ledMode colorChange){
 }
 
 public void LED_init() {
-  m_led.setLength(m_ledBuffer.getLength());
-  m_led.setData(m_ledBuffer);
-  m_led.start();
+  m_leftLed.setLength(m_ledBuffer.getLength());
+  m_leftLed.setData(m_ledBuffer);
+  m_leftLed.start();
+  
+  // m_rightLed.setLength(m_ledBuffer.getLength());
+  // m_rightLed.setData(m_ledBuffer);
+  // m_rightLed.start();
 } 
 
 public boolean getCanSeeNote() {
