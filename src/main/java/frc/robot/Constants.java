@@ -31,9 +31,9 @@ public final class Constants {
 
     public static final class DriveConstants {
 
-        public static final double kTrackWidth = Units.inchesToMeters(24.75);
+        public static final double kTrackWidth = Units.inchesToMeters(24);
         // Distance between right and left wheels
-        public static final double kWheelBase = Units.inchesToMeters(24.75);
+        public static final double kWheelBase = Units.inchesToMeters(24);
         // Distance between front and back wheels
         public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
                 new Translation2d(kWheelBase / 2, kTrackWidth / 2), /* Left front */
@@ -114,8 +114,8 @@ public final class Constants {
     }
 
     public static final class LimeLightConstants {
-        public static final String kllShoot = "Limelight-shoot";
-        public static final String kllPickup = "Limelight-pickup";
+        public static final String kllShoot = "limelight-shoot";
+        public static final String kllPickup = "limelight-pickup";
         public static final int kAprilTagPipeline = 0;
         public static final int kNeuralNetworkPipeline = 1;
     }

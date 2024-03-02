@@ -28,7 +28,7 @@ public class ManualLift extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    lift.setLift(m_opController.getRawAxis(5)/3);
+    lift.setLift(m_opController.getRawAxis(5)/2);
   }
 
   // Called once the command ends or is interrupted.
