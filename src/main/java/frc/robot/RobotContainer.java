@@ -84,7 +84,7 @@ public class RobotContainer {
                                 () -> !m_driveController.getRawButton(5))); // LB
 
                  //Register named commands
-              //NamedCommands.registerCommand("AprilTagAlignCmd", new AprilTagAlignCmd(swerveSubsystem));
+              NamedCommands.registerCommand("AprilTagAlignCmd", new AprilTagAlignCmd(swerveSubsystem));
               //NamedCommands.registerCommand("FireSpeaker", new ParallelDeadlineGroup( new FeedandFireSpeak(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.SPEAKER))));
               // NamedCommands.registerCommand("FireAmp", new ParallelDeadlineGroup( new FeedandFireAmp(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.AMP))));
               // NamedCommands.registerCommand("Pickup", new ParallelDeadlineGroup( new Pickup(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.PICKUP))));
