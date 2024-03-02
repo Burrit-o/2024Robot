@@ -10,6 +10,7 @@ import frc.robot.Constants.LiftConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.OperatorConstants;
 
+import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator.NameMatcher;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathConstraints;
@@ -25,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.IPFSSub;
 import frc.robot.subsystems.Lift;
@@ -70,7 +72,7 @@ public class RobotContainer {
     m_IPFSSub = new IPFSSub();
     m_Lift = new Lift();
     configureBindings();
-    //m_Lift.setDefaultCommand(new SetHeight(m_Lift, Setpoint.PICKUP));
+    m_Lift.setDefaultCommand(new SetHeight(m_Lift, Setpoint.PICKUP));
    // m_Lift.setDefaultCommand(new ManualLift(m_Lift));
 
 
@@ -82,11 +84,15 @@ public class RobotContainer {
                                 () -> !m_driveController.getRawButton(5))); // LB
 
                  //Register named commands
-              NamedCommands.registerCommand("AprilTagAlignCmd", new AprilTagAlignCmd(swerveSubsystem));
-              NamedCommands.registerCommand("FireSpeaker", new ParallelDeadlineGroup( new FeedandFireSpeak(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.SPEAKER))));
-              NamedCommands.registerCommand("FireAmp", new ParallelDeadlineGroup( new FeedandFireAmp(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.AMP))));
-              NamedCommands.registerCommand("Pickup", new ParallelDeadlineGroup( new Pickup(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.PICKUP))));
-              NamedCommands.registerCommand("RestingPos", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.STOW)));
+              //NamedCommands.registerCommand("AprilTagAlignCmd", new AprilTagAlignCmd(swerveSubsystem));
+              //NamedCommands.registerCommand("FireSpeaker", new ParallelDeadlineGroup( new FeedandFireSpeak(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.SPEAKER))));
+              // NamedCommands.registerCommand("FireAmp", new ParallelDeadlineGroup( new FeedandFireAmp(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.AMP))));
+              // NamedCommands.registerCommand("Pickup", new ParallelDeadlineGroup( new Pickup(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.PICKUP))));
+              NamedCommands.registerCommand("PickupSetpoint", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.STOW)));
+              NamedCommands.registerCommand("SpeakerSetpoint", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.SPEAKER)));
+              NamedCommands.registerCommand("FireSpeaker", new FeedandFireSpeak(m_IPFSSub));
+              NamedCommands.registerCommand("Pickup", new Pickup(m_IPFSSub));
+              //NamedCommands.registerCommand("NoteAlignedCmd", new NoteAlignCmd(swerveSubsystem));
               // NamedCommands.registerCommand("ClimberHigh", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.PICKTOP)));
               // NamedCommands.registerCommand("ClimberLow", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.PICKBOTTOM)));
 
@@ -142,6 +148,8 @@ public class RobotContainer {
     OPrBumper.toggleOnTrue(new ManualLift(m_Lift));
     OPMenu.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.STOW)));
     OPlBumper.whileTrue(new FeedandFireSpeak(m_IPFSSub));
+    //  Trigger pagebtn = m_operatorController.back();
+    //  pagebtn.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.SPEAKER)));
 
 
 
@@ -150,17 +158,20 @@ public class RobotContainer {
     //Trigger OPlDPad = m_operatorController.povLeft();
     //Trigger OPrDPad = m_operatorController.povRight();
     OPuDPad.whileTrue(new ParallelDeadlineGroup(new Pickup(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.PICKUP))));
+    OPyButton.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.SPEAKER)));
+    OPaButton.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.AMP)));
+    OPxButton.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.STOW)));
     
     // Press and hold the B button to Pathfind to Roughly Source. Releasing button should cancel the command
-     OPdDPad.whileTrue(AutoBuilder.pathfindToPose(
-      new Pose2d(15.75, 1.73, Rotation2d.fromDegrees(0)), 
-      new PathConstraints(
-        3.0, 1.0, 
-        Units.degreesToRadians(180), Units.degreesToRadians(270)
-      ), 
-      0, 
-      2.0
-    ));
+    //  OPdDPad.whileTrue(AutoBuilder.pathfindToPose(
+    //   new Pose2d(15.75, 1.73, Rotation2d.fromDegrees(0)), 
+    //   new PathConstraints(
+    //     3.0, 1.0, 
+    //     Units.degreesToRadians(180), Units.degreesToRadians(270)
+    //   ), 
+    //   0, 
+    //   2.0
+    // ));
 
   // Press and hold the Y button to Pathfind to (1.83, 3.0, 0 degrees). Releasing button should cancel the command
   // OPlDPad.whileTrue(AutoBuilder.pathfindToPose(
@@ -174,25 +185,27 @@ public class RobotContainer {
   //   ));
 
   //Press and hold the X button to Pathfind to the start of the "AMP-Path" path. Releasing the button should cancel the command
-  OPaButton.whileTrue(AutoBuilder.pathfindThenFollowPath(
-      PathPlannerPath.fromPathFile("AMP-path"), 
-      new PathConstraints(1.0, 1.0, Units.degreesToRadians(180), Units.degreesToRadians(270)), 
-      0.0));
+  // OPaButton.whileTrue(AutoBuilder.pathfindThenFollowPath(
+  //     PathPlannerPath.fromPathFile("AMP-path"), 
+  //     new PathConstraints(1.0, 1.0, Units.degreesToRadians(180), Units.degreesToRadians(270)), 
+  //     0.0));
 
-  OPxButton.whileTrue(AutoBuilder.pathfindThenFollowPath(
-      PathPlannerPath.fromPathFile("SpHigh"), 
-      new PathConstraints(1.0, 1.0, Units.degreesToRadians(180), Units.degreesToRadians(270)), 
-      0.0));
+  // OPxButton.whileTrue(AutoBuilder.pathfindThenFollowPath(
+  //     PathPlannerPath.fromPathFile("SpHigh"), 
+  //     new PathConstraints(1.0, 1.0, Units.degreesToRadians(180), Units.degreesToRadians(270)), 
+  //     0.0));
 
-  OPyButton.whileTrue(AutoBuilder.pathfindThenFollowPath(
-      PathPlannerPath.fromPathFile("SpMid"), 
-      new PathConstraints(1.0, 1.0, Units.degreesToRadians(180), Units.degreesToRadians(270)), 
-      0.0));
+  // OPyButton.whileTrue(AutoBuilder.pathfindThenFollowPath(
+  //     PathPlannerPath.fromPathFile("SpMid"), 
+  //     new PathConstraints(1.0, 1.0, Units.degreesToRadians(180), Units.degreesToRadians(270)), 
+  //     0.0));
 
-  OPbButton.whileTrue(AutoBuilder.pathfindThenFollowPath(
-      PathPlannerPath.fromPathFile("SpLow"), 
-      new PathConstraints(1.0, 1.0, Units.degreesToRadians(180), Units.degreesToRadians(270)), 
-      0.0));
+  // OPbButton.whileTrue(AutoBuilder.pathfindThenFollowPath(
+  //     PathPlannerPath.fromPathFile("SpLow"), 
+  //     new PathConstraints(1.0, 1.0, Units.degreesToRadians(180), Units.degreesToRadians(270)), 
+  //     0.0));
+
+    new JoystickButton(m_driveController, 1).onTrue(new InstantCommand(() -> swerveSubsystem.zeroHeading()));
      
 
   }
@@ -202,8 +215,7 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  //public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-   // return Autos.exampleAuto(m_exampleSubsystem);
-  }
+  public Command getAutonomousCommand() {
+   return autoChooser.getSelected();
+  }}
 //}

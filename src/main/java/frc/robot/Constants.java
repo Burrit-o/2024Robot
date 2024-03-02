@@ -145,7 +145,7 @@ public final class Constants {
         public static final int kDriverRotAxis = 4;
         public static final int kDriverFieldOrientedButtonIdx = 5;
 
-        public static final double kDeadband = 0.1;
+        public static final double kDeadband = 0.25;
     }
 
     public static class OperatorConstants {
@@ -193,7 +193,7 @@ public final class Constants {
     public static final double ClimbTop = 425;
     public static final double ClimbBottom = 100;
     public static final double AmpHeight = 260;
-    public static final double SpeakerHeight = 215;
+    public static final double SpeakerHeight = 265;
     public static final double Short = 70;
     public static final double PickupHeight = 70;
     public static final double Stow = 70;
