@@ -118,8 +118,6 @@ public class RobotContainer {
                 LED_Chooser.addOption("ALLIANCE", ledMode.ALLIANCE);
           
                 SmartDashboard.putData("LED COLORS", LED_Chooser);
-
-                //m_LEDs = new LEDs();
   }
 
   /**

@@ -8,14 +8,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
-// import frc.robot.LEDs;
+import frc.robot.LEDs;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.IPFSConstants;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.LEDConstants.ledMode;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
+import frc.robot.LEDs;
 
 
 
@@ -36,11 +37,10 @@ public class IPFSSub extends SubsystemBase {
   private final RelativeEncoder BREncoder;
 
   public final DigitalInput PickupSensor;  
-
-  // private final LEDs m_LEDs;
+  private final LEDs m_LEDs;
   /** Creates a new IPFSSub. */
   public IPFSSub() {
-        // m_LEDs = new LEDs(LEDConstants.LEDlength, LEDConstants.LEDport);
+  m_LEDs = new LEDs(LEDConstants.LEDlength, LEDConstants.LEDport);
   TLShooterMotor = new CANSparkMax(IPFSConstants.TLShooterMotor, MotorType.kBrushless);
   TRShooterMotor = new CANSparkMax(IPFSConstants.TRShooterMotor, MotorType.kBrushless);
   TLShooterMotor.setInverted(true);
@@ -121,12 +121,12 @@ public class IPFSSub extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("PickupSensor", PickupSensor.get());
 
-    // if(haveNote()) {
-    //   m_LEDs.setColor(ledMode.GREEN);
-    // } 
-    // else {
-    //   m_LEDs.setColor(ledMode.RED);
-    // }
+    if(haveNote()) {
+      m_LEDs.setColor(ledMode.GREEN);
+    } 
+    else {
+      m_LEDs.setColor(ledMode.RED);
+    }
 
   }
 }

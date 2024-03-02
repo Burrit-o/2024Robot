@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.LEDConstants.ledMode;
+import frc.robot.subsystems.IPFSSub;
 
 
 
@@ -35,7 +36,7 @@ private AddressableLEDBuffer yellow_ledBuffer;
 private AddressableLEDBuffer team_ledBuffer;
 private AddressableLEDBuffer rainbow_ledBuffer;
 private int counter;
-
+private IPFSSub m_IPFSSub;
 Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
 /*public enum ledMode {
   RED, GREEN, RAINBOW, TEAM, BLUE, PURPLE, YELLOW
@@ -43,6 +44,7 @@ Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
   
 //Constructor for LEDs class
 public LEDs(int length, int port) {
+  
   new_change = false;
   curr_color = ledMode.PURPLE;
   m_ledBuffer = new AddressableLEDBuffer(length);
@@ -74,7 +76,7 @@ public LEDs(int length, int port) {
        rainbow_ledBuffer.setHSV(i, (hue), 255, 128);
   }
 
-  setLEDmode(RobotContainer.LED_Chooser.getSelected());
+  // setLEDmode(RobotContainer.LED_Chooser.getSelected());
   LED_init();
 }
 
