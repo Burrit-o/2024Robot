@@ -12,19 +12,19 @@
     "data": {
       "commands": [
         {
-          "type": "deadline",
+          "type": "sequential",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "FireSpeaker"
+                  "name": "SpeakerSetpoint"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "SpeakerSetpoint"
+                  "name": "FireSpeaker"
                 }
               }
             ]
@@ -43,19 +43,19 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "sequential",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "FireSpeaker"
+                  "name": "SpeakerSetpoint"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "SpeakerSetpoint"
+                  "name": "FireSpeaker"
                 }
               }
             ]

@@ -14,13 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "FireSpeaker"
+            "name": "SpeakerSetpoint"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "SpeakerSetpoint"
+            "name": "FireSpeaker"
           }
         },
         {
