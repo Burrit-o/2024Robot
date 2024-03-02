@@ -12,9 +12,22 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "deadline",
           "data": {
-            "name": "SpeakerSetpoint"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "CheckHeight"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SpeakerSetpoint"
+                }
+              }
+            ]
           }
         },
         {

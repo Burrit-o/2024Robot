@@ -12,22 +12,28 @@
     "data": {
       "commands": [
         {
-          "type": "sequential",
+          "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "SpeakerSetpoint"
+                  "name": "CheckHeight"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "FireSpeaker"
+                  "name": "SpeakerSetpoint"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FireSpeaker"
           }
         },
         {
@@ -43,22 +49,28 @@
           }
         },
         {
-          "type": "sequential",
+          "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "SpeakerSetpoint"
+                  "name": "CheckHeight"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "FireSpeaker"
+                  "name": "SpeakerSetpoint"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FireSpeaker"
           }
         }
       ]
