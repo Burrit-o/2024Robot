@@ -1,0 +1,43 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.73,
+      "y": 6.76
+    },
+    "rotation": -115.32514060941995
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "high to amp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FireAmp"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "amp reload "
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pickup"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
