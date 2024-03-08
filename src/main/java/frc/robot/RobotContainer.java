@@ -87,15 +87,12 @@ public class RobotContainer {
 
                  //Register named commands
               NamedCommands.registerCommand("AprilTagAlignCmd", new AprilTagAlignCmd(swerveSubsystem));
-              //NamedCommands.registerCommand("FireSpeaker", new ParallelDeadlineGroup( new FeedandFireSpeak(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.SPEAKER))));
-              // NamedCommands.registerCommand("FireAmp", new ParallelDeadlineGroup( new FeedandFireAmp(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.AMP))));
-              // NamedCommands.registerCommand("Pickup", new ParallelDeadlineGroup( new Pickup(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.PICKUP))));
               NamedCommands.registerCommand("PickupSetpoint", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.STOW)));
-              NamedCommands.registerCommand("SpeakerSetpoint", new SetHeight(m_Lift, LiftConstants.Setpoint.SPEAKER));
+              NamedCommands.registerCommand("SpeakerSetpoint", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.SPEAKER)));
               NamedCommands.registerCommand("CheckHeight", new CheckHeight(m_Lift));
-              NamedCommands.registerCommand("FireSpeaker", new FeedandFireSpeak(m_IPFSSub));
+              NamedCommands.registerCommand("FireSpeaker", new FeedandFireSpeak(m_IPFSSub, m_Lift));
               NamedCommands.registerCommand("Pickup", new Pickup(m_IPFSSub));
-              //NamedCommands.registerCommand("NoteAlignedCmd", new NoteAlignCmd(swerveSubsystem));
+              // NamedCommands.registerCommand("NoteAlignedCmd", new NoteAlignCmd(swerveSubsystem));
               // NamedCommands.registerCommand("ClimberHigh", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.PICKTOP)));
               // NamedCommands.registerCommand("ClimberLow", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.PICKBOTTOM)));
 
@@ -148,7 +145,7 @@ public class RobotContainer {
 
     OPrBumper.toggleOnTrue(new ManualLift(m_Lift));
     OPMenu.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.STOW)));
-    OPlBumper.whileTrue(new FeedandFireSpeak(m_IPFSSub));
+    OPlBumper.whileTrue(new FeedandFireAmp(m_IPFSSub));
     //  Trigger pagebtn = m_operatorController.back();
     //  pagebtn.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.SPEAKER)));
 

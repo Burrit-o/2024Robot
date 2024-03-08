@@ -50,7 +50,7 @@ public class Lift extends SubsystemBase {
 
   }
 
-  public double getSetHeight() {
+  public double getCommandedHeight() {
     return LiftSetpoint.getSetpoint();
   }
 
@@ -99,13 +99,17 @@ public class Lift extends SubsystemBase {
         default:kp = 0; ki = 0; kd = 0; height = LiftConstants.Stow;
     } 
     LiftSetpoint = new PIDController(kp, ki, kd);
-    LiftSetpoint.setSetpoint(height);
-    
+    LiftSetpoint.setSetpoint(height);  
+  }
+
+  public boolean atSetpoint() {
+    int tolerance = 10;
+    if(currentHeight() < getCommandedHeight() + tolerance && currentHeight() > getCommandedHeight() - tolerance) {
+      return true;
     }
-
-
+    return false;
+  }
   
-
   public double currentHeight() {
    /*  if (LiftHeight > meanHeight + BackupToF.getRangeSigma() ||  LiftHeight < meanHeight - BackupToF.getRangeSigma())
 

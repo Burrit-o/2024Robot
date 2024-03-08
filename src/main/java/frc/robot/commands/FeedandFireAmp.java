@@ -28,7 +28,7 @@ public class FeedandFireAmp extends Command {
   @Override
   public void execute() {
     m_subsystem.Feed(0.167);
-    m_subsystem.Shoot(1);
+    m_subsystem.Shoot(.225);
   }
 
   // Called once the command ends or is interrupted.

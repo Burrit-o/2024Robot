@@ -30,7 +30,7 @@ public class CheckHeight extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(m_Lift.currentHeight() < m_Lift.getSetHeight() + tolerance && m_Lift.currentHeight() > m_Lift.getSetHeight() - tolerance) {
+    if(m_Lift.currentHeight() < m_Lift.getCommandedHeight() + tolerance && m_Lift.currentHeight() > m_Lift.getCommandedHeight() - tolerance) {
       return true;
     }
     return false;
