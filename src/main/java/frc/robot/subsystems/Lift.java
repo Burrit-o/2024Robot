@@ -27,6 +27,7 @@ public class Lift extends SubsystemBase {
   private double ki;
   private double kd;
   private double height;
+  private double speed;
 
   /** Creates a new Lift. */
   public Lift() {
@@ -83,20 +84,20 @@ public class Lift extends SubsystemBase {
 
     LiftConstants.Setpoint setpoint = m_Setpoint;
     switch (setpoint) {
-        case AMP: kp = 0.00287; ki = 0.000875; kd = 0.00007; height = LiftConstants.AmpHeight ;
+        case AMP: kp = 0.00287; ki = 0.000875; kd = 0.00007; height = LiftConstants.AmpHeight; speed = .225 ;
       break;
         // case SPEAKER: kp = 0.00315; ki = 0.001125; kd = 0.000075; height = LiftConstants.SpeakerHeight ;
-        case SPEAKER: kp = 0.00283; ki = 0.00085; kd = 0.00007; height = LiftConstants.SpeakerHeight ;
+        case SPEAKER: kp = 0.00283; ki = 0.00085; kd = 0.00007; height = LiftConstants.SpeakerHeight; speed = 1 ;
       break;
-        case STOW: kp = 0; ki = 0; kd = 0; height = LiftConstants.Stow ;
+        case STOW: kp = 0; ki = 0; kd = 0; height = LiftConstants.Stow; speed = 0;
       break;
-        case PICKTOP : kp = 0; ki = 0; kd = 0; height = LiftConstants.ClimbTop ;
+        case PICKTOP : kp = 0; ki = 0; kd = 0; height = LiftConstants.ClimbTop; speed = 0 ;
       break;
-        case PICKBOTTOM: kp = 0; ki = 0; kd = 0; height = LiftConstants.ClimbBottom ;
+        case PICKBOTTOM: kp = 0; ki = 0; kd = 0; height = LiftConstants.ClimbBottom; speed = 0  ;
       break;
-        case PICKUP: kp = 0; ki = 0; kd = 0; height = LiftConstants.PickupHeight ;
+        case PICKUP: kp = 0; ki = 0; kd = 0; height = LiftConstants.PickupHeight; speed = 0  ;
       break;
-        default:kp = 0; ki = 0; kd = 0; height = LiftConstants.Stow;
+        default:kp = 0; ki = 0; kd = 0; height = LiftConstants.Stow; speed = 0 ;
     } 
     LiftSetpoint = new PIDController(kp, ki, kd);
     LiftSetpoint.setSetpoint(height);  
@@ -122,6 +123,11 @@ public class Lift extends SubsystemBase {
     else {return meanHeight;}*/
     return BackupToF.getRange();
   }
+
+  public double ShootSpeed(){
+    return speed;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

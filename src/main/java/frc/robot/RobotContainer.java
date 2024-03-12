@@ -42,6 +42,7 @@ import frc.robot.commands.Pickup;
 import frc.robot.commands.SetHeight;
 import frc.robot.commands.CheckHeight;
 import frc.robot.commands.SwerveJoystickCmd;
+import frc.robot.commands.Shoot;
 
 
 
@@ -204,7 +205,8 @@ public class RobotContainer {
   //     0.0));
 
     new JoystickButton(m_driveController, 1).onTrue(new InstantCommand(() -> swerveSubsystem.zeroHeading()));
-     
+    new JoystickButton(m_driveController, 2).onTrue(new InstantCommand(() -> swerveSubsystem.zeroHeading()));
+
 
   }
 

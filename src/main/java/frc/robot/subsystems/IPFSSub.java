@@ -9,14 +9,12 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import frc.robot.LEDs;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.IPFSConstants;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.LEDConstants.ledMode;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import frc.robot.LEDs;
 
 
 
@@ -114,6 +112,7 @@ public class IPFSSub extends SubsystemBase {
   public boolean haveNote() {
     return PickupSensor.get();
   }
+
 
     @Override
 
