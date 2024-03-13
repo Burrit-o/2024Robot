@@ -40,9 +40,9 @@ import frc.robot.commands.ManualLift;
 import frc.robot.commands.NoteAlignCmd;
 import frc.robot.commands.Pickup;
 import frc.robot.commands.SetHeight;
+import frc.robot.commands.SetShoot;
 import frc.robot.commands.CheckHeight;
 import frc.robot.commands.SwerveJoystickCmd;
-import frc.robot.commands.Shoot;
 
 
 
@@ -91,7 +91,7 @@ public class RobotContainer {
               NamedCommands.registerCommand("PickupSetpoint", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.STOW)));
               NamedCommands.registerCommand("SpeakerSetpoint", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.SPEAKER)));
               NamedCommands.registerCommand("CheckHeight", new CheckHeight(m_Lift));
-              NamedCommands.registerCommand("FireSpeaker", new FeedandFireSpeak(m_IPFSSub, m_Lift));
+              NamedCommands.registerCommand("FireSpeaker", new FeedandFireSpeak(m_IPFSSub));
               NamedCommands.registerCommand("Pickup", new Pickup(m_IPFSSub));
               // NamedCommands.registerCommand("NoteAlignedCmd", new NoteAlignCmd(swerveSubsystem));
               // NamedCommands.registerCommand("ClimberHigh", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.PICKTOP)));
@@ -149,6 +149,8 @@ public class RobotContainer {
     OPlBumper.whileTrue(new FeedandFireAmp(m_IPFSSub));
     //  Trigger pagebtn = m_operatorController.back();
     //  pagebtn.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.SPEAKER)));
+
+    OPxButton.onTrue(new SetShoot(m_Lift, new FeedandFireSpeak(m_IPFSSub), LiftConstants.Setpoint.SPEAKER));
 
 
 

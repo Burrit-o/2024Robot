@@ -19,8 +19,6 @@ public class Lift extends SubsystemBase {
   private final CANSparkMax LeftLiftMotor, RightLiftMotor;
   private PIDController LiftSetpoint;
   private final TimeOfFlight ToF, BackupToF;
-  private final double LiftHeight;
-  private final double BackupLiftHeight;
   private final DigitalInput TopLim;
   private final DigitalInput BottomLim;
   private double kp;
@@ -40,8 +38,6 @@ public class Lift extends SubsystemBase {
 
     ToF = new TimeOfFlight(LiftConstants.ToFSensor);
     BackupToF = new TimeOfFlight(LiftConstants.BackupToFSensor);
-    LiftHeight = ToF.getRange();
-    BackupLiftHeight = BackupToF.getRange();
 
     //meanHeight = (LiftHeight + BackupLiftHeight)/2;
     TopLim = new DigitalInput(3);
@@ -104,7 +100,7 @@ public class Lift extends SubsystemBase {
   }
 
   public boolean atSetpoint() {
-    int tolerance = 10;
+    int tolerance = 5;
     if(currentHeight() < getCommandedHeight() + tolerance && currentHeight() > getCommandedHeight() - tolerance) {
       return true;
     }
