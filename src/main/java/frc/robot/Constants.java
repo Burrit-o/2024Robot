@@ -196,8 +196,8 @@ public final class Constants {
     public static final double AmpHeight = 225;
     public static final double SpeakerHeight = 265;
     public static final double Short = 70;
-    public static final double PickupHeight = 70;
-    public static final double Stow = 70;
+    public static final double PickupHeight = 90;
+    public static final double Stow = 115;
     //stow is 250 usually
     public static final double defaultStartingHeight = Stow;
   }

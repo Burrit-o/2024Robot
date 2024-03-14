@@ -91,7 +91,7 @@ public class Lift extends SubsystemBase {
       break;
         case PICKBOTTOM: kp = 0; ki = 0; kd = 0; height = LiftConstants.ClimbBottom; speed = 0  ;
       break;
-        case PICKUP: kp = 0; ki = 0; kd = 0; height = LiftConstants.PickupHeight; speed = 0  ;
+        case PICKUP: kp = .002; ki = 0.0003; kd = 0; height = LiftConstants.PickupHeight; speed = 0  ;
       break;
         default:kp = 0; ki = 0; kd = 0; height = LiftConstants.Stow; speed = 0 ;
     } 

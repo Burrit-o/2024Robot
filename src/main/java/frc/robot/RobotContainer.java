@@ -147,11 +147,8 @@ public class RobotContainer {
     OPrBumper.toggleOnTrue(new ManualLift(m_Lift));
     OPMenu.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.STOW)));
     OPlBumper.whileTrue(new FeedandFireAmp(m_IPFSSub));
-    //  Trigger pagebtn = m_operatorController.back();
-    //  pagebtn.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.SPEAKER)));
-
     OPxButton.whileTrue(new SetShoot(m_Lift, new FeedandFireAmp(m_IPFSSub), LiftConstants.Setpoint.SPEAKER));
-
+    OPbButton.whileTrue(new SetShoot(m_Lift, new Pickup(m_IPFSSub), LiftConstants.Setpoint.PICKUP));
 
 
     Trigger OPuDPad = m_operatorController.povUp();
@@ -161,7 +158,7 @@ public class RobotContainer {
     OPuDPad.whileTrue(new ParallelDeadlineGroup(new Pickup(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.PICKUP))));
     OPyButton.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.SPEAKER)));
     OPaButton.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.AMP)));
-    //OPxButton.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.STOW)));
+    OPdDPad.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.PICKUP)));
     
     // Press and hold the B button to Pathfind to Roughly Source. Releasing button should cancel the command
     //  OPdDPad.whileTrue(AutoBuilder.pathfindToPose(
