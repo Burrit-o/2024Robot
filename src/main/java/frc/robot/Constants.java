@@ -194,7 +194,7 @@ public final class Constants {
     public static final double ClimbTop = 425;
     public static final double ClimbBottom = 100;
     public static final double AmpHeight = 225;
-    public static final double SpeakerHeight = 265;
+    public static final double SpeakerHeight = 225;
     public static final double Short = 70;
     public static final double PickupHeight = 90;
     public static final double Stow = 115;
