@@ -65,7 +65,7 @@ public class IPFSSub extends SubsystemBase {
   IntakeMotorBottom.setIdleMode(IdleMode.kBrake);  
 
   
-  PickupSensor = new DigitalInput (1);
+  PickupSensor = new DigitalInput (4);
 
   TLEncoder = TLShooterMotor.getEncoder();
   TREncoder = TRShooterMotor.getEncoder();
@@ -118,7 +118,7 @@ public class IPFSSub extends SubsystemBase {
 
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putBoolean("PickupSensor", PickupSensor.get());
+    SmartDashboard.putBoolean("PickupSensor", haveNote());
 
     if(haveNote()) {
       m_LEDs.setColor(ledMode.GREEN);

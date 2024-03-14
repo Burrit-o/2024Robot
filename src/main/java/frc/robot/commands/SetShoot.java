@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Lift;
 
 import frc.robot.Constants.LiftConstants;
@@ -18,20 +19,18 @@ public class SetShoot extends Command {
     lift = subsytem;
     setpoint = Setpoint;
     command = Command;
-    addRequirements(lift);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    lift.setLiftPID(setpoint);
+  lift.setLiftPID(setpoint);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override

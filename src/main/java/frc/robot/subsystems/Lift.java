@@ -130,6 +130,5 @@ public class Lift extends SubsystemBase {
     SmartDashboard.putNumber("LiftHeight", ToF.getRange());
     SmartDashboard.putNumber("BackupLiftHeight", BackupToF.getRange());
     SmartDashboard.putNumber("MeanHeight", (ToF.getRange()+BackupToF.getRange()+30)/2);
-
   }
 }

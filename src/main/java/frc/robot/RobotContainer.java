@@ -41,8 +41,8 @@ import frc.robot.commands.NoteAlignCmd;
 import frc.robot.commands.Pickup;
 import frc.robot.commands.SetHeight;
 import frc.robot.commands.SetShoot;
-import frc.robot.commands.CheckHeight;
 import frc.robot.commands.SwerveJoystickCmd;
+import frc.robot.commands.CheckHeight;
 
 
 
@@ -88,11 +88,11 @@ public class RobotContainer {
 
                  //Register named commands
               NamedCommands.registerCommand("AprilTagAlignCmd", new AprilTagAlignCmd(swerveSubsystem));
-              NamedCommands.registerCommand("PickupSetpoint", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.STOW)));
+              NamedCommands.registerCommand("Stow", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.STOW)));
               NamedCommands.registerCommand("SpeakerSetpoint", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.SPEAKER)));
               NamedCommands.registerCommand("CheckHeight", new CheckHeight(m_Lift));
               NamedCommands.registerCommand("FireSpeaker", new FeedandFireSpeak(m_IPFSSub));
-              NamedCommands.registerCommand("Pickup", new Pickup(m_IPFSSub));
+              NamedCommands.registerCommand("Pickup", new SetShoot(m_Lift, new Pickup(m_IPFSSub), LiftConstants.Setpoint.PICKUP));
               // NamedCommands.registerCommand("NoteAlignedCmd", new NoteAlignCmd(swerveSubsystem));
               // NamedCommands.registerCommand("ClimberHigh", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.PICKTOP)));
               // NamedCommands.registerCommand("ClimberLow", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.PICKBOTTOM)));
@@ -150,7 +150,7 @@ public class RobotContainer {
     //  Trigger pagebtn = m_operatorController.back();
     //  pagebtn.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.SPEAKER)));
 
-    OPxButton.onTrue(new SetShoot(m_Lift, new FeedandFireSpeak(m_IPFSSub), LiftConstants.Setpoint.SPEAKER));
+    OPxButton.whileTrue(new SetShoot(m_Lift, new FeedandFireAmp(m_IPFSSub), LiftConstants.Setpoint.SPEAKER));
 
 
 
@@ -161,7 +161,7 @@ public class RobotContainer {
     OPuDPad.whileTrue(new ParallelDeadlineGroup(new Pickup(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.PICKUP))));
     OPyButton.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.SPEAKER)));
     OPaButton.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.AMP)));
-    OPxButton.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.STOW)));
+    //OPxButton.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.STOW)));
     
     // Press and hold the B button to Pathfind to Roughly Source. Releasing button should cancel the command
     //  OPdDPad.whileTrue(AutoBuilder.pathfindToPose(
@@ -207,7 +207,6 @@ public class RobotContainer {
   //     0.0));
 
     new JoystickButton(m_driveController, 1).onTrue(new InstantCommand(() -> swerveSubsystem.zeroHeading()));
-    new JoystickButton(m_driveController, 2).onTrue(new InstantCommand(() -> swerveSubsystem.zeroHeading()));
 
 
   }
