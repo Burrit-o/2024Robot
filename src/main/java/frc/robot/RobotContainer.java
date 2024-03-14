@@ -146,8 +146,8 @@ public class RobotContainer {
 
     OPrBumper.toggleOnTrue(new ManualLift(m_Lift));
     OPMenu.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.STOW)));
-    OPlBumper.whileTrue(new FeedandFireAmp(m_IPFSSub));
-    OPxButton.whileTrue(new SetShoot(m_Lift, new FeedandFireAmp(m_IPFSSub), LiftConstants.Setpoint.SPEAKER));
+    OPlBumper.whileTrue(new FeedandFireSpeak(m_IPFSSub));
+    OPxButton.onTrue(new SetShoot(m_Lift, new FeedandFireAmp(m_IPFSSub), LiftConstants.Setpoint.SPEAKER));
     OPbButton.whileTrue(new SetShoot(m_Lift, new Pickup(m_IPFSSub), LiftConstants.Setpoint.PICKUP));
 
 

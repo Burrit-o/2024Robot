@@ -110,7 +110,7 @@ public class IPFSSub extends SubsystemBase {
 
 
   public boolean haveNote() {
-    return PickupSensor.get();
+    return !PickupSensor.get();
   }
 
 
