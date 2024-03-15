@@ -189,12 +189,13 @@ public final class Constants {
 
     //Setpoint Heights, totally random at the moment, once tested will be replaced
     public static enum Setpoint {
-      STOW, PICKUP, PICKTOP, PICKBOTTOM, SPEAKER, AMP;
+      STOW, PICKUP, PICKTOP, PICKBOTTOM, SPEAKER, AMP, SPEAK4FT;
     }
     public static final double ClimbTop = 425;
     public static final double ClimbBottom = 100;
     public static final double AmpHeight = 225;
     public static final double SpeakerHeight = 225;
+    public static final double Speaker4ft = 182;
     public static final double Short = 70;
     public static final double PickupHeight = 90;
     public static final double Stow = 115;

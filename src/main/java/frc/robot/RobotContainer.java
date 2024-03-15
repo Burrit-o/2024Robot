@@ -148,9 +148,9 @@ public class RobotContainer {
     OPrBumper.toggleOnTrue(new ManualLift(m_Lift));
     OPMenu.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.STOW)));
     OPlBumper.whileTrue(new FeedandFireSpeak(m_IPFSSub));
-    OPxButton.onTrue(new SetShoot(m_Lift, new FeedandFireAmp(m_IPFSSub), LiftConstants.Setpoint.SPEAKER));
+    OPaButton.onTrue(new SetShoot(m_Lift, new FeedandFireAmp(m_IPFSSub), LiftConstants.Setpoint.AMP));
     OPbButton.whileTrue(new SetShoot(m_Lift, new Pickup(m_IPFSSub), LiftConstants.Setpoint.PICKUP));
-
+    OPxButton.onTrue(new SetShoot(m_Lift, new FeedandFireSpeak(m_IPFSSub), LiftConstants.Setpoint.SPEAK4FT));
 
     Trigger OPuDPad = m_operatorController.povUp();
     Trigger OPdDPad = m_operatorController.povDown();
@@ -158,7 +158,7 @@ public class RobotContainer {
     //Trigger OPrDPad = m_operatorController.povRight();
     OPuDPad.whileTrue(new ParallelDeadlineGroup(new Pickup(m_IPFSSub), new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.PICKUP))));
     OPyButton.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.SPEAKER)));
-    OPaButton.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.AMP)));
+    //OPaButton.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.AMP)));
     OPdDPad.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.PICKUP)));
     
     // Press and hold the B button to Pathfind to Roughly Source. Releasing button should cancel the command

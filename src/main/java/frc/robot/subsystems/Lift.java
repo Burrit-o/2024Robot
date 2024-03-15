@@ -93,6 +93,8 @@ public class Lift extends SubsystemBase {
       break;
         case PICKUP: kp = .002; ki = 0.0003; kd = 0; height = LiftConstants.PickupHeight; speed = 0  ;
       break;
+        case SPEAK4FT: kp = 0.0045; ki = 0.0035; kd = 0.0001125; height = LiftConstants.Speaker4ft; speed = 1 ;
+      break;
         default:kp = 0; ki = 0; kd = 0; height = LiftConstants.Stow; speed = 0 ;
     } 
     LiftSetpoint = new PIDController(kp, ki, kd);
@@ -117,7 +119,7 @@ public class Lift extends SubsystemBase {
      {return LiftHeight;}
 
     else {return meanHeight;}*/
-    return BackupToF.getRange();
+    return (BackupToF.getRange()+ToF.getRange()+30)/2;
   }
 
   public double ShootSpeed(){
@@ -127,8 +129,8 @@ public class Lift extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("LiftHeight", ToF.getRange());
+    SmartDashboard.putNumber("LiftHeight", ToF.getRange()+30);
     SmartDashboard.putNumber("BackupLiftHeight", BackupToF.getRange());
-    SmartDashboard.putNumber("MeanHeight", (ToF.getRange()+BackupToF.getRange()+30)/2);
+    SmartDashboard.putNumber("MeanHeight", currentHeight());
   }
 }

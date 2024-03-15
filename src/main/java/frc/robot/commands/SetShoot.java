@@ -41,7 +41,7 @@ public class SetShoot extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(lift.currentHeight()-lift.getCommandedHeight()) <= 5){
+    if (Math.abs(lift.currentHeight()-lift.getCommandedHeight()) <= 2){
       return true;
     }else{
     return false;
