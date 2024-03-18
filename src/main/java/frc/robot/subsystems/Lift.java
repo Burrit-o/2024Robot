@@ -93,7 +93,7 @@ public class Lift extends SubsystemBase {
       break;
         case PICKUP: kp = .002; ki = 0.0003; kd = 0; height = LiftConstants.PickupHeight; speed = 0  ;
       break;
-        case SPEAK4FT: kp = 0.0045; ki = 0.0035; kd = 0.0001125; height = LiftConstants.Speaker4ft; speed = 1 ;
+        case SPEAKDriveline: kp = 0.00433; ki = 0.00325; kd = 0.00011125; height = LiftConstants.SpeakerDriveline; speed = 1 ;
       break;
         default:kp = 0; ki = 0; kd = 0; height = LiftConstants.Stow; speed = 0 ;
     } 
