@@ -30,16 +30,29 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.5
+                  "waitTime": 1.0
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "High Drive Out"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pickup"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "High Drive Out"
+                }
+              }
+            ]
           }
         },
         {

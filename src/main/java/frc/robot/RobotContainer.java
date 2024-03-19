@@ -150,7 +150,7 @@ public class RobotContainer {
     OPlBumper.whileTrue(new FeedandFireSpeak(m_IPFSSub));
     OPaButton.onTrue(new SetShoot(m_Lift, new FeedandFireAmp(m_IPFSSub), LiftConstants.Setpoint.AMP));
     OPbButton.whileTrue(new SetShoot(m_Lift, new Pickup(m_IPFSSub), LiftConstants.Setpoint.PICKUP));
-    OPxButton.onTrue(new SetShoot(m_Lift, new FeedandFireSpeak(m_IPFSSub), LiftConstants.Setpoint.SPEAK4FT));
+    OPxButton.onTrue(new SetShoot(m_Lift, new FeedandFireSpeak(m_IPFSSub), LiftConstants.Setpoint.SPEAKPickupSide));
 
     Trigger OPuDPad = m_operatorController.povUp();
     Trigger OPdDPad = m_operatorController.povDown();
