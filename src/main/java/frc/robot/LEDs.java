@@ -6,38 +6,59 @@ package frc.robot;
 
 import java.util.Optional;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //import frc.robot.Constants.LEDConstants.ledMode;
 import frc.robot.Constants.LEDConstants;
+import frc.robot.Constants.VisionConstants;
+import frc.robot.Constants.LEDConstants.ledMode;
+import frc.robot.subsystems.IPFSSub;
 
 
 
 /** Add your docs here. */
 public class LEDs extends SubsystemBase {
       /** Creates a new LED. */
-private AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(LEDConstants.LEDlength);
-private AddressableLED m_led = new AddressableLED(LEDConstants.LEDport);
-
-private AddressableLEDBuffer red_ledBuffer = new AddressableLEDBuffer(LEDConstants.LEDlength);
-private AddressableLEDBuffer blue_ledBuffer = new AddressableLEDBuffer(LEDConstants.LEDlength);
-private AddressableLEDBuffer green_ledBuffer = new AddressableLEDBuffer(LEDConstants.LEDlength);
-private AddressableLEDBuffer purple_ledBuffer = new AddressableLEDBuffer(LEDConstants.LEDlength);
-private AddressableLEDBuffer yellow_ledBuffer = new AddressableLEDBuffer(LEDConstants.LEDlength);
-private AddressableLEDBuffer team_ledBuffer = new AddressableLEDBuffer(LEDConstants.LEDlength);
-private AddressableLEDBuffer rainbow_ledBuffer = new AddressableLEDBuffer(LEDConstants.LEDlength);
-
+private AddressableLEDBuffer m_ledBuffer; 
+private AddressableLED m_leftLed, m_rightLed;
+private ledMode curr_color;
+private boolean new_change;
+private AddressableLEDBuffer red_ledBuffer;
+private AddressableLEDBuffer blue_ledBuffer;
+private AddressableLEDBuffer green_ledBuffer;
+private AddressableLEDBuffer purple_ledBuffer;
+private AddressableLEDBuffer yellow_ledBuffer;
+private AddressableLEDBuffer team_ledBuffer;
+private AddressableLEDBuffer rainbow_ledBuffer;
+private int counter;
+private IPFSSub m_IPFSSub;
 Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
 /*public enum ledMode {
   RED, GREEN, RAINBOW, TEAM, BLUE, PURPLE, YELLOW
 }*/
   
 //Constructor for LEDs class
-public LEDs() {
-  for (var i = 0; i < LEDConstants.LEDlength; i++) {
+public LEDs(int length, int leftPort, int rightPort) {
+  
+  new_change = false;
+  curr_color = ledMode.PURPLE;
+  m_ledBuffer = new AddressableLEDBuffer(length);
+  m_leftLed = new AddressableLED(leftPort);
+  // m_rightLed = new AddressableLED(rightPort);
+  red_ledBuffer = new AddressableLEDBuffer(length);
+  blue_ledBuffer = new AddressableLEDBuffer(length);
+  green_ledBuffer = new AddressableLEDBuffer(length);
+  purple_ledBuffer = new AddressableLEDBuffer(length);
+  yellow_ledBuffer = new AddressableLEDBuffer(length);
+  team_ledBuffer = new AddressableLEDBuffer(length);
+  rainbow_ledBuffer = new AddressableLEDBuffer(length);
+
+  for (var i = 0; i < length; i++) {
     red_ledBuffer.setRGB(i, 255, 0, 0);
     blue_ledBuffer.setRGB(i, 0, 0, 255);
     green_ledBuffer.setRGB(i, 0, 255, 0);
@@ -51,12 +72,12 @@ public LEDs() {
     team_ledBuffer.setRGB(i+6, 255, 20, 0);
   }
 
-  for (var i = 0; i < LEDConstants.LEDlength; i++) {
-    final int hue = (int) (((((12 + i) * 180) / LEDConstants.LEDlength) + 0) % 180);
+  for (var i = 0; i < length; i++) {
+    final int hue = (int) (((((12 + i) * 180) / length) + 0) % 180);
        rainbow_ledBuffer.setHSV(i, (hue), 255, 128);
   }
 
-  setLEDmode(RobotContainer.LED_Chooser.getSelected());
+  // setLEDmode(RobotContainer.LED_Chooser.getSelected());
   LED_init();
 }
 
@@ -94,18 +115,47 @@ switch (m_mode) {
 public void setColor (LEDConstants.ledMode mode) { 
   LEDConstants.ledMode m_led_mode = mode;
   setLEDmode(m_led_mode);
-  m_led.setData(m_ledBuffer);
+  m_leftLed.setData(m_ledBuffer);
+  // m_rightLed.setData(m_ledBuffer);
 }
 
-  public void LED_init() {
-    m_led.setLength(m_ledBuffer.getLength());
-    m_led.setData(m_ledBuffer);
-    m_led.start();
-  } 
+public void changeColor (ledMode colorChange){
+  curr_color = colorChange;
+  new_change = true;
+}
 
-  @Override
+public void LED_init() {
+  m_leftLed.setLength(m_ledBuffer.getLength());
+  m_leftLed.setData(m_ledBuffer);
+  m_leftLed.start();
+  
+  // m_rightLed.setLength(m_ledBuffer.getLength());
+  // m_rightLed.setData(m_ledBuffer);
+  // m_rightLed.start();
+} 
+
+public boolean getCanSeeNote() {
+  // If we can see a NOTE, return true
+  if(NetworkTableInstance.getDefault().getTable(VisionConstants.kPickupLimelightNetworkTableName).getEntry("tx").getDouble(0) != 0) {
+    counter = 0;
+    return true;
+  }
+  // Reduce noise
+  else {
+    if(counter < 3) {
+      counter = counter + 1;
+      return true;
+    }
+  }
+  return false;
+}
+
+@Override
   public void periodic() {
     // This method will be called once per scheduler run
-    setColor(RobotContainer.LED_Chooser.getSelected());
+    if (new_change) {
+      setColor(curr_color);
+      new_change = false;
+    }
   }
 }

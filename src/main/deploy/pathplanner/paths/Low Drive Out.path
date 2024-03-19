@@ -8,40 +8,52 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7123390646436798,
-        "y": 4.339720100628832
+        "x": 1.523709862070113,
+        "y": 3.9853215333511693
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.450786344413977,
-        "y": 4.1046482092964185
+        "x": 2.560934045286515,
+        "y": 4.095469234223708
       },
       "prevControl": {
-        "x": 1.4507863444139768,
-        "y": 4.1046482092964185
+        "x": 1.6154996127972279,
+        "y": 4.086290259150997
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Pickup",
-      "waypointRelativePos": 0.35,
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.05,
       "command": {
-        "type": "sequential",
+        "type": "deadline",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
                 "name": "Pickup"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "RestingPos"
               }
             }
           ]
@@ -61,7 +73,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "HML Drive Out",
+  "folder": null,
   "previewStartingState": {
     "rotation": -61.26385756738269,
     "velocity": 0

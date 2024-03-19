@@ -31,9 +31,9 @@ public final class Constants {
 
     public static final class DriveConstants {
 
-        public static final double kTrackWidth = Units.inchesToMeters(24.75);
+        public static final double kTrackWidth = Units.inchesToMeters(24);
         // Distance between right and left wheels
-        public static final double kWheelBase = Units.inchesToMeters(24.75);
+        public static final double kWheelBase = Units.inchesToMeters(24);
         // Distance between front and back wheels
         public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
                 new Translation2d(kWheelBase / 2, kTrackWidth / 2), /* Left front */
@@ -91,22 +91,22 @@ public final class Constants {
         public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3;
 
         /* (Also Incorrect) Feedforward constants from SysID run on 2/19/24 */
-        public static final double kSLeft = 0.95317;
-        public static final double kVLeft = 0.26112;
-        public static final double kALeft = 1.0539;
+        // public static final double kSLeft = 0.95317;
+        // public static final double kVLeft = 0.26112;
+        // public static final double kALeft = 1.0539;
 
-        public static final double kSRight = 0.48604;
-        public static final double kVRight = 1.7619;
-        public static final double kARight = 0.66864;
+        // public static final double kSRight = 0.48604;
+        // public static final double kVRight = 1.7619;
+        // public static final double kARight = 0.66864;
 
-        /* (Incorrect) Feedforward constants from Daedalus */
-         /*public static final double kSLeft = 0.097576;
+        /*  (Incorrect) Feedforward constants from Daedalus */
+         public static final double kSLeft = 0.097576;
          public static final double kVLeft = 2.6933;
          public static final double kALeft = 0.26236;
 
          public static final double kSRight = 0.099437;
          public static final double kVRight = 2.6173;
-         public static final double kARight = 0.11195;*/
+         public static final double kARight = 0.11195;
 
         // Drive/Rotation gain
         public static final double kRotGain = 2;
@@ -114,8 +114,8 @@ public final class Constants {
     }
 
     public static final class LimeLightConstants {
-        public static final String kllShoot = "Limelight-shoot";
-        public static final String kllPickup = "Limelight-pickup";
+        public static final String kllShoot = "limelight-shoot";
+        public static final String kllPickup = "limelight-pickup";
         public static final int kAprilTagPipeline = 0;
         public static final int kNeuralNetworkPipeline = 1;
     }
@@ -145,7 +145,7 @@ public final class Constants {
         public static final int kDriverRotAxis = 4;
         public static final int kDriverFieldOrientedButtonIdx = 5;
 
-        public static final double kDeadband = 0.1;
+        public static final double kDeadband = 0.25;
     }
 
     public static class OperatorConstants {
@@ -159,8 +159,9 @@ public final class Constants {
     }
 
     public static class LEDConstants {
-        public static final int LEDport = 0;
-        public static final int LEDlength = 12;
+        public static final int LeftLEDport = 1;
+        public static final int RightLEDport = 0;
+        public static final int LEDlength = 17;
 
         public enum ledMode {
             RED, GREEN, RAINBOW, TEAM, BLUE, PURPLE, YELLOW, ALLIANCE;
@@ -188,15 +189,19 @@ public final class Constants {
 
     //Setpoint Heights, totally random at the moment, once tested will be replaced
     public static enum Setpoint {
-      STOW, PICKUP, PICKTOP, PICKBOTTOM, SPEAKER, AMP;
+      STOW, PICKUP, PICKTOP, PICKBOTTOM, SPEAKER, AMP, SPEAK4FT, SPEAKPickupSide, SPEAKDriveline;
+
     }
     public static final double ClimbTop = 425;
     public static final double ClimbBottom = 100;
-    public static final double AmpHeight = 260;
-    public static final double SpeakerHeight = 215;
+    public static final double AmpHeight = 225;
+    public static final double SpeakerHeight = 225;
+    public static final double Speaker4ft = 182;
+    public static final double SpeakSidePickupSpot = 166;
+    public static final double SpeakerDriveline = 200;
     public static final double Short = 70;
-    public static final double PickupHeight = 70;
-    public static final double Stow = 70;
+    public static final double PickupHeight = 90;
+    public static final double Stow = 115;
     //stow is 250 usually
     public static final double defaultStartingHeight = Stow;
   }

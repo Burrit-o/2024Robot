@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3952042110521514,
+        "x": 1.3676672858340169,
         "y": 5.545747295712128
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3952042110521523,
+        "x": 2.3676672858340178,
         "y": 5.545747295712128
       },
       "isLocked": false,
@@ -35,13 +35,19 @@
       "name": "Pickup",
       "waypointRelativePos": 0.4,
       "command": {
-        "type": "sequential",
+        "type": "deadline",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
                 "name": "Pickup"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "RestingPos"
               }
             }
           ]
@@ -61,7 +67,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "HML Drive Out",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

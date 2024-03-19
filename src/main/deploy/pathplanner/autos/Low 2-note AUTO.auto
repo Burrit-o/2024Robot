@@ -12,9 +12,28 @@
     "data": {
       "commands": [
         {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "CheckHeight"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SpeakerSetpoint"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "SpeakerClose"
+            "name": "FireSpeaker"
           }
         },
         {
@@ -30,14 +49,33 @@
           }
         },
         {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "CheckHeight"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SpeakerSetpoint"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "SpeakerClose"
+            "name": "FireSpeaker"
           }
         }
       ]
     }
   },
-  "folder": "HML 2-note auto",
+  "folder": null,
   "choreoAuto": false
 }
