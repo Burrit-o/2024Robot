@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8263133149866646,
-      "y": 6.690439013952964
+      "x": 0.71,
+      "y": 6.711477129946491
     },
     "rotation": 59.43394494143663
   },
@@ -12,15 +12,47 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "SpeakerClose"
+            "waitTime": 0.01
           }
         },
         {
-          "type": "path",
+          "type": "sequential",
           "data": {
-            "pathName": "High Drive Out"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "FireSpeaker"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pickup"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "High Drive Out"
+                }
+              }
+            ]
           }
         },
         {
@@ -30,14 +62,27 @@
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "SpeakerClose"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "FireSpeaker"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.5
+                }
+              }
+            ]
           }
         }
       ]
     }
   },
-  "folder": "HML 2-note auto",
+  "folder": null,
   "choreoAuto": false
 }

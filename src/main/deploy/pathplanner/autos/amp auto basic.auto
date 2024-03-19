@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2.0,
-      "y": 7.0
+      "x": 0.73,
+      "y": 6.76
     },
-    "rotation": 0
+    "rotation": -115.32514060941995
   },
   "command": {
     "type": "sequential",
@@ -14,37 +14,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": " Path 1 test"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
+            "pathName": "high to amp"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "NoteAlignedCmd"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
+            "name": "FireAmp"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Path 2 test"
+            "pathName": "amp reload "
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AprilTagAlignCmd"
+            "name": "Pickup"
           }
         }
       ]

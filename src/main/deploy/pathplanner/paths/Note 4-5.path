@@ -75,7 +75,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Mid notes",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0.7994066268555365,
     "velocity": 0

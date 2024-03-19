@@ -20,20 +20,25 @@ public class FeedandFireSpeak extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
+  public void initialize(){
     m_timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.Feed(0.167);
-    m_subsystem.Shoot(1);
+      m_subsystem.Shoot(1);
+      if (m_timer.get() >= .5){
+           m_subsystem.Feed(1);
+           m_subsystem.Shoot(1);
+      }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_timer.stop();
+    m_timer.reset();
     m_subsystem.Feed(0);
     m_subsystem.Shoot(0);
   }
@@ -41,7 +46,7 @@ public class FeedandFireSpeak extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (m_timer.get() >= 3) {
+    if (m_timer.get() >= 1) {
       return true;
     }else{
       return false;

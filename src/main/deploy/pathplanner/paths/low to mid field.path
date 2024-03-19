@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "HML MID FIELD",
+  "folder": null,
   "previewStartingState": {
     "rotation": -57.4872967697407,
     "velocity": 0

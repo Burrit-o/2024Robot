@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 1.852718113424813,
+        "x": 1.3676672858340169,
         "y": 5.51
       },
       "prevControl": {
-        "x": 2.252633806873221,
+        "x": 1.7675829792824262,
         "y": 5.5043531363658476
       },
       "nextControl": null,
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Scoring Paths",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

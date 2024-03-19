@@ -2,30 +2,30 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2.89,
-      "y": 7.02
+      "x": 3.0120909314571827,
+      "y": 6.511225119454518
     },
-    "rotation": -0.320861180309675
+    "rotation": -90.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "SpeakerClose"
+            "pathName": "Shoot Amp "
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "SpHigh"
+            "name": "FireAmp"
           }
         }
       ]
     }
   },
-  "folder": "Scoring Paths ",
+  "folder": null,
   "choreoAuto": false
 }

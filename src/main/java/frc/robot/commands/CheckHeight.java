@@ -5,31 +5,23 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Lift;
-
-public class ManualLift extends Command {
-  Lift lift;
-  CommandXboxController m_opController;
-  /** Creates a new ManualLift. */
-  public ManualLift(Lift subsystem) {
-    lift = subsystem;
-    m_opController = new CommandXboxController(1);
+public class CheckHeight extends Command {
+  private final Lift m_Lift;
+  int tolerance = 10;  // Ends command if the lift is +/- tolerance
+  /** Creates a new CheckHeight. */
+  public CheckHeight(Lift lift) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(lift);
+    m_Lift = lift;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    lift.setLift(m_opController.getRawAxis(5)/2);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
@@ -38,6 +30,9 @@ public class ManualLift extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(m_Lift.currentHeight() < m_Lift.getCommandedHeight() + tolerance && m_Lift.currentHeight() > m_Lift.getCommandedHeight() - tolerance) {
+      return true;
+    }
     return false;
   }
 }
