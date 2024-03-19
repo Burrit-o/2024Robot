@@ -83,7 +83,7 @@ public class Lift extends SubsystemBase {
         case AMP: kp = 0.00287; ki = 0.000875; kd = 0.00007; height = LiftConstants.AmpHeight; speed = .225 ;
       break;
         // case SPEAKER: kp = 0.00315; ki = 0.001125; kd = 0.000075; height = LiftConstants.SpeakerHeight ;
-        case SPEAKER: kp = 0.00283; ki = 0.00085; kd = 0.00007; height = LiftConstants.SpeakerHeight; speed = 1 ;
+        case SPEAKER: kp = 0.00475; ki = 0.00115; kd = 0.000085; height = LiftConstants.SpeakerHeight; speed = 1 ;
       break;
         case STOW: kp = 0; ki = 0; kd = 0; height = LiftConstants.Stow; speed = 0;
       break;
@@ -94,6 +94,8 @@ public class Lift extends SubsystemBase {
         case PICKUP: kp = .002; ki = 0.0003; kd = 0; height = LiftConstants.PickupHeight; speed = 0  ;
       break;
         case SPEAKDriveline: kp = 0.00433; ki = 0.00325; kd = 0.00011125; height = LiftConstants.SpeakerDriveline; speed = 1 ;
+      break;
+        case SPEAKPickupSide: kp = 0.0045; ki = 0.0035; kd = 0.0001125; height = LiftConstants.SpeakSidePickupSpot; speed = 1 ;
       break;
         default:kp = 0; ki = 0; kd = 0; height = LiftConstants.Stow; speed = 0 ;
     } 
@@ -119,7 +121,7 @@ public class Lift extends SubsystemBase {
      {return LiftHeight;}
 
     else {return meanHeight;}*/
-    return (BackupToF.getRange()+ToF.getRange()+30)/2;
+    return (BackupToF.getRange()+ToF.getRange())/2;
   }
 
   public double ShootSpeed(){

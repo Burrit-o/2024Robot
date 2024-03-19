@@ -26,14 +26,33 @@
                 "data": {
                   "name": "FireSpeaker"
                 }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.0
+                }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "High Drive Out"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pickup"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "High Drive Out"
+                }
+              }
+            ]
           }
         },
         {
@@ -43,9 +62,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "FireSpeaker"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "FireSpeaker"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.5
+                }
+              }
+            ]
           }
         }
       ]
