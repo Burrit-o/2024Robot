@@ -104,7 +104,7 @@ public class IPFSSub extends SubsystemBase {
   }
 
   public void Intake(double speed) {
-   IntakeMotorTop.set(speed);
+   IntakeMotorTop.set(speed*.85);
    IntakeMotorBottom.set(speed);
   }
 
