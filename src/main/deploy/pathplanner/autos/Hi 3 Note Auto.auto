@@ -98,6 +98,18 @@
               }
             ]
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Pickup to High Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootHighPickup"
+          }
         }
       ]
     }

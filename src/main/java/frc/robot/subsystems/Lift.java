@@ -158,7 +158,7 @@ public class Lift extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("LiftHeight", ToF.getRange()+30);
+    SmartDashboard.putNumber("LiftHeight", ToF.getRange());
     SmartDashboard.putNumber("BackupLiftHeight", BackupToF.getRange());
     SmartDashboard.putNumber("MeanHeight", currentHeight());
     SmartDashboard.putNumber("MeanFilteredHeight", currentFilteredHeight());
