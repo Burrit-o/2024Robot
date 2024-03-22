@@ -104,8 +104,9 @@ public class Lift extends SubsystemBase {
       break;
         //case SPEAKPickupSide: kp = 0.00425; ki = 0.0035; kd = 0.0001125; height = LiftConstants.SpeakSidePickupSpot; speed = 1 ;
         case SPEAKPickupSide: kp = 0.00475; ki = 0.00115; kd = 0.000085; height = LiftConstants.SpeakSidePickupSpot; speed = 1 ;
-
       break;
+        case SPEAKPickupMid: kp = 0.00475; ki = 0.00115; kd = 0.000085; height = LiftConstants.SpeakMidPickupSpot; speed = 1 ;
+
         default:kp = 0; ki = 0; kd = 0; height = LiftConstants.Stow; speed = 0 ;
     } 
     LiftSetpoint = new PIDController(kp, ki, kd);

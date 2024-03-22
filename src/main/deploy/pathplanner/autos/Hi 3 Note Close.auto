@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7343180058169219,
-      "y": 6.674761229655645
+      "x": 0.7251390307442104,
+      "y": 6.70229815487378
     },
-    "rotation": 60.1240073083106
+    "rotation": 60.25511870305783
   },
   "command": {
     "type": "sequential",
@@ -18,22 +18,15 @@
           }
         },
         {
-          "type": "sequential",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "FireSpeaker"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 1.0
-                }
-              }
-            ]
+            "name": "FireSpeaker"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         },
         {
@@ -62,22 +55,15 @@
           }
         },
         {
-          "type": "sequential",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShootHighPickup"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 1.0
-                }
-              }
-            ]
+            "name": "ShootHighPickup"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         },
         {
@@ -93,7 +79,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "HighPickup to Midline"
+                  "pathName": "Hi Pickup to Mid Pickup"
                 }
               }
             ]
@@ -102,13 +88,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Top Pickup to High Shoot"
+            "pathName": "Mid Pickup Aim"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootHighPickup"
+            "name": "ShootMidPickup"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         }
       ]
