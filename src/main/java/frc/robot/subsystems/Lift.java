@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LiftConstants;
@@ -21,12 +22,20 @@ public class Lift extends SubsystemBase {
   private final TimeOfFlight ToF, BackupToF;
   private final DigitalInput TopLim;
   private final DigitalInput BottomLim;
+  private final Servo leftBrakeServo, rightBrakeServo;
   private double kp;
   private double ki;
   private double kd;
   private double height;
   private double speed;
 
+  private double currentHeight = 0;
+  private double secondMostRecentHeight = 0;
+  private double thirdMostRecentHeight = 0;
+
+  private double currentHeightWeight = 0.5;
+  private double secondMostRecentHeightWeight = 0.35;
+  private double thirdMostRecentHeightWeight = 0.15;
   /** Creates a new Lift. */
   public Lift() {
     LeftLiftMotor = new CANSparkMax(LiftConstants.LeftLiftMotor, MotorType.kBrushless);
@@ -35,7 +44,6 @@ public class Lift extends SubsystemBase {
     LeftLiftMotor.setIdleMode(IdleMode.kBrake);
     RightLiftMotor.setIdleMode(IdleMode.kBrake);
 
-
     ToF = new TimeOfFlight(LiftConstants.ToFSensor);
     BackupToF = new TimeOfFlight(LiftConstants.BackupToFSensor);
 
@@ -43,8 +51,8 @@ public class Lift extends SubsystemBase {
     TopLim = new DigitalInput(3);
     BottomLim = new DigitalInput(2);
 
-
-
+    leftBrakeServo = new Servo(8);
+    rightBrakeServo = new Servo(9);
   }
 
   public double getCommandedHeight() {
@@ -72,7 +80,7 @@ public class Lift extends SubsystemBase {
 
 
   public void runLiftSetpoint() {
-    setLift(-LiftSetpoint.calculate(currentHeight()));
+    setLift(-LiftSetpoint.calculate(currentFilteredHeight()));
   }
 
   public void setLiftPID(LiftConstants.Setpoint m_Setpoint) {
@@ -95,9 +103,7 @@ public class Lift extends SubsystemBase {
       break;
         case SPEAKDriveline: kp = 0.00433; ki = 0.00325; kd = 0.00011125; height = LiftConstants.SpeakerDriveline; speed = 1 ;
       break;
-        //case SPEAKPickupSide: kp = 0.00425; ki = 0.0035; kd = 0.0001125; height = LiftConstants.SpeakSidePickupSpot; speed = 1 ;
-        case SPEAKPickupSide: kp = 0.00475; ki = 0.00115; kd = 0.000085; height = LiftConstants.SpeakSidePickupSpot; speed = 1 ;
-
+        case SPEAKPickupSide: kp = 0.0045; ki = 0.0035; kd = 0.0001125; height = LiftConstants.SpeakSidePickupSpot; speed = 1 ;
       break;
         default:kp = 0; ki = 0; kd = 0; height = LiftConstants.Stow; speed = 0 ;
     } 
@@ -107,7 +113,10 @@ public class Lift extends SubsystemBase {
 
   public boolean atSetpoint() {
     int tolerance = 5;
-    if(currentHeight() < getCommandedHeight() + tolerance && currentHeight() > getCommandedHeight() - tolerance) {
+    // if(currentHeight() < getCommandedHeight() + tolerance && currentHeight() > getCommandedHeight() - tolerance) {
+    //   return true;
+    // }
+    if(currentFilteredHeight() < getCommandedHeight() + tolerance && currentFilteredHeight() > getCommandedHeight() - tolerance) {
       return true;
     }
     return false;
@@ -126,8 +135,36 @@ public class Lift extends SubsystemBase {
     return (BackupToF.getRange()+ToF.getRange())/2;
   }
 
+  public double currentFilteredHeight() {
+    thirdMostRecentHeight = secondMostRecentHeight;
+    secondMostRecentHeight = currentHeight;
+    currentHeight = (BackupToF.getRange()+ToF.getRange())/2;
+
+    if(thirdMostRecentHeight != 0) {
+      return 
+        thirdMostRecentHeight * thirdMostRecentHeightWeight
+        + secondMostRecentHeight * secondMostRecentHeightWeight
+        + currentHeight * currentHeightWeight;
+    }
+
+    return (BackupToF.getRange()+ToF.getRange())/2;
+  }
+
   public double ShootSpeed(){
     return speed;
+  }
+
+  public void enableBrake() {
+    runBrake(1);
+  }
+
+  public void disableBrake() {
+    runBrake(0);
+  }
+
+  private void runBrake(double position) {
+    leftBrakeServo.set(position);
+    rightBrakeServo.set(position);
   }
 
   @Override
@@ -136,5 +173,8 @@ public class Lift extends SubsystemBase {
     SmartDashboard.putNumber("LiftHeight", ToF.getRange()+30);
     SmartDashboard.putNumber("BackupLiftHeight", BackupToF.getRange());
     SmartDashboard.putNumber("MeanHeight", currentHeight());
+    SmartDashboard.putNumber("MeanFilteredHeight", currentFilteredHeight());
+    SmartDashboard.putNumber("Left Servo", leftBrakeServo.get());
+    SmartDashboard.putNumber("Right Servo", rightBrakeServo.get());
   }
 }

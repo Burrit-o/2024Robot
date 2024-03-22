@@ -15,8 +15,8 @@ public class SetShoot extends Command {
   LiftConstants.Setpoint  setpoint;
   Command command;
   /** Creates a new SetShoot. */
-  public SetShoot(Lift subsytem, Command Command, LiftConstants.Setpoint Setpoint) {
-    lift = subsytem;
+  public SetShoot(Lift Subsytem, Command Command, LiftConstants.Setpoint Setpoint) {
+    lift = Subsytem;
     setpoint = Setpoint;
     command = Command;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -25,7 +25,7 @@ public class SetShoot extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-  lift.setLiftPID(setpoint);
+    lift.setLiftPID(setpoint);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
