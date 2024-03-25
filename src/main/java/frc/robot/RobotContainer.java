@@ -88,6 +88,7 @@ public class RobotContainer {
 
                  //Register named commands
               NamedCommands.registerCommand("AprilTagAlignCmd", new AprilTagAlignCmd(swerveSubsystem));
+              NamedCommands.registerCommand("NoteAlignCmd", new NoteAlignCmd(swerveSubsystem));
               NamedCommands.registerCommand("Stow", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.STOW)));
               NamedCommands.registerCommand("SpeakerSetpoint", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.SPEAKER)));
               NamedCommands.registerCommand("CheckHeight", new CheckHeight(m_Lift));
