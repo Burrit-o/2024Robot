@@ -91,9 +91,10 @@ public class RobotContainer {
               NamedCommands.registerCommand("Stow", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.STOW)));
               NamedCommands.registerCommand("SpeakerSetpoint", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.SPEAKER)));
               NamedCommands.registerCommand("CheckHeight", new CheckHeight(m_Lift));
-              NamedCommands.registerCommand("FireSpeaker", new FeedandFireSpeak(m_IPFSSub));
               NamedCommands.registerCommand("Pickup", new SetShoot(m_Lift, new Pickup(m_IPFSSub), LiftConstants.Setpoint.PICKUP));
               NamedCommands.registerCommand("FireSpeaker", new SetShoot(m_Lift, new FeedandFireSpeak(m_IPFSSub), LiftConstants.Setpoint.SPEAKER));
+              NamedCommands.registerCommand("ShootHighPickup", new SetShoot(m_Lift, new FeedandFireSpeak(m_IPFSSub), LiftConstants.Setpoint.SPEAKPickupSide));
+              NamedCommands.registerCommand("ShootMidPickup", new SetShoot(m_Lift, new FeedandFireSpeak(m_IPFSSub), LiftConstants.Setpoint.SPEAKPickupMid));
               // NamedCommands.registerCommand("NoteAlignedCmd", new NoteAlignCmd(swerveSubsystem));
               // NamedCommands.registerCommand("ClimberHigh", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.PICKTOP)));
               // NamedCommands.registerCommand("ClimberLow", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.PICKBOTTOM)));

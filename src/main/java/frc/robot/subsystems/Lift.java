@@ -27,6 +27,13 @@ public class Lift extends SubsystemBase {
   private double height;
   private double speed;
 
+  private double currentHeight = 0;
+  private double secondMostRecentHeight = 0;
+  private double thirdMostRecentHeight = 0;
+
+  private double currentHeightWeight = 0.5;
+  private double secondMostRecentHeightWeight = 0.35;
+  private double thirdMostRecentHeightWeight = 0.15;
   /** Creates a new Lift. */
   public Lift() {
     LeftLiftMotor = new CANSparkMax(LiftConstants.LeftLiftMotor, MotorType.kBrushless);
@@ -72,7 +79,7 @@ public class Lift extends SubsystemBase {
 
 
   public void runLiftSetpoint() {
-    setLift(-LiftSetpoint.calculate(currentHeight()));
+    setLift(-LiftSetpoint.calculate(currentFilteredHeight()));
   }
 
   public void setLiftPID(LiftConstants.Setpoint m_Setpoint) {
@@ -95,8 +102,11 @@ public class Lift extends SubsystemBase {
       break;
         case SPEAKDriveline: kp = 0.00433; ki = 0.00325; kd = 0.00011125; height = LiftConstants.SpeakerDriveline; speed = 1 ;
       break;
-        case SPEAKPickupSide: kp = 0.0045; ki = 0.0035; kd = 0.0001125; height = LiftConstants.SpeakSidePickupSpot; speed = 1 ;
+        //case SPEAKPickupSide: kp = 0.00425; ki = 0.0035; kd = 0.0001125; height = LiftConstants.SpeakSidePickupSpot; speed = 1 ;
+        case SPEAKPickupSide: kp = 0.00475; ki = 0.00115; kd = 0.000085; height = LiftConstants.SpeakSidePickupSpot; speed = 1 ;
       break;
+        case SPEAKPickupMid: kp = 0.00475; ki = 0.00115; kd = 0.000085; height = LiftConstants.SpeakMidPickupSpot; speed = 1 ;
+
         default:kp = 0; ki = 0; kd = 0; height = LiftConstants.Stow; speed = 0 ;
     } 
     LiftSetpoint = new PIDController(kp, ki, kd);
@@ -105,7 +115,10 @@ public class Lift extends SubsystemBase {
 
   public boolean atSetpoint() {
     int tolerance = 5;
-    if(currentHeight() < getCommandedHeight() + tolerance && currentHeight() > getCommandedHeight() - tolerance) {
+    // if(currentHeight() < getCommandedHeight() + tolerance && currentHeight() > getCommandedHeight() - tolerance) {
+    //   return true;
+    // }
+    if(currentFilteredHeight() < getCommandedHeight() + tolerance && currentFilteredHeight() > getCommandedHeight() - tolerance) {
       return true;
     }
     return false;
@@ -124,6 +137,21 @@ public class Lift extends SubsystemBase {
     return (BackupToF.getRange()+ToF.getRange())/2;
   }
 
+  public double currentFilteredHeight() {
+    thirdMostRecentHeight = secondMostRecentHeight;
+    secondMostRecentHeight = currentHeight;
+    currentHeight = (BackupToF.getRange()+ToF.getRange())/2;
+
+    if(thirdMostRecentHeight != 0) {
+      return 
+        thirdMostRecentHeight * thirdMostRecentHeightWeight
+        + secondMostRecentHeight * secondMostRecentHeightWeight
+        + currentHeight * currentHeightWeight;
+    }
+
+    return (BackupToF.getRange()+ToF.getRange())/2;
+  }
+
   public double ShootSpeed(){
     return speed;
   }
@@ -131,8 +159,9 @@ public class Lift extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("LiftHeight", ToF.getRange()+30);
+    SmartDashboard.putNumber("LiftHeight", ToF.getRange());
     SmartDashboard.putNumber("BackupLiftHeight", BackupToF.getRange());
     SmartDashboard.putNumber("MeanHeight", currentHeight());
+    SmartDashboard.putNumber("MeanFilteredHeight", currentFilteredHeight());
   }
 }

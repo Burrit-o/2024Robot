@@ -96,6 +96,15 @@ public class IPFSSub extends SubsystemBase {
     TRShooterMotor.set(speed);
     BLShooterMotor.set(speed);
     BRShooterMotor.set(speed);
+
+    SmartDashboard.putNumber("Shooter Motor RPM", TLShooterMotor.getEncoder().getVelocity());
+  }
+
+  public void shootRpm(double rpm) {
+    TLShooterMotor.set(TLShooterMotor.getEncoder().getVelocity() > rpm ? 0 : 1);
+    TRShooterMotor.set(TRShooterMotor.getEncoder().getVelocity() > rpm ? 0 : 1);
+    BLShooterMotor.set(BLShooterMotor.getEncoder().getVelocity() > rpm ? 0 : 1);
+    BRShooterMotor.set(BRShooterMotor.getEncoder().getVelocity() > rpm ? 0 : 1);
   }
   
   public void Feed(double speed) {
@@ -104,7 +113,7 @@ public class IPFSSub extends SubsystemBase {
   }
 
   public void Intake(double speed) {
-   IntakeMotorTop.set(speed);
+   IntakeMotorTop.set(speed*.85);
    IntakeMotorBottom.set(speed);
   }
 
