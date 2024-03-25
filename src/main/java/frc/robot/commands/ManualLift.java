@@ -29,6 +29,7 @@ public class ManualLift extends Command {
   @Override
   public void execute() {
     lift.setLift(m_opController.getRawAxis(5)/2);
+    lift.runBrake(m_opController.getRawAxis(1));
   }
 
   // Called once the command ends or is interrupted.

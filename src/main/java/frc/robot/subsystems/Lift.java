@@ -162,7 +162,7 @@ public class Lift extends SubsystemBase {
     runBrake(0);
   }
 
-  private void runBrake(double position) {
+  public void runBrake(double position) {
     leftBrakeServo.set(position);
     rightBrakeServo.set(position);
   }
