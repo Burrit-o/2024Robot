@@ -4,157 +4,117 @@
 
 package frc.robot;
 
-import java.util.Optional;
-
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-//import frc.robot.Constants.LEDConstants.ledMode;
 import frc.robot.Constants.LEDConstants;
-import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.LEDConstants.ledMode;
-import frc.robot.subsystems.IPFSSub;
-
-
+import frc.robot.Constants.LEDConstants.statusLED;
 
 /** Add your docs here. */
 public class LEDs extends SubsystemBase {
-      /** Creates a new LED. */
 private AddressableLEDBuffer m_ledBuffer; 
-private AddressableLED m_leftLed, m_rightLed;
+private AddressableLED m_LEDs;
 private ledMode curr_color;
 private boolean new_change;
 private AddressableLEDBuffer red_ledBuffer;
 private AddressableLEDBuffer blue_ledBuffer;
 private AddressableLEDBuffer green_ledBuffer;
 private AddressableLEDBuffer purple_ledBuffer;
+private AddressableLEDBuffer orange_ledBuffer;
 private AddressableLEDBuffer yellow_ledBuffer;
-private AddressableLEDBuffer team_ledBuffer;
-private AddressableLEDBuffer rainbow_ledBuffer;
-private int counter;
-private IPFSSub m_IPFSSub;
-Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
-/*public enum ledMode {
-  RED, GREEN, RAINBOW, TEAM, BLUE, PURPLE, YELLOW
-}*/
+private AddressableLEDBuffer zia_ledBuffer;
   
 //Constructor for LEDs class
-public LEDs(int length, int leftPort, int rightPort) {
+public LEDs(int length, int PWMPort) {
   
   new_change = false;
-  curr_color = ledMode.PURPLE;
+  //curr_color = ledMode.PURPLE;
   m_ledBuffer = new AddressableLEDBuffer(length);
-  m_leftLed = new AddressableLED(leftPort);
-  // m_rightLed = new AddressableLED(rightPort);
-  red_ledBuffer = new AddressableLEDBuffer(length);
-  blue_ledBuffer = new AddressableLEDBuffer(length);
-  green_ledBuffer = new AddressableLEDBuffer(length);
-  purple_ledBuffer = new AddressableLEDBuffer(length);
-  yellow_ledBuffer = new AddressableLEDBuffer(length);
-  team_ledBuffer = new AddressableLEDBuffer(length);
-  rainbow_ledBuffer = new AddressableLEDBuffer(length);
+  m_LEDs = new AddressableLED(LEDConstants.LEDport);
 
-  for (var i = 0; i < length; i++) {
+  red_ledBuffer = new AddressableLEDBuffer(LEDConstants.statusLEDlength);
+  blue_ledBuffer = new AddressableLEDBuffer(LEDConstants.statusLEDlength);
+  green_ledBuffer = new AddressableLEDBuffer(LEDConstants.statusLEDlength);
+  purple_ledBuffer = new AddressableLEDBuffer(LEDConstants.statusLEDlength);
+  orange_ledBuffer = new AddressableLEDBuffer(LEDConstants.statusLEDlength);
+  yellow_ledBuffer = new AddressableLEDBuffer(LEDConstants.statusLEDlength);
+  zia_ledBuffer = new AddressableLEDBuffer(LEDConstants.ziaLEDlength);
+
+  //Populate the status LED color buffers
+  for (var i = 0; i < LEDConstants.statusLEDlength; i++) {
     red_ledBuffer.setRGB(i, 255, 0, 0);
     blue_ledBuffer.setRGB(i, 0, 0, 255);
     green_ledBuffer.setRGB(i, 0, 255, 0);
     purple_ledBuffer.setRGB(i, 135, 0, 211);
+    orange_ledBuffer.setRGB(i, 255, 20, 0);
     yellow_ledBuffer.setRGB(i, 255, 255, 0);
   }
 
-  //Set Team 1164 colors
-  for (var i = 0; i < 6; i++) {
-    team_ledBuffer.setRGB(i, 135, 0, 211);
-    team_ledBuffer.setRGB(i+6, 255, 20, 0);
+  //Populate the ZIA symbol LED buffer with TEAM colors
+  for (var i = 0; i < 8; i++) {
+    zia_ledBuffer.setRGB(i, 135, 0, 211);
+  }
+  for (var i = 8; i < LEDConstants.ziaLEDlength; i++) {
+    zia_ledBuffer.setRGB(i, 255, 20, 0);
   }
 
-  for (var i = 0; i < length; i++) {
-    final int hue = (int) (((((12 + i) * 180) / length) + 0) % 180);
-       rainbow_ledBuffer.setHSV(i, (hue), 255, 128);
-  }
-
-  // setLEDmode(RobotContainer.LED_Chooser.getSelected());
   LED_init();
 }
 
-public void setLEDmode (LEDConstants.ledMode mode) {
-  LEDConstants.ledMode m_mode = mode;
-
-switch (m_mode) {
-  case RED: m_ledBuffer = red_ledBuffer;
-  break;
-  case GREEN: m_ledBuffer = green_ledBuffer;
-  break;
-  case RAINBOW: m_ledBuffer = rainbow_ledBuffer;
-  break;
-  case TEAM: m_ledBuffer = team_ledBuffer;
-  break;
-  case BLUE: m_ledBuffer = blue_ledBuffer;
-  break;
-  case PURPLE: m_ledBuffer = purple_ledBuffer;
-  break;
-  case YELLOW: m_ledBuffer = yellow_ledBuffer;
-  break;
-  case ALLIANCE: {
-     if (alliance.isPresent()) {
-            if (alliance.get() == Alliance.Blue) {
-              m_ledBuffer = blue_ledBuffer;
-            } if (alliance.get() == Alliance.Red) {
-              m_ledBuffer = red_ledBuffer;
-            }
-        }
-      }
-  default:break;
-}
-}
-
-public void setColor (LEDConstants.ledMode mode) { 
-  LEDConstants.ledMode m_led_mode = mode;
-  setLEDmode(m_led_mode);
-  m_leftLed.setData(m_ledBuffer);
-  // m_rightLed.setData(m_ledBuffer);
-}
-
-public void changeColor (ledMode colorChange){
-  curr_color = colorChange;
-  new_change = true;
-}
-
 public void LED_init() {
-  m_leftLed.setLength(m_ledBuffer.getLength());
-  m_leftLed.setData(m_ledBuffer);
-  m_leftLed.start();
-  
-  // m_rightLed.setLength(m_ledBuffer.getLength());
-  // m_rightLed.setData(m_ledBuffer);
-  // m_rightLed.start();
+  m_LEDs.setLength(m_ledBuffer.getLength());
+
+  //Set default colors on the LED buffer
+  signal(statusLED.STRIP1, ledMode.RED);
+  signal(statusLED.STRIP2, ledMode.RED);
+  signal(statusLED.STRIP3, ledMode.RED);
+  System.arraycopy(zia_ledBuffer, 0, m_ledBuffer, 45, LEDConstants.ziaLEDlength);
+
+  //Send the default colors to the LEDs and start
+  m_LEDs.setData(m_ledBuffer);
+  m_LEDs.start();
 } 
 
-public boolean getCanSeeNote() {
-  // If we can see a NOTE, return true
-  if(NetworkTableInstance.getDefault().getTable(VisionConstants.kPickupLimelightNetworkTableName).getEntry("tx").getDouble(0) != 0) {
-    counter = 0;
-    return true;
+public void signal (statusLED strip, ledMode color) {
+  statusLED m_strip = strip;
+  ledMode m_color = color;
+  int offset = 0;
+
+  switch (m_strip) {
+    case STRIP1: offset = 0;
+    break;
+    case STRIP2: offset = 15;
+    break;
+    case STRIP3: offset = 30;
+    break;
+    default:break;
   }
-  // Reduce noise
-  else {
-    if(counter < 3) {
-      counter = counter + 1;
-      return true;
-    }
+
+  switch (m_color) {
+    case RED: System.arraycopy(red_ledBuffer, 0, m_ledBuffer, offset, LEDConstants.statusLEDlength);
+    break;
+    case GREEN: System.arraycopy(green_ledBuffer, 0, m_ledBuffer, offset, LEDConstants.statusLEDlength);
+    break;
+    case YELLOW: System.arraycopy(yellow_ledBuffer, 0, m_ledBuffer, offset, LEDConstants.statusLEDlength); 
+    break;
+    case ORANGE: System.arraycopy(orange_ledBuffer, 0, m_ledBuffer, offset, LEDConstants.statusLEDlength); 
+    break;
+    case PURPLE: System.arraycopy(purple_ledBuffer, 0, m_ledBuffer, offset, LEDConstants.statusLEDlength); 
+    break;
+    case BLUE: System.arraycopy(blue_ledBuffer, 0, m_ledBuffer, offset, LEDConstants.statusLEDlength); 
+    break;
+    default: break;
   }
-  return false;
+
+  new_change = true;
 }
 
 @Override
   public void periodic() {
     // This method will be called once per scheduler run
     if (new_change) {
-      setColor(curr_color);
+      m_LEDs.setData(m_ledBuffer);
       new_change = false;
     }
   }

@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-// import frc.robot.LEDs;
+import frc.robot.LEDs;
 import frc.robot.subsystems.IPFSSub;
 import frc.robot.subsystems.Lift;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -55,8 +55,8 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final IPFSSub m_IPFSSub;
   private final Lift m_Lift;
-  // public final LEDs m_LEDs;
-   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  public final LEDs m_LEDs;
+   private final SwerveSubsystem swerveSubsystem;
 
         private final SendableChooser<Command> autoChooser;
 
@@ -70,9 +70,11 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
-    m_IPFSSub = new IPFSSub();
+    m_LEDs = new LEDs(LEDConstants.LEDlength, LEDConstants.LEDport);
+    swerveSubsystem = new SwerveSubsystem(m_LEDs);
+    m_IPFSSub = new IPFSSub(m_LEDs);
     m_Lift = new Lift();
-    // m_LEDs = new LEDs(LEDConstants.LEDlength, LEDConstants.LEDport);
+   
     configureBindings();
     m_Lift.setDefaultCommand(new SetHeight(m_Lift, Setpoint.PICKUP));
    // m_Lift.setDefaultCommand(new ManualLift(m_Lift));

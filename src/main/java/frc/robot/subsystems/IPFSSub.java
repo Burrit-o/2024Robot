@@ -13,6 +13,9 @@ import frc.robot.RobotContainer;
 import frc.robot.Constants.IPFSConstants;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.LEDConstants.ledMode;
+import frc.robot.Constants.LEDConstants.statusLED;
+import frc.robot.Constants.VisionConstants;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -36,11 +39,16 @@ public class IPFSSub extends SubsystemBase {
   private final RelativeEncoder BLEncoder;
   private final RelativeEncoder BREncoder;
 
+  private LEDs m_LEDs;
+
   public final DigitalInput PickupSensor;  
-  private final LEDs m_LEDs;
+  //private final LEDs m_LEDs;
+  private boolean haveNOTESet = false;
+  private boolean seeNOTESet = false;
+
   /** Creates a new IPFSSub. */
-  public IPFSSub() {
-  m_LEDs = new LEDs(LEDConstants.LEDlength, LEDConstants.LeftLEDport, LEDConstants.RightLEDport);
+  public IPFSSub(LEDs leds) {
+  m_LEDs = leds;
   TLShooterMotor = new CANSparkMax(IPFSConstants.TLShooterMotor, MotorType.kBrushless);
   TRShooterMotor = new CANSparkMax(IPFSConstants.TRShooterMotor, MotorType.kBrushless);
   TLShooterMotor.setInverted(true);
@@ -115,18 +123,45 @@ public class IPFSSub extends SubsystemBase {
     return PickupSensor.get();
   }
 
-    @Override
+  public boolean canSeeNote() {
+  // If we can see a NOTE, return true
+  int counter = 0;
 
+  if(NetworkTableInstance.getDefault().getTable(VisionConstants.kPickupLimelightNetworkTableName).getEntry("tx").getDouble(0) != 0) {
+    counter = 0;
+    return true;
+  }
+  // Reduce noise
+  else {
+    if(counter < 3) {
+      counter = counter + 1;
+      return true;
+    }
+  }
+  return false;
+}
+
+@Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("PickupSensor", PickupSensor.get());
 
-    if(haveNote()) {
-      m_LEDs.setColor(ledMode.GREEN);
+    // Only change LED color when state changes (not every clock cycle)
+    if(haveNote() && !haveNOTESet) {
+      m_LEDs.signal(statusLED.STRIP1, ledMode.GREEN);
+      m_LEDs.signal(statusLED.STRIP2, ledMode.GREEN);
+      haveNOTESet = true;
     } 
-    else {
-      m_LEDs.setColor(ledMode.RED);
+    else if (canSeeNote() && !seeNOTESet) {
+      m_LEDs.signal(statusLED.STRIP1, ledMode.YELLOW);
+      m_LEDs.signal(statusLED.STRIP2, ledMode.YELLOW);
+      seeNOTESet = true;
     }
-
+    else if (!haveNote() && !canSeeNote()) {
+      m_LEDs.signal(statusLED.STRIP1, ledMode.RED);
+      m_LEDs.signal(statusLED.STRIP2, ledMode.RED);
+      haveNOTESet = false;
+      seeNOTESet = false;
+    }
   }
 }
