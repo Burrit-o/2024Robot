@@ -12,28 +12,21 @@
     "data": {
       "commands": [
         {
-          "type": "deadline",
+          "type": "wait",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "CheckHeight"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "SpeakerSetpoint"
-                }
-              }
-            ]
+            "waitTime": 0.01
           }
         },
         {
           "type": "named",
           "data": {
             "name": "FireSpeaker"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         },
         {
@@ -43,34 +36,15 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "SpMid"
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "CheckHeight"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "SpeakerSetpoint"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "FireSpeaker"
+            "name": "ShootMidPickup"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         }
       ]
