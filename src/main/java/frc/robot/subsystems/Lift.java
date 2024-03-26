@@ -22,7 +22,8 @@ public class Lift extends SubsystemBase {
   private final TimeOfFlight ToF, BackupToF;
   private final DigitalInput TopLim;
   private final DigitalInput BottomLim;
-  private final Servo leftBrakeServo, rightBrakeServo;
+  private static Servo leftBrakeServo;
+  private static Servo rightBrakeServo;
   private double kp;
   private double ki;
   private double kd;
@@ -154,12 +155,14 @@ public class Lift extends SubsystemBase {
     return speed;
   }
 
-  public void enableBrake() {
-    runBrake(1);
+  public static void enableBrake() {
+    leftBrakeServo.set(0);
+    rightBrakeServo.set(0);
   }
 
-  public void disableBrake() {
-    runBrake(0);
+  public static void disableBrake() {
+    leftBrakeServo.set(.5);
+    rightBrakeServo.set(.5);
   }
 
   public void runBrake(double position) {

@@ -34,6 +34,7 @@ import frc.robot.subsystems.IPFSSub;
 import frc.robot.subsystems.Lift;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.commands.AprilTagAlignCmd;
+import frc.robot.commands.Brakes;
 import frc.robot.commands.FeedandFireAmp;
 import frc.robot.commands.FeedandFireSpeak;
 import frc.robot.commands.ManualLift;
@@ -207,6 +208,7 @@ public class RobotContainer {
   //     0.0));
 
     new JoystickButton(m_driveController, 1).onTrue(new InstantCommand(() -> swerveSubsystem.zeroHeading()));
+    new JoystickButton(m_driveController, 5).toggleOnTrue(new Brakes(m_Lift));
 
 
   }
