@@ -186,7 +186,7 @@ public class SwerveSubsystem extends SubsystemBase {
         return states;
     }
 
-    public void updateValues() {
+    public void updateValues(String networkTableName) {
 
         //TODO: Maybe switch these to use the limelight helper sub
         //tv = shooterLLTable.getEntry("tv").getDouble(0);
@@ -195,7 +195,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
         //results = LimelightHelpers.getLatestResults("Limelight-shoot");
 
-        limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue(LimeLightConstants.kllShoot);
+        limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue(networkTableName);
 
     }
 
@@ -328,7 +328,13 @@ public class SwerveSubsystem extends SubsystemBase {
         // Set the robot pose on the Field2D object
         
 
-        updateValues();
+        updateValues(LimeLightConstants.kllShoot);
+        updatePoseEstimatorWithVisionBotPose();
+
+        // UNCOMMENT BELOW TO USE LIMELIGHT 3G. MAKE SURE NETWORKTABLE NAME IS CORRECT.
+
+        // updateValues(LimeLightConstants.kllAprilTags);
+        // updatePoseEstimatorWithVisionBotPose();
 
         SmartDashboard.putBoolean("Vision Identified Tag", limelightMeasurement.tagCount > 0);
         //SmartDashboard.putBoolean("Is good target", isGoodTarget());
@@ -355,8 +361,6 @@ public class SwerveSubsystem extends SubsystemBase {
                 
             }
         */
-        
-        updatePoseEstimatorWithVisionBotPose();
 
         m_field.setRobotPose(this.getPose());
         SmartDashboard.putData(m_field);
