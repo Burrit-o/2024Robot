@@ -87,7 +87,7 @@ public class RobotContainer {
                                 () -> !m_driveController.getRawButton(5))); // LB
 
                  //Register named commands
-              NamedCommands.registerCommand("AprilTagAlignCmd", new AprilTagAlignCmd(swerveSubsystem));
+              // NamedCommands.registerCommand("AprilTagAlignCmd", new AprilTagAlignCmd(swerveSubsystem));
               NamedCommands.registerCommand("NoteAlignCmd", new NoteAlignCmd(swerveSubsystem));
               NamedCommands.registerCommand("Stow", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.STOW)));
               NamedCommands.registerCommand("SpeakerSetpoint", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.SPEAKER)));
@@ -207,8 +207,10 @@ public class RobotContainer {
   //     new PathConstraints(1.0, 1.0, Units.degreesToRadians(180), Units.degreesToRadians(270)), 
   //     0.0));
 
+    // A Button
     new JoystickButton(m_driveController, 1).onTrue(new InstantCommand(() -> swerveSubsystem.zeroHeading()));
-
+    // LB Button
+    new JoystickButton(m_driveController, 5).whileTrue(new ParallelDeadlineGroup(new Pickup(m_IPFSSub), new SetHeight(m_Lift, LiftConstants.Setpoint.PICKUP), new NoteAlignCmd(swerveSubsystem)));
 
   }
 
