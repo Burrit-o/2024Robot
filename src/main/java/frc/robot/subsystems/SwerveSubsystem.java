@@ -393,6 +393,7 @@ public class SwerveSubsystem extends SubsystemBase {
         }
         else if (!isUpdating && !updatingSet) {
             m_LEDs.signal(statusLED.STRIP3, ledMode.ORANGE);
+            updatingSet = true;
         }
     }
 
