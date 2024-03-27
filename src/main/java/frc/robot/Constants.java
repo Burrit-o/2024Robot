@@ -159,13 +159,18 @@ public final class Constants {
     }
 
     public static class LEDConstants {
-        public static final int LeftLEDport = 1;
-        public static final int RightLEDport = 0;
-        public static final int LEDlength = 17;
+        public static final int LEDport = 0;
+        public static final int LEDlength = 93;  // 15 * 3 status LEDs plus 48 LEDs in the Zia symbol
+        public static final int statusLEDlength = 15; // Length of status LEDs
+        public static final int ziaLEDlength = 48;
 
         public enum ledMode {
-            RED, GREEN, RAINBOW, TEAM, BLUE, PURPLE, YELLOW, ALLIANCE;
+          RED, GREEN, RAINBOW, TEAM, BLUE, PURPLE, YELLOW, ORANGE, ALLIANCE;
           }
+
+        public enum statusLED {
+          STRIP1, STRIP2, STRIP3;
+        }
     }
 
   public class IPFSConstants {

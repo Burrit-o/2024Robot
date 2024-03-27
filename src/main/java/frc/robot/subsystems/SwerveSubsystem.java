@@ -31,6 +31,9 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.LimeLightConstants;
 import frc.robot.LimelightHelpers;
+import frc.robot.LEDs;
+import frc.robot.Constants.LEDConstants.ledMode;
+import frc.robot.Constants.LEDConstants.statusLED;
 import edu.wpi.first.wpilibj.SerialPort;
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -91,6 +94,9 @@ public class SwerveSubsystem extends SubsystemBase {
     private double tl;
     private boolean isUpdating = false;
     private boolean gate = true;
+    private boolean updatingSet = false;
+    private LEDs m_LEDs;
+
     //private LimelightHelpers.LimelightResults results;
     private LimelightHelpers.PoseEstimate limelightMeasurement;
     
@@ -103,7 +109,8 @@ public class SwerveSubsystem extends SubsystemBase {
     private SimpleMotorFeedforward feedforwardLeft = new SimpleMotorFeedforward(DriveConstants.kSLeft,
             DriveConstants.kVLeft, DriveConstants.kALeft);
 
-    public SwerveSubsystem() {
+    public SwerveSubsystem(LEDs leds) {
+        m_LEDs = leds;
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
@@ -378,6 +385,16 @@ public class SwerveSubsystem extends SubsystemBase {
         //offsets
         //forward: 0.381
         //up: 0.713
+
+        // This is not finished yet... :-)
+        if (isUpdating && !updatingSet) {
+            m_LEDs.signal(statusLED.STRIP3, ledMode.PURPLE);
+            updatingSet = true;
+        }
+        else if (!isUpdating && !updatingSet) {
+            m_LEDs.signal(statusLED.STRIP3, ledMode.ORANGE);
+            updatingSet = true;
+        }
     }
 
     public void stopModules() {
@@ -407,16 +424,4 @@ public class SwerveSubsystem extends SubsystemBase {
         return gyro.getYaw();
     }
 
-   /* public float getChassisPitchError() {
-        double pitch = (double) gyro.getPitch();
-        SmartDashboard.putNumber("Pitch", pitch);
-        pitch = pitch * Math.PI / 180;
-        double g = 1.0;
-        double a = gyro.getWorldLinearAccelX();
-        pitch = pitch - Math.asin(((Math.sin(pitch) * 2.0 * g * Math.cos(pitch) + a)
-                / Math.sqrt(Math.pow(g, 2.0) + Math.pow(Math.sin(pitch), 2.0) + 2.0 * g * Math.sin(pitch)
-                        + Math.pow(g, 2.0) * Math.pow(Math.cos(pitch), 2.0)))
-                * (180.0 / Math.PI));
-        SmartDashboard.putNumber("Corrected Pitch", pitch);
-        return (float) pitch;*/
     } 
