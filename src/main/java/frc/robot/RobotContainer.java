@@ -88,7 +88,7 @@ public class RobotContainer {
 
                  //Register named commands
               // NamedCommands.registerCommand("AprilTagAlignCmd", new AprilTagAlignCmd(swerveSubsystem));
-              NamedCommands.registerCommand("NoteAlignCmd", new NoteAlignCmd(swerveSubsystem));
+              NamedCommands.registerCommand("NoteAlignCmd", new NoteAlignCmd(swerveSubsystem, m_IPFSSub));
               NamedCommands.registerCommand("Stow", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.STOW)));
               NamedCommands.registerCommand("SpeakerSetpoint", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.SPEAKER)));
               NamedCommands.registerCommand("CheckHeight", new CheckHeight(m_Lift));
@@ -192,25 +192,25 @@ public class RobotContainer {
   //     new PathConstraints(1.0, 1.0, Units.degreesToRadians(180), Units.degreesToRadians(270)), 
   //     0.0));
 
-  // OPxButton.whileTrue(AutoBuilder.pathfindThenFollowPath(
-  //     PathPlannerPath.fromPathFile("SpHigh"), 
-  //     new PathConstraints(1.0, 1.0, Units.degreesToRadians(180), Units.degreesToRadians(270)), 
-  //     0.0));
+  OPxButton.whileTrue(AutoBuilder.pathfindThenFollowPath(
+      PathPlannerPath.fromPathFile("High Shoot Rotate - PathFind"), 
+      new PathConstraints(3.5, 3.75, Units.degreesToRadians(540), Units.degreesToRadians(720)), 
+      0.0));
 
-  // OPyButton.whileTrue(AutoBuilder.pathfindThenFollowPath(
-  //     PathPlannerPath.fromPathFile("SpMid"), 
-  //     new PathConstraints(1.0, 1.0, Units.degreesToRadians(180), Units.degreesToRadians(270)), 
-  //     0.0));
+  OPyButton.whileTrue(AutoBuilder.pathfindThenFollowPath(
+      PathPlannerPath.fromPathFile("Mid Shoot Rotate - PathFind"), 
+      new PathConstraints(3.5, 3.75, Units.degreesToRadians(540), Units.degreesToRadians(720)), 
+      0.0));
 
-  // OPbButton.whileTrue(AutoBuilder.pathfindThenFollowPath(
-  //     PathPlannerPath.fromPathFile("SpLow"), 
-  //     new PathConstraints(1.0, 1.0, Units.degreesToRadians(180), Units.degreesToRadians(270)), 
-  //     0.0));
+  OPbButton.whileTrue(AutoBuilder.pathfindThenFollowPath(
+      PathPlannerPath.fromPathFile("Low Shoot Rotate - PathFind"), 
+      new PathConstraints(3.5, 3.75, Units.degreesToRadians(540), Units.degreesToRadians(720)), 
+      0.0));
 
     // A Button
     new JoystickButton(m_driveController, 1).onTrue(new InstantCommand(() -> swerveSubsystem.zeroHeading()));
     // LB Button
-    new JoystickButton(m_driveController, 5).whileTrue(new ParallelDeadlineGroup(new Pickup(m_IPFSSub), new SetHeight(m_Lift, LiftConstants.Setpoint.PICKUP), new NoteAlignCmd(swerveSubsystem)));
+    new JoystickButton(m_driveController, 5).whileTrue(new ParallelDeadlineGroup(new Pickup(m_IPFSSub), new SetHeight(m_Lift, LiftConstants.Setpoint.PICKUP), new NoteAlignCmd(swerveSubsystem, m_IPFSSub)));
 
   }
 
