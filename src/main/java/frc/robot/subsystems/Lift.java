@@ -156,8 +156,8 @@ public class Lift extends SubsystemBase {
   }
 
   public static void enableBrake() {
-    leftBrakeServo.set(0);
-    rightBrakeServo.set(0);
+    leftBrakeServo.set(.15);
+    rightBrakeServo.set(.15);
   }
 
   public static void disableBrake() {
