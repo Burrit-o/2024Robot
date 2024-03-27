@@ -16,9 +16,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.IPFSSub;
 
 public class NoteAlignCmd extends Command {
   private final SwerveSubsystem m_swerveSubsystem;
+  private final IPFSSub m_ipfsSubsystem;
   private final NetworkTable limelighNetworkTable;
   private final PIDController lateralPidController, longitudinalPidController, rotationalPidController;
   private double previousPipeline;
@@ -30,8 +32,8 @@ public class NoteAlignCmd extends Command {
   // Change these values as needed
   private double noteSizeThreshold = 0.3;                 // Minimum size of the NOTE for the robot to move to and pickup.
   private double overshootDistance = 0.5;                 // This is how many meters will be added to the distance to try to run over the NOTE.
-  private double limeLightHeight = 0.71;                  // The LimeLight distance off the floor in meters, used to estimate distance to a NOTE.
-  private double limeLightAngle = 0;                      // Pitch of the LimeLight
+  private double limeLightHeight = 0.603;                 // The LimeLight distance off the floor in meters, used to estimate distance to a NOTE.
+  private double limeLightAngle = -42;                    // Pitch of the LimeLight
   private double minimumNoteAngle = -21.5;                // The minimum angle for the LimeLight to calculate distance to the NOTE. Below this, the robot will estimate.
   private double translationP = 0.38;
   private double translationI = 0;
@@ -50,8 +52,9 @@ public class NoteAlignCmd extends Command {
    */
 
   /** Creates a new DriveAndPickupNoteCmd. */
-  public NoteAlignCmd(SwerveSubsystem swerveSubsystem) {
+  public NoteAlignCmd(SwerveSubsystem swerveSubsystem, IPFSSub ipfsSubsystem) {
     this.m_swerveSubsystem = swerveSubsystem;
+    this.m_ipfsSubsystem = ipfsSubsystem;
     this.lateralPidController = new PIDController(translationP, translationI, translationD);
     this.longitudinalPidController = new PIDController(translationP, translationI, translationD);
     this.rotationalPidController = new PIDController(rotationP, rotationI, rotationD);
@@ -178,7 +181,7 @@ public class NoteAlignCmd extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Math.abs(lateralDistanceToNote) <= 0.15) {  // Add or statement for NOTE in pickup
+    if(m_ipfsSubsystem.haveNote()) {
         return true;
     }
     return false;
