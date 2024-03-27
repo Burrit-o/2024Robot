@@ -9,7 +9,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import frc.robot.LEDs;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.IPFSConstants;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.LEDConstants.ledMode;
@@ -19,7 +18,6 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import frc.robot.LEDs;
 
 
 
@@ -77,7 +75,8 @@ public class IPFSSub extends SubsystemBase {
   IntakeMotorBottom.setIdleMode(IdleMode.kBrake);  
 
   
-  PickupSensor = new DigitalInput(4);
+
+  PickupSensor = new DigitalInput (4);
 
   TLEncoder = TLShooterMotor.getEncoder();
   TREncoder = TRShooterMotor.getEncoder();
@@ -108,6 +107,15 @@ public class IPFSSub extends SubsystemBase {
     TRShooterMotor.set(speed);
     BLShooterMotor.set(speed);
     BRShooterMotor.set(speed);
+
+    SmartDashboard.putNumber("Shooter Motor RPM", TLShooterMotor.getEncoder().getVelocity());
+  }
+
+  public void shootRpm(double rpm) {
+    TLShooterMotor.set(TLShooterMotor.getEncoder().getVelocity() > rpm ? 0 : 1);
+    TRShooterMotor.set(TRShooterMotor.getEncoder().getVelocity() > rpm ? 0 : 1);
+    BLShooterMotor.set(BLShooterMotor.getEncoder().getVelocity() > rpm ? 0 : 1);
+    BRShooterMotor.set(BRShooterMotor.getEncoder().getVelocity() > rpm ? 0 : 1);
   }
   
   public void Feed(double speed) {
@@ -116,13 +124,13 @@ public class IPFSSub extends SubsystemBase {
   }
 
   public void Intake(double speed) {
-   IntakeMotorTop.set(speed);
+   IntakeMotorTop.set(speed*.85);
    IntakeMotorBottom.set(speed);
   }
 
 
   public boolean haveNote() {
-    return PickupSensor.get();
+    return !PickupSensor.get();
   }
 
   public boolean canSeeNote() {
@@ -141,16 +149,18 @@ public class IPFSSub extends SubsystemBase {
   return false;
 }
 
+
 @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putBoolean("PickupSensor", PickupSensor.get());
+    SmartDashboard.putBoolean("PickupSensor", haveNote());
     SmartDashboard.putBoolean("CanSeeNote", canSeeNote());
     // Only change LED color when state changes (not every clock cycle)
     if(!haveNote() && !haveNOTESet) {
       m_LEDs.signal(statusLED.STRIP1, ledMode.GREEN);
       m_LEDs.signal(statusLED.STRIP3, ledMode.GREEN);
       haveNOTESet = true;
+
     } 
     else if (canSeeNote() && !seeNOTESet && haveNote()) {
       m_LEDs.signal(statusLED.STRIP1, ledMode.YELLOW);

@@ -19,15 +19,21 @@ public class Lift extends SubsystemBase {
   private final CANSparkMax LeftLiftMotor, RightLiftMotor;
   private PIDController LiftSetpoint;
   private final TimeOfFlight ToF, BackupToF;
-  private final double LiftHeight;
-  private final double BackupLiftHeight;
   private final DigitalInput TopLim;
   private final DigitalInput BottomLim;
   private double kp;
   private double ki;
   private double kd;
   private double height;
+  private double speed;
 
+  private double currentHeight = 0;
+  private double secondMostRecentHeight = 0;
+  private double thirdMostRecentHeight = 0;
+
+  private double currentHeightWeight = 0.5;
+  private double secondMostRecentHeightWeight = 0.35;
+  private double thirdMostRecentHeightWeight = 0.15;
   /** Creates a new Lift. */
   public Lift() {
     LeftLiftMotor = new CANSparkMax(LiftConstants.LeftLiftMotor, MotorType.kBrushless);
@@ -39,8 +45,6 @@ public class Lift extends SubsystemBase {
 
     ToF = new TimeOfFlight(LiftConstants.ToFSensor);
     BackupToF = new TimeOfFlight(LiftConstants.BackupToFSensor);
-    LiftHeight = ToF.getRange();
-    BackupLiftHeight = BackupToF.getRange();
 
     //meanHeight = (LiftHeight + BackupLiftHeight)/2;
     TopLim = new DigitalInput(3);
@@ -75,7 +79,7 @@ public class Lift extends SubsystemBase {
 
 
   public void runLiftSetpoint() {
-    setLift(-LiftSetpoint.calculate(currentHeight()));
+    setLift(-LiftSetpoint.calculate(currentFilteredHeight()));
   }
 
   public void setLiftPID(LiftConstants.Setpoint m_Setpoint) {
@@ -83,28 +87,38 @@ public class Lift extends SubsystemBase {
 
     LiftConstants.Setpoint setpoint = m_Setpoint;
     switch (setpoint) {
-        case AMP: kp = 0.00287; ki = 0.000875; kd = 0.00007; height = LiftConstants.AmpHeight ;
+        case AMP: kp = 0.00287; ki = 0.000875; kd = 0.00007; height = LiftConstants.AmpHeight; speed = .225 ;
       break;
         // case SPEAKER: kp = 0.00315; ki = 0.001125; kd = 0.000075; height = LiftConstants.SpeakerHeight ;
-        case SPEAKER: kp = 0.00283; ki = 0.00085; kd = 0.00007; height = LiftConstants.SpeakerHeight ;
+        case SPEAKER: kp = 0.00475; ki = 0.00115; kd = 0.000085; height = LiftConstants.SpeakerHeight; speed = 1 ;
       break;
-        case STOW: kp = 0; ki = 0; kd = 0; height = LiftConstants.Stow ;
+        case STOW: kp = 0; ki = 0; kd = 0; height = LiftConstants.Stow; speed = 0;
       break;
-        case PICKTOP : kp = 0; ki = 0; kd = 0; height = LiftConstants.ClimbTop ;
+        case PICKTOP : kp = 0; ki = 0; kd = 0; height = LiftConstants.ClimbTop; speed = 0 ;
       break;
-        case PICKBOTTOM: kp = 0; ki = 0; kd = 0; height = LiftConstants.ClimbBottom ;
+        case PICKBOTTOM: kp = 0; ki = 0; kd = 0; height = LiftConstants.ClimbBottom; speed = 0  ;
       break;
-        case PICKUP: kp = 0; ki = 0; kd = 0; height = LiftConstants.PickupHeight ;
+        case PICKUP: kp = .002; ki = 0.0003; kd = 0; height = LiftConstants.PickupHeight; speed = 0  ;
       break;
-        default:kp = 0; ki = 0; kd = 0; height = LiftConstants.Stow;
+        case SPEAKDriveline: kp = 0.00433; ki = 0.00325; kd = 0.00011125; height = LiftConstants.SpeakerDriveline; speed = 1 ;
+      break;
+        //case SPEAKPickupSide: kp = 0.00425; ki = 0.0035; kd = 0.0001125; height = LiftConstants.SpeakSidePickupSpot; speed = 1 ;
+        case SPEAKPickupSide: kp = 0.00475; ki = 0.00115; kd = 0.000085; height = LiftConstants.SpeakSidePickupSpot; speed = 1 ;
+      break;
+        case SPEAKPickupMid: kp = 0.00475; ki = 0.00115; kd = 0.000085; height = LiftConstants.SpeakMidPickupSpot; speed = 1 ;
+
+        default:kp = 0; ki = 0; kd = 0; height = LiftConstants.Stow; speed = 0 ;
     } 
     LiftSetpoint = new PIDController(kp, ki, kd);
     LiftSetpoint.setSetpoint(height);  
   }
 
   public boolean atSetpoint() {
-    int tolerance = 10;
-    if(currentHeight() < getCommandedHeight() + tolerance && currentHeight() > getCommandedHeight() - tolerance) {
+    int tolerance = 5;
+    // if(currentHeight() < getCommandedHeight() + tolerance && currentHeight() > getCommandedHeight() - tolerance) {
+    //   return true;
+    // }
+    if(currentFilteredHeight() < getCommandedHeight() + tolerance && currentFilteredHeight() > getCommandedHeight() - tolerance) {
       return true;
     }
     return false;
@@ -120,14 +134,34 @@ public class Lift extends SubsystemBase {
      {return LiftHeight;}
 
     else {return meanHeight;}*/
-    return BackupToF.getRange();
+    return (BackupToF.getRange()+ToF.getRange())/2;
   }
+
+  public double currentFilteredHeight() {
+    thirdMostRecentHeight = secondMostRecentHeight;
+    secondMostRecentHeight = currentHeight;
+    currentHeight = (BackupToF.getRange()+ToF.getRange())/2;
+
+    if(thirdMostRecentHeight != 0) {
+      return 
+        thirdMostRecentHeight * thirdMostRecentHeightWeight
+        + secondMostRecentHeight * secondMostRecentHeightWeight
+        + currentHeight * currentHeightWeight;
+    }
+
+    return (BackupToF.getRange()+ToF.getRange())/2;
+  }
+
+  public double ShootSpeed(){
+    return speed;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("LiftHeight", ToF.getRange());
     SmartDashboard.putNumber("BackupLiftHeight", BackupToF.getRange());
-    SmartDashboard.putNumber("MeanHeight", (ToF.getRange()+BackupToF.getRange()+30)/2);
-
+    SmartDashboard.putNumber("MeanHeight", currentHeight());
+    SmartDashboard.putNumber("MeanFilteredHeight", currentFilteredHeight());
   }
 }

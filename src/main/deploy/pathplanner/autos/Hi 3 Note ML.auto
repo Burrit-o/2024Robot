@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.71,
-      "y": 6.711477129946491
+      "x": 0.7343180058169219,
+      "y": 6.674761229655645
     },
-    "rotation": 59.43394494143663
+    "rotation": 60.1240073083106
   },
   "command": {
     "type": "sequential",
@@ -74,7 +74,26 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.5
+                  "waitTime": 1.0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pickup"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "HighPickup to Midline"
                 }
               }
             ]

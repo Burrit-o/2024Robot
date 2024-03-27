@@ -7,16 +7,13 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IPFSSub;
-import frc.robot.subsystems.Lift;
 
 public class FeedandFireSpeak extends Command {
   private final IPFSSub m_subsystem;
-  private final Lift m_Lift;
   private final Timer m_timer;
   /** Creates a new FeedandFire. */
-  public FeedandFireSpeak(IPFSSub subsystem, Lift lift) {
+  public FeedandFireSpeak(IPFSSub subsystem) {
     m_subsystem = subsystem;
-    m_Lift = lift;
     addRequirements(m_subsystem);
     m_timer = new Timer();
   }
@@ -30,13 +27,10 @@ public class FeedandFireSpeak extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_Lift.atSetpoint()) {
-      m_subsystem.Shoot(1);
+      m_subsystem.shootRpm(5000);
       if (m_timer.get() >= .5){
            m_subsystem.Feed(1);
-           m_subsystem.Shoot(1);
       }
-    }
   }
 
   // Called once the command ends or is interrupted.
@@ -51,7 +45,7 @@ public class FeedandFireSpeak extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (m_timer.get() >= 3) {
+    if (m_timer.get() >= 1) {
       return true;
     }else{
       return false;
