@@ -10,10 +10,10 @@ import frc.robot.subsystems.Lift;
 
 
 public class Brakes extends Command {
-  Lift lift;
-  /** Creates a new Brakes. */
-  public Brakes(Subsystem Lift) {
-    Lift = lift;
+  private final Lift m_Lift;
+  /** Creates sa new Brakes. */
+  public Brakes(Lift lift) {
+    m_Lift = lift;
         // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -24,13 +24,13 @@ public class Brakes extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Lift.enableBrake();
+    m_Lift.enableBrake();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Lift.disableBrake();
+    m_Lift.disableBrake();
   }
 
   // Returns true when the command should end.

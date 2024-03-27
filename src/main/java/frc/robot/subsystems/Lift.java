@@ -37,6 +37,7 @@ public class Lift extends SubsystemBase {
   private double currentHeightWeight = 0.5;
   private double secondMostRecentHeightWeight = 0.35;
   private double thirdMostRecentHeightWeight = 0.15;
+  private boolean brakeEnabled;
   /** Creates a new Lift. */
   public Lift() {
     LeftLiftMotor = new CANSparkMax(LiftConstants.LeftLiftMotor, MotorType.kBrushless);
@@ -54,6 +55,8 @@ public class Lift extends SubsystemBase {
 
     leftBrakeServo = new Servo(8);
     rightBrakeServo = new Servo(9);
+
+    brakeEnabled = false;
   }
 
   public double getCommandedHeight() {
@@ -61,20 +64,22 @@ public class Lift extends SubsystemBase {
   }
 
   public void setLift(double speed) {
-    if (speed < 0) {
-      if (!TopLim.get()) {
-          LeftLiftMotor.set(0);
-          RightLiftMotor.set(0);   
+    if(!brakeEnabled) {
+      if (speed < 0) {
+        if (!TopLim.get()) {
+            LeftLiftMotor.set(0);
+            RightLiftMotor.set(0);   
+        } else {
+            LeftLiftMotor.set(speed);
+            RightLiftMotor.set(speed);      }
       } else {
-          LeftLiftMotor.set(speed);
-          RightLiftMotor.set(speed);      }
-  } else {
-      if (!BottomLim.get()) {
-          LeftLiftMotor.set(0);
-          RightLiftMotor.set(0);      
-      } else {
-          LeftLiftMotor.set(speed);
-          RightLiftMotor.set(speed);      
+        if (!BottomLim.get()) {
+            LeftLiftMotor.set(0);
+            RightLiftMotor.set(0);      
+        } else {
+            LeftLiftMotor.set(speed);
+            RightLiftMotor.set(speed);      
+        }
       }
     }
   }
@@ -155,12 +160,15 @@ public class Lift extends SubsystemBase {
     return speed;
   }
 
-  public static void enableBrake() {
+  public void enableBrake() {
+    setLift(0);
+    brakeEnabled = true;
     leftBrakeServo.set(.15);
     rightBrakeServo.set(.15);
-  }
+  
 
-  public static void disableBrake() {
+  public void disableBrake() {
+    brakeEnabled = false;
     leftBrakeServo.set(.5);
     rightBrakeServo.set(.5);
   }
