@@ -45,6 +45,8 @@ public class IPFSSub extends SubsystemBase {
   //private final LEDs m_LEDs;
   private boolean haveNOTESet = false;
   private boolean seeNOTESet = false;
+  
+  private int counter = 0;
 
   /** Creates a new IPFSSub. */
   public IPFSSub(LEDs leds) {
@@ -75,7 +77,7 @@ public class IPFSSub extends SubsystemBase {
   IntakeMotorBottom.setIdleMode(IdleMode.kBrake);  
 
   
-  PickupSensor = new DigitalInput (1);
+  PickupSensor = new DigitalInput(4);
 
   TLEncoder = TLShooterMotor.getEncoder();
   TREncoder = TRShooterMotor.getEncoder();
@@ -125,8 +127,6 @@ public class IPFSSub extends SubsystemBase {
 
   public boolean canSeeNote() {
   // If we can see a NOTE, return true
-  int counter = 0;
-
   if(NetworkTableInstance.getDefault().getTable(VisionConstants.kPickupLimelightNetworkTableName).getEntry("tx").getDouble(0) != 0) {
     counter = 0;
     return true;
@@ -145,21 +145,21 @@ public class IPFSSub extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("PickupSensor", PickupSensor.get());
-
+    SmartDashboard.putBoolean("CanSeeNote", canSeeNote());
     // Only change LED color when state changes (not every clock cycle)
-    if(haveNote() && !haveNOTESet) {
+    if(!haveNote() && !haveNOTESet) {
       m_LEDs.signal(statusLED.STRIP1, ledMode.GREEN);
-      m_LEDs.signal(statusLED.STRIP2, ledMode.GREEN);
+      m_LEDs.signal(statusLED.STRIP3, ledMode.GREEN);
       haveNOTESet = true;
     } 
-    else if (canSeeNote() && !seeNOTESet) {
+    else if (canSeeNote() && !seeNOTESet && haveNote()) {
       m_LEDs.signal(statusLED.STRIP1, ledMode.YELLOW);
-      m_LEDs.signal(statusLED.STRIP2, ledMode.YELLOW);
+      m_LEDs.signal(statusLED.STRIP3, ledMode.YELLOW);
       seeNOTESet = true;
     }
-    else if (!haveNote() && !canSeeNote()) {
+    else if (haveNote() && !canSeeNote()) {
       m_LEDs.signal(statusLED.STRIP1, ledMode.RED);
-      m_LEDs.signal(statusLED.STRIP2, ledMode.RED);
+      m_LEDs.signal(statusLED.STRIP3, ledMode.RED);
       haveNOTESet = false;
       seeNOTESet = false;
     }

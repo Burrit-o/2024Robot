@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.lang.reflect.Array;
+
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -62,6 +64,14 @@ public LEDs(int length, int PWMPort) {
   LED_init();
 }
 
+
+private void myarraycopy(AddressableLEDBuffer small, int srcPos, AddressableLEDBuffer big, int destPos, int copyLen) {
+  for (int i = 0; i < copyLen; i++) {
+    big.setLED(destPos+i, small.getLED(srcPos+i));
+  }
+}
+
+
 public void LED_init() {
   m_LEDs.setLength(m_ledBuffer.getLength());
 
@@ -69,7 +79,7 @@ public void LED_init() {
   signal(statusLED.STRIP1, ledMode.RED);
   signal(statusLED.STRIP2, ledMode.RED);
   signal(statusLED.STRIP3, ledMode.RED);
-  System.arraycopy(zia_ledBuffer, 0, m_ledBuffer, 45, LEDConstants.ziaLEDlength);
+  myarraycopy(zia_ledBuffer, 0, m_ledBuffer, 45, LEDConstants.ziaLEDlength);
 
   //Send the default colors to the LEDs and start
   m_LEDs.setData(m_ledBuffer);
@@ -92,17 +102,17 @@ public void signal (statusLED strip, ledMode color) {
   }
 
   switch (m_color) {
-    case RED: System.arraycopy(red_ledBuffer, 0, m_ledBuffer, offset, LEDConstants.statusLEDlength);
+    case RED: myarraycopy(red_ledBuffer, 0, m_ledBuffer, offset, LEDConstants.statusLEDlength);
     break;
-    case GREEN: System.arraycopy(green_ledBuffer, 0, m_ledBuffer, offset, LEDConstants.statusLEDlength);
+    case GREEN: myarraycopy(green_ledBuffer, 0, m_ledBuffer, offset, LEDConstants.statusLEDlength);
     break;
-    case YELLOW: System.arraycopy(yellow_ledBuffer, 0, m_ledBuffer, offset, LEDConstants.statusLEDlength); 
+    case YELLOW: myarraycopy(yellow_ledBuffer, 0, m_ledBuffer, offset, LEDConstants.statusLEDlength); 
     break;
-    case ORANGE: System.arraycopy(orange_ledBuffer, 0, m_ledBuffer, offset, LEDConstants.statusLEDlength); 
+    case ORANGE: myarraycopy(orange_ledBuffer, 0, m_ledBuffer, offset, LEDConstants.statusLEDlength); 
     break;
-    case PURPLE: System.arraycopy(purple_ledBuffer, 0, m_ledBuffer, offset, LEDConstants.statusLEDlength); 
+    case PURPLE: myarraycopy(purple_ledBuffer, 0, m_ledBuffer, offset, LEDConstants.statusLEDlength); 
     break;
-    case BLUE: System.arraycopy(blue_ledBuffer, 0, m_ledBuffer, offset, LEDConstants.statusLEDlength); 
+    case BLUE: myarraycopy(blue_ledBuffer, 0, m_ledBuffer, offset, LEDConstants.statusLEDlength); 
     break;
     default: break;
   }
