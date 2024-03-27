@@ -165,7 +165,7 @@ public class Lift extends SubsystemBase {
     brakeEnabled = true;
     leftBrakeServo.set(.15);
     rightBrakeServo.set(.15);
-  
+  }
 
   public void disableBrake() {
     brakeEnabled = false;
