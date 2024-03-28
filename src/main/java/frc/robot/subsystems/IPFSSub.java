@@ -156,18 +156,18 @@ public class IPFSSub extends SubsystemBase {
     SmartDashboard.putBoolean("PickupSensor", haveNote());
     SmartDashboard.putBoolean("CanSeeNote", canSeeNote());
     // Only change LED color when state changes (not every clock cycle)
-    if(!haveNote() && !haveNOTESet) {
+    if(haveNote() && !haveNOTESet) {
       m_LEDs.signal(statusLED.STRIP1, ledMode.GREEN);
       m_LEDs.signal(statusLED.STRIP3, ledMode.GREEN);
       haveNOTESet = true;
 
     } 
-    else if (canSeeNote() && !seeNOTESet && haveNote()) {
+    else if (canSeeNote() && !seeNOTESet && !haveNote()) {
       m_LEDs.signal(statusLED.STRIP1, ledMode.YELLOW);
       m_LEDs.signal(statusLED.STRIP3, ledMode.YELLOW);
       seeNOTESet = true;
     }
-    else if (haveNote() && !canSeeNote()) {
+    else if (!haveNote() && !canSeeNote()) {
       m_LEDs.signal(statusLED.STRIP1, ledMode.RED);
       m_LEDs.signal(statusLED.STRIP3, ledMode.RED);
       haveNOTESet = false;
