@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LiftConstants;
@@ -21,6 +22,8 @@ public class Lift extends SubsystemBase {
   private final TimeOfFlight ToF, BackupToF;
   private final DigitalInput TopLim;
   private final DigitalInput BottomLim;
+  private static Servo leftBrakeServo;
+  private static Servo rightBrakeServo;
   private double kp;
   private double ki;
   private double kd;
@@ -34,6 +37,7 @@ public class Lift extends SubsystemBase {
   private double currentHeightWeight = 0.5;
   private double secondMostRecentHeightWeight = 0.35;
   private double thirdMostRecentHeightWeight = 0.15;
+  private boolean brakeEnabled;
   /** Creates a new Lift. */
   public Lift() {
     LeftLiftMotor = new CANSparkMax(LiftConstants.LeftLiftMotor, MotorType.kBrushless);
@@ -42,7 +46,6 @@ public class Lift extends SubsystemBase {
     LeftLiftMotor.setIdleMode(IdleMode.kBrake);
     RightLiftMotor.setIdleMode(IdleMode.kBrake);
 
-
     ToF = new TimeOfFlight(LiftConstants.ToFSensor);
     BackupToF = new TimeOfFlight(LiftConstants.BackupToFSensor);
 
@@ -50,8 +53,10 @@ public class Lift extends SubsystemBase {
     TopLim = new DigitalInput(3);
     BottomLim = new DigitalInput(2);
 
+    leftBrakeServo = new Servo(8);
+    rightBrakeServo = new Servo(9);
 
-
+    brakeEnabled = false;
   }
 
   public double getCommandedHeight() {
@@ -59,20 +64,22 @@ public class Lift extends SubsystemBase {
   }
 
   public void setLift(double speed) {
-    if (speed < 0) {
-      if (!TopLim.get()) {
-          LeftLiftMotor.set(0);
-          RightLiftMotor.set(0);   
+    if(!brakeEnabled) {
+      if (speed < 0) {
+        if (!TopLim.get()) {
+            LeftLiftMotor.set(0);
+            RightLiftMotor.set(0);   
+        } else {
+            LeftLiftMotor.set(speed);
+            RightLiftMotor.set(speed);      }
       } else {
-          LeftLiftMotor.set(speed);
-          RightLiftMotor.set(speed);      }
-  } else {
-      if (!BottomLim.get()) {
-          LeftLiftMotor.set(0);
-          RightLiftMotor.set(0);      
-      } else {
-          LeftLiftMotor.set(speed);
-          RightLiftMotor.set(speed);      
+        if (!BottomLim.get()) {
+            LeftLiftMotor.set(0);
+            RightLiftMotor.set(0);      
+        } else {
+            LeftLiftMotor.set(speed);
+            RightLiftMotor.set(speed);      
+        }
       }
     }
   }
@@ -156,6 +163,24 @@ public class Lift extends SubsystemBase {
     return speed;
   }
 
+  public void enableBrake() {
+    setLift(0);
+    brakeEnabled = true;
+    leftBrakeServo.set(.1);
+    rightBrakeServo.set(.15);
+  }
+
+  public void disableBrake() {
+    brakeEnabled = false;
+    leftBrakeServo.set(.45);
+    rightBrakeServo.set(.45);
+  }
+
+  public void runBrake(double position) {
+    leftBrakeServo.set(position);
+    rightBrakeServo.set(position);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -163,5 +188,7 @@ public class Lift extends SubsystemBase {
     SmartDashboard.putNumber("BackupLiftHeight", BackupToF.getRange());
     SmartDashboard.putNumber("MeanHeight", currentHeight());
     SmartDashboard.putNumber("MeanFilteredHeight", currentFilteredHeight());
+    SmartDashboard.putNumber("Left Servo", leftBrakeServo.get());
+    SmartDashboard.putNumber("Right Servo", rightBrakeServo.get());
   }
 }

@@ -5,45 +5,37 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.Lift;
 
-import frc.robot.Constants.LiftConstants;
 
-public class SetShoot extends Command {
-  Lift lift;
-  LiftConstants.Setpoint  setpoint;
-  Command command;
-  /** Creates a new SetShoot. */
-  public SetShoot(Lift Subsytem, Command Command, LiftConstants.Setpoint Setpoint) {
-    lift = Subsytem;
-    setpoint = Setpoint;
-    command = Command;
-    // Use addRequirements() here to declare subsystem dependencies.
+public class Brakes extends Command {
+  private final Lift m_Lift;
+  /** Creates sa new Brakes. */
+  public Brakes(Lift lift) {
+    m_Lift = lift;
+        // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    lift.setLiftPID(setpoint);
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_Lift.enableBrake();
+  }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    command.schedule();
+    m_Lift.disableBrake();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(lift.currentHeight()-lift.getCommandedHeight()) <= 2){
-      return true;
-    }else{
     return false;
-    }
   }
 }
