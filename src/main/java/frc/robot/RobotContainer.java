@@ -210,7 +210,7 @@ public class RobotContainer {
     // A Button
     new JoystickButton(m_driveController, 1).onTrue(new InstantCommand(() -> swerveSubsystem.zeroHeading()));
     // LB Button
-    new JoystickButton(m_driveController, 5).whileTrue(new ParallelDeadlineGroup(new Pickup(m_IPFSSub), new SetHeight(m_Lift, LiftConstants.Setpoint.PICKUP), new NoteAlignCmd(swerveSubsystem, m_IPFSSub)));
+    new JoystickButton(m_driveController, 6).whileTrue(new ParallelDeadlineGroup(new Pickup(m_IPFSSub), new SetHeight(m_Lift, LiftConstants.Setpoint.PICKUP), new NoteAlignCmd(swerveSubsystem, m_IPFSSub)));
 
   }
 

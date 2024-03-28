@@ -35,7 +35,7 @@ public class NoteAlignCmd extends Command {
   private double limeLightHeight = 0.603;                 // The LimeLight distance off the floor in meters, used to estimate distance to a NOTE.
   private double limeLightAngle = -42;                    // Pitch of the LimeLight
   private double minimumNoteAngle = -21.5;                // The minimum angle for the LimeLight to calculate distance to the NOTE. Below this, the robot will estimate.
-  private double translationP = 0.38;
+  private double translationP = 0.1;
   private double translationI = 0;
   private double translationD = 0;
 
@@ -73,7 +73,7 @@ public class NoteAlignCmd extends Command {
   @Override
   public void initialize() {
     previousPipeline = limelighNetworkTable.getEntry("pipeline").getDouble(0);
-    limelighNetworkTable.getEntry("pipeline").setNumber(1);
+    limelighNetworkTable.getEntry("pipeline").setNumber(0);
     tv = 0;
     tx = 0;
     ty = 0;
@@ -111,7 +111,7 @@ public class NoteAlignCmd extends Command {
       degreesToRotate = degreesToRotate - (lastYaw - m_swerveSubsystem.getChassisYaw());
       lastYaw = m_swerveSubsystem.getPose().getRotation().getDegrees();
       if(!moveToNote) {
-        chassisSpeeds = new ChassisSpeeds(0, 0, rotationalPidController.calculate(degreesToRotate));
+        chassisSpeeds = new ChassisSpeeds(0, 0, rotationalPidController.calculate(0));
       }
       if(moveToNote) {
         tOld = tNew;
@@ -120,7 +120,8 @@ public class NoteAlignCmd extends Command {
         if(tOld != 0 && tNew != 0) {
           predictedLateralDistanceTraveled = predictedLateralDistanceTraveled + (m_swerveSubsystem.getRobotRelativeSpeeds().vxMetersPerSecond * (tNew - tOld));
           lateralDistanceToNote = distanceFromNote + overshootDistance - predictedLateralDistanceTraveled;
-          chassisSpeeds = new ChassisSpeeds(longitudinalPidController.calculate(-lateralDistanceToNote), lateralPidController.calculate(tx), rotationalPidController.calculate(degreesToRotate));
+          // lateraldistancetonote
+          chassisSpeeds = new ChassisSpeeds(longitudinalPidController.calculate(-ty), lateralPidController.calculate(lateralDistanceToNote), rotationalPidController.calculate(0));
         }
       }
       // If the robot sees a NOTE that is close and isn't pointed at it, stop the full-circle scan and point the robot at the NOTE.
@@ -159,7 +160,7 @@ public class NoteAlignCmd extends Command {
       if(tOld != 0 && tNew != 0) {
         predictedLateralDistanceTraveled = predictedLateralDistanceTraveled + (m_swerveSubsystem.getRobotRelativeSpeeds().vxMetersPerSecond * (tNew - tOld));
         lateralDistanceToNote = distanceFromNote + overshootDistance - predictedLateralDistanceTraveled;
-        chassisSpeeds = new ChassisSpeeds(longitudinalPidController.calculate(-lateralDistanceToNote), lateralPidController.calculate(tx), rotationalPidController.calculate(degreesToRotate));
+        chassisSpeeds = new ChassisSpeeds(longitudinalPidController.calculate(lateralDistanceToNote), lateralPidController.calculate(tx), rotationalPidController.calculate(degreesToRotate));
       }
     }
     if(!seesNote) {
@@ -181,7 +182,7 @@ public class NoteAlignCmd extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(!m_ipfsSubsystem.haveNote()) {
+    if(m_ipfsSubsystem.haveNote()) {
         return true;
     }
     return false;
