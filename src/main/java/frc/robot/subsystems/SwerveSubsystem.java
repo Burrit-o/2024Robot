@@ -253,6 +253,7 @@ public class SwerveSubsystem extends SubsystemBase {
         if (poseEstimate.tagCount > 0) {
             double xyStds;
             double degStds;
+            SmartDashboard.putNumber("poseDifference", poseDifference);
             // multiple targets detected
             if (poseEstimate.tagCount >= 2 && poseEstimate.avgTagArea > 0.5) {
                 xyStds = 0.5;
@@ -284,7 +285,7 @@ public class SwerveSubsystem extends SubsystemBase {
             m_poseEstimator.setVisionMeasurementStdDevs(
                 VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
             m_poseEstimator.addVisionMeasurement(visionPose,
-                shootLimelightMeasurement.timestampSeconds);
+                poseEstimate.timestampSeconds);
         }
     }
 
@@ -325,15 +326,14 @@ public class SwerveSubsystem extends SubsystemBase {
         if(isUpdating == true) {
             signalIsUpdating = true;
         }
+            SmartDashboard.putBoolean("signalIsUpdating", signalIsUpdating);
+            SmartDashboard.putBoolean("seesTags", shootLLPoseEstimate.tagCount > 0 || tagsLLPoseEstimate.tagCount > 0);
 
         if(signalIsUpdating == true) {
-            // Color 1
         }
         else if((shootLLPoseEstimate.tagCount > 0 || tagsLLPoseEstimate.tagCount > 0)) {
-            // Color 2
         }
         else {
-            // Color 2
         }
 
         /*
