@@ -30,6 +30,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.LimeLightConstants;
+import frc.robot.Constants.VisionConstants;
+import frc.robot.LimelightHelpers.LimelightResults;
 import frc.robot.LimelightHelpers;
 import edu.wpi.first.wpilibj.SerialPort;
 
@@ -82,7 +84,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
     // Create a new Field2d object for plotting pose and initialize LimeLight Network table instances
     private final Field2d m_field = new Field2d();
-    private final NetworkTable pickupLLTable = NetworkTableInstance.getDefault().getTable(LimeLightConstants.kllPickup);
     //Uncomment when we get Limelights renamed
     //private final NetworkTable pickupLLTable = NetworkTableInstance.getDefault().getTable(LimeLightConstants.kllPickup);
     private final NetworkTable shooterLLTable = NetworkTableInstance.getDefault().getTable(LimeLightConstants.kllShoot);
@@ -90,10 +91,11 @@ public class SwerveSubsystem extends SubsystemBase {
     private double ta;
     private double tl;
     private boolean isUpdating = false;
-    private boolean gate = true;
+   private boolean gate = true;
     //private LimelightHelpers.LimelightResults results;
-    private LimelightHelpers.PoseEstimate limelightMeasurement;
-    
+    private LimelightHelpers.PoseEstimate shootLimelightMeasurement;
+    private LimelightHelpers.PoseEstimate tagsLimelightMeasurement;
+
     Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
 
     // Create two new SimpleMotorFeedforwards (one right and one left) with gains
@@ -186,19 +188,6 @@ public class SwerveSubsystem extends SubsystemBase {
         return states;
     }
 
-    public void updateValues(String networkTableName) {
-
-        //TODO: Maybe switch these to use the limelight helper sub
-        //tv = shooterLLTable.getEntry("tv").getDouble(0);
-        //ta = shooterLLTable.getEntry("ta").getDouble(0);
-        //tl = shooterLLTable.getEntry("tl").getDouble(40);
-
-        //results = LimelightHelpers.getLatestResults("Limelight-shoot");
-
-        limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue(networkTableName);
-
-    }
-
     /* 
     public boolean isGoodTarget() {
         //return ta >= 0.5  || results.targetingResults.targets_Fiducials.length > 1 && ta>0.4;
@@ -240,10 +229,10 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
 
-    public void updatePoseEstimatorWithVisionBotPose() {
+    public void updatePoseEstimatorWithVisionBotPose(LimelightHelpers.PoseEstimate poseEstimate) {
         //PoseLatency visionBotPose = m_visionSystem.getPoseLatency();
         //Pose2d visionPose = getVisionEstimatedPose();
-        Pose2d visionPose = limelightMeasurement.pose;
+        Pose2d visionPose = poseEstimate.pose;
         // invalid LL data
         //if (visionBotPose.pose2d.getX() == 0.0) {
         //    return;
@@ -254,7 +243,6 @@ public class SwerveSubsystem extends SubsystemBase {
             return;
         }
         
-
         // distance from current pose to vision estimated pose
         //double poseDifference = m_poseEstimator.getEstimatedPosition().getTranslation()
         //    .getDistance(visionBotPose.pose2d.getTranslation());
@@ -262,23 +250,21 @@ public class SwerveSubsystem extends SubsystemBase {
         double poseDifference = m_poseEstimator.getEstimatedPosition().getTranslation()
             .getDistance(visionPose.getTranslation());
 
-        
-
-        if (limelightMeasurement.tagCount > 0) {
+        if (poseEstimate.tagCount > 0) {
             double xyStds;
             double degStds;
             // multiple targets detected
-            if (limelightMeasurement.tagCount >= 2 && limelightMeasurement.avgTagArea > 0.5) {
+            if (poseEstimate.tagCount >= 2 && poseEstimate.avgTagArea > 0.5) {
                 xyStds = 0.5;
                 degStds = 6;
             }
             // 1 target with large area and close to estimated pose
-            else if (limelightMeasurement.avgTagArea > 0.66 && poseDifference < 1.5) { //areea 0.8, diff 0.5
+            else if (poseEstimate.avgTagArea > 0.66 && poseDifference < 1.5) { //areea 0.8, diff 0.5
                 xyStds = 1.0;
                 degStds = 12;
             }
             // 1 target farther away and estimated pose is close
-            else if (limelightMeasurement.avgTagArea > 0.15 && poseDifference < 0.3) { // area 0.1, diff 0.3
+            else if (poseEstimate.avgTagArea > 0.15 && poseDifference < 0.3) { // area 0.1, diff 0.3
                 xyStds = 2.0;
                 degStds = 30;
             }
@@ -298,7 +284,7 @@ public class SwerveSubsystem extends SubsystemBase {
             m_poseEstimator.setVisionMeasurementStdDevs(
                 VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
             m_poseEstimator.addVisionMeasurement(visionPose,
-                limelightMeasurement.timestampSeconds);
+                shootLimelightMeasurement.timestampSeconds);
         }
     }
 
@@ -327,17 +313,28 @@ public class SwerveSubsystem extends SubsystemBase {
         
         // Set the robot pose on the Field2D object
         
+        LimelightHelpers.PoseEstimate shootLLPoseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(LimeLightConstants.kllShoot);
+        LimelightHelpers.PoseEstimate tagsLLPoseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(LimeLightConstants.kllAprilTags);
+        
+        boolean signalIsUpdating = false;
+        updatePoseEstimatorWithVisionBotPose(shootLLPoseEstimate);
+        if(isUpdating == true) {
+            signalIsUpdating = true;
+        }
+        updatePoseEstimatorWithVisionBotPose(tagsLLPoseEstimate);
+        if(isUpdating == true) {
+            signalIsUpdating = true;
+        }
 
-        updateValues(LimeLightConstants.kllShoot);
-        updatePoseEstimatorWithVisionBotPose();
-
-        // UNCOMMENT BELOW TO USE LIMELIGHT 3G. MAKE SURE NETWORKTABLE NAME IS CORRECT.
-
-        // updateValues(LimeLightConstants.kllAprilTags);
-        // updatePoseEstimatorWithVisionBotPose();
-
-        SmartDashboard.putBoolean("Vision Identified Tag", limelightMeasurement.tagCount > 0);
-        //SmartDashboard.putBoolean("Is good target", isGoodTarget());
+        if(signalIsUpdating == true) {
+            // Color 1
+        }
+        else if((shootLLPoseEstimate.tagCount > 0 || tagsLLPoseEstimate.tagCount > 0)) {
+            // Color 2
+        }
+        else {
+            // Color 2
+        }
 
         /*
 

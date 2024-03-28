@@ -181,7 +181,7 @@ public class NoteAlignCmd extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(m_ipfsSubsystem.haveNote()) {
+    if(!m_ipfsSubsystem.haveNote()) {
         return true;
     }
     return false;
