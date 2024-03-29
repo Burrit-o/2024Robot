@@ -116,6 +116,7 @@ public final class Constants {
     public static final class LimeLightConstants {
         public static final String kllShoot = "limelight-shoot";
         public static final String kllPickup = "limelight-pickup";
+        public static final String kllAprilTags = "limelight-tags";
         public static final int kAprilTagPipeline = 0;
         public static final int kNeuralNetworkPipeline = 1;
     }
@@ -156,7 +157,8 @@ public final class Constants {
     public static class VisionConstants {
         public static final String kPickupLimelightNetworkTableName = "limelight-pickup";
         public static final String kShootLimelightNetworkTableName = "limelight-shoot";
-    }
+        public static final String kAprilTagLimelightNetworkTableName = "limelight-tags";
+      }
 
     public static class LEDConstants {
         public static final int LEDport = 0;
