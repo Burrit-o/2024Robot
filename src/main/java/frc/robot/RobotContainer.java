@@ -196,15 +196,21 @@ public class RobotContainer {
   //     new PathConstraints(1.0, 1.0, Units.degreesToRadians(180), Units.degreesToRadians(270)), 
   //     0.0));
 
-  OPbButton.whileTrue(AutoBuilder.pathfindThenFollowPath(
+  /*OPbButton.whileTrue(AutoBuilder.pathfindThenFollowPath(
       PathPlannerPath.fromPathFile("High Shoot Rotate - PathFind"), 
       new PathConstraints(3.5, 3.75, Units.degreesToRadians(540), Units.degreesToRadians(720)), 
-      0.0));
+      0.0));*/
 
-  OPyButton.whileTrue(AutoBuilder.pathfindThenFollowPath(
+  OPbButton.whileTrue(AutoBuilder.followPath(
+      PathPlannerPath.fromPathFile("High Shoot Rotate - PathFind")));
+
+  /*OPyButton.whileTrue(AutoBuilder.pathfindThenFollowPath(
       PathPlannerPath.fromPathFile("Mid Shoot Rotate - PathFind"), 
       new PathConstraints(3.5, 3.75, Units.degreesToRadians(540), Units.degreesToRadians(720)), 
-      0.0));
+      0.0));*/
+
+      OPyButton.whileTrue(AutoBuilder.followPath(
+      PathPlannerPath.fromPathFile("Mid Shoot Rotate - PathFind")));
 
   OPxButton.whileTrue(AutoBuilder.pathfindThenFollowPath(
       PathPlannerPath.fromPathFile("Low Shoot Rotate - PathFind"), 
