@@ -15,27 +15,30 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.IPFSSub;
+import frc.robot.subsystems.SwerveSubsystem;
 
 public class NoteAlignCmd extends Command {
   private final SwerveSubsystem m_swerveSubsystem;
-  private final IPFSSub m_ipfsSubsystem;
+  private final IPFSSub m_ipfs;
   private final NetworkTable limelighNetworkTable;
-  private final PIDController lateralPidController, longitudinalPidController, rotationalPidController;
+  private final PIDController xPidController, yPidController, rotPidController;
   private double previousPipeline;
-  private double tv, tx, ty, ta, lastYaw, lateralDistanceToNote, distanceFromNote, predictedLateralDistanceTraveled;
+  private double tv, tx, ty, ta, lastYaw, xDistance, yDistance;
   private double degreesToRotate;
   private double tOld, tNew;
   private boolean detectNotes, moveToNote, seesNote;
 
   // Change these values as needed
-  private double noteSizeThreshold = 0.3;                 // Minimum size of the NOTE for the robot to move to and pickup.
-  private double overshootDistance = 0.5;                 // This is how many meters will be added to the distance to try to run over the NOTE.
-  private double limeLightHeight = 0.603;                 // The LimeLight distance off the floor in meters, used to estimate distance to a NOTE.
-  private double limeLightAngle = -42;                    // Pitch of the LimeLight
-  private double minimumNoteAngle = -21.5;                // The minimum angle for the LimeLight to calculate distance to the NOTE. Below this, the robot will estimate.
-  private double translationP = 0.1;
+  private double noteSizeThreshold = 0.3; // Minimum size of the NOTE for the robot to move to and pickup.
+  private double overshootDistance = 0.5; // This is how many meters will be added to the distance to try to run over
+                                          // the NOTE.
+  private double limeLightHeight = 0.71; // The LimeLight distance off the floor in meters, used to estimate distance to
+                                         // a NOTE.
+  private double limeLightAngle = 0; // Pitch of the LimeLight
+  private double minimumNoteAngle = -21.5; // The minimum angle for the LimeLight to calculate distance to the NOTE.
+                                           // Below this, the robot will estimate.
+  private double translationP = 0.38; // P can be 0.05 after initial testing
   private double translationI = 0;
   private double translationD = 0;
 
@@ -52,19 +55,19 @@ public class NoteAlignCmd extends Command {
    */
 
   /** Creates a new DriveAndPickupNoteCmd. */
-  public NoteAlignCmd(SwerveSubsystem swerveSubsystem, IPFSSub ipfsSubsystem) {
+  public NoteAlignCmd(SwerveSubsystem swerveSubsystem, IPFSSub ipfs) {
     this.m_swerveSubsystem = swerveSubsystem;
-    this.m_ipfsSubsystem = ipfsSubsystem;
-    this.lateralPidController = new PIDController(translationP, translationI, translationD);
-    this.longitudinalPidController = new PIDController(translationP, translationI, translationD);
-    this.rotationalPidController = new PIDController(rotationP, rotationI, rotationD);
+    this.m_ipfs = ipfs;
+    this.xPidController = new PIDController(translationP, translationI, translationD);
+    this.yPidController = new PIDController(translationP, translationI, translationD);
+    this.rotPidController = new PIDController(rotationP, rotationI, rotationD);
 
-    // this.limelighNetworkTable = NetworkTableInstance.getDefault().getTable(VisionConstants.kPickupLimelightNetworkTableName);
-    this.limelighNetworkTable = NetworkTableInstance.getDefault().getTable(VisionConstants.kPickupLimelightNetworkTableName);
+    this.limelighNetworkTable = NetworkTableInstance.getDefault()
+        .getTable(VisionConstants.kPickupLimelightNetworkTableName);
 
-    lateralPidController.setSetpoint(0);
-    longitudinalPidController.setSetpoint(0);
-    rotationalPidController.setSetpoint(0);
+    xPidController.setSetpoint(0);
+    yPidController.setSetpoint(0);
+    rotPidController.setSetpoint(0);
 
     addRequirements(swerveSubsystem);
   }
@@ -72,7 +75,6 @@ public class NoteAlignCmd extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    previousPipeline = limelighNetworkTable.getEntry("pipeline").getDouble(0);
     limelighNetworkTable.getEntry("pipeline").setNumber(0);
     tv = 0;
     tx = 0;
@@ -80,13 +82,8 @@ public class NoteAlignCmd extends Command {
     ta = 0;
     degreesToRotate = 0;
     detectNotes = true; // Try to search for NOTES
-    moveToNote = true;
-    lastYaw = m_swerveSubsystem.getChassisYaw();
-    lateralDistanceToNote = 0;
-    predictedLateralDistanceTraveled = 0;
     tOld = 0;
     tNew = 0;
-    seesNote = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -94,81 +91,22 @@ public class NoteAlignCmd extends Command {
   public void execute() {
     // Initialize ChassisSpeeds to control robot movement
     ChassisSpeeds chassisSpeeds;
-    chassisSpeeds = new ChassisSpeeds(0,0,0);
+    chassisSpeeds = new ChassisSpeeds(0, 0, 0);
 
-    // If the robot should look for a NOTE, get data from the LimeLight and rotate in place.
-    if(detectNotes == true) {
+    // If the robot should look for a NOTE, get data from the LimeLight and rotate
+    // in place.
+    if (detectNotes == true) {
       // Get most recent LimeLight position on a NOTE, if present.
-      tv = limelighNetworkTable.getEntry("tv").getDouble(0);
-      tx = limelighNetworkTable.getEntry("tx").getDouble(0);
-      ty = limelighNetworkTable.getEntry("ty").getDouble(0);
-      ta = limelighNetworkTable.getEntry("ta").getDouble(0);
-
-      if(tv != 0) {
-        seesNote = true;
-      }
-      // Decrease degreesToRotate as the robot completes its search.
-      degreesToRotate = degreesToRotate - (lastYaw - m_swerveSubsystem.getChassisYaw());
-      lastYaw = m_swerveSubsystem.getPose().getRotation().getDegrees();
-      if(!moveToNote) {
-        chassisSpeeds = new ChassisSpeeds(0, 0, rotationalPidController.calculate(0));
-      }
-      if(moveToNote) {
-        tOld = tNew;
-        tNew = System.nanoTime() / Math.pow(10, 9);
-        // Predict distance traveled based on meters/second multiplied by time traveling at the velocity.
-        if(tOld != 0 && tNew != 0) {
-          predictedLateralDistanceTraveled = predictedLateralDistanceTraveled + (m_swerveSubsystem.getRobotRelativeSpeeds().vxMetersPerSecond * (tNew - tOld));
-          lateralDistanceToNote = distanceFromNote + overshootDistance - predictedLateralDistanceTraveled;
-          // lateraldistancetonote
-          chassisSpeeds = new ChassisSpeeds(longitudinalPidController.calculate(-ty), lateralPidController.calculate(lateralDistanceToNote), rotationalPidController.calculate(0));
-        }
-      }
-      // If the robot sees a NOTE that is close and isn't pointed at it, stop the full-circle scan and point the robot at the NOTE.
-      if(ta >= noteSizeThreshold && Math.abs(tx) > 5) {
-        degreesToRotate = tx;
-      }
-      
-      // If the robot sees a NOTE and is reasonably pointed at it, begin moving towards the NOTE.
-      if(ta >= noteSizeThreshold && Math.abs(tx) <= 5) {
-        // Guess the distance until the robot encounters the NOTE. Begin moving towards the NOTE.
-        if((lateralDistanceToNote == 0 || ty >= minimumNoteAngle) && !moveToNote) {
-          distanceFromNote = Math.tan((90 - Math.abs(ty) + limeLightAngle) * Math.PI/180) * limeLightHeight;
-          moveToNote = true;
-        }
-
-        // Prevent from tracking a new NOTE after the current NOTE leaves its field of view.
-        if(ty < minimumNoteAngle) {
-          degreesToRotate = 0;
-          detectNotes = false;
-        }
-      }
-    } 
-    if(detectNotes == false) {
-      tv = 0;
-      tx = 0;
-      ty = 0;
-      ta = 0;
-      chassisSpeeds = new ChassisSpeeds(0, 0, 0);
+      updateValues();
     }
 
-    // If a NOTE is seen, go there and record timestamps to calculate distance traveled.
-    if(detectNotes == false && moveToNote == true) {        
-      tOld = tNew;
-      tNew = System.nanoTime() / Math.pow(10, 9);
-      // Predict distance traveled based on meters/second multiplied by time traveling at the velocity.
-      if(tOld != 0 && tNew != 0) {
-        predictedLateralDistanceTraveled = predictedLateralDistanceTraveled + (m_swerveSubsystem.getRobotRelativeSpeeds().vxMetersPerSecond * (tNew - tOld));
-        lateralDistanceToNote = distanceFromNote + overshootDistance - predictedLateralDistanceTraveled;
-        chassisSpeeds = new ChassisSpeeds(longitudinalPidController.calculate(lateralDistanceToNote), lateralPidController.calculate(tx), rotationalPidController.calculate(degreesToRotate));
-      }
-    }
-    if(!seesNote) {
-      chassisSpeeds = new ChassisSpeeds(0,0,0);
-    }
+    updateDistances();
+    chassisSpeeds = new ChassisSpeeds(xPidController.calculate(xDistance),
+        yPidController.calculate(yDistance + overshootDistance), 0);
+
     // Convert chassis speeds to individual module states
     SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
-    
+
     // Output each module states to wheels
     m_swerveSubsystem.setModuleStates(moduleStates);
   }
@@ -176,15 +114,46 @@ public class NoteAlignCmd extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    //limelighNetworkTable.getEntry("pipeline").setNumber(previousPipeline);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(m_ipfsSubsystem.haveNote()) {
-        return true;
+    if (m_ipfs.haveNote()) { // Add or statement for NOTE in pickup
+      return true;
     }
     return false;
+  }
+
+  private void updateValues() {
+    ty = limelighNetworkTable.getEntry("ty").getDouble(0);
+
+    if (ty >= minimumNoteAngle) {
+      tv = limelighNetworkTable.getEntry("tv").getDouble(0);
+      tx = limelighNetworkTable.getEntry("tx").getDouble(0);
+      ty = limelighNetworkTable.getEntry("ty").getDouble(0) + 90 + limeLightAngle;
+      ta = limelighNetworkTable.getEntry("ta").getDouble(0);
+    } else {
+      detectNotes = false;
+      tv = 0;
+      tx = 0;
+      ty = 0;
+      ta = 0;
+    }
+  }
+
+  private void updateDistances() {
+    tOld = tNew;
+    tNew = System.nanoTime() / Math.pow(10, 9);
+
+    if (detectNotes) {
+      yDistance = Math.tan(ty) * limeLightHeight;
+      xDistance = Math.tan(tx) * yDistance;
+    } else if (tOld != 0 && tNew != 0) {
+      yDistance = yDistance - m_swerveSubsystem.getRobotRelativeSpeeds().vyMetersPerSecond * (tNew - tOld);
+      xDistance = xDistance - m_swerveSubsystem.getRobotRelativeSpeeds().vxMetersPerSecond * (tNew - tOld);
+      SmartDashboard.putNumber("xdistance", xDistance);
+      SmartDashboard.putNumber("ydistance", yDistance);
+    }
   }
 }

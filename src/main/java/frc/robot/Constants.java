@@ -201,10 +201,10 @@ public final class Constants {
     }
     public static final double ClimbTop = 425;
     public static final double ClimbBottom = 100;
-    public static final double AmpHeight = 225;
-    public static final double SpeakerHeight = 225;
+    public static final double AmpHeight = 220;
+    public static final double SpeakerHeight = 230;
     public static final double Speaker4ft = 182;
-    public static final double SpeakSidePickupSpot = 177;
+    public static final double SpeakSidePickupSpot = 173;
     public static final double SpeakMidPickupSpot = 182;
     public static final double SpeakerDriveline = 200;
     public static final double Short = 70;

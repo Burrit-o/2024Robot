@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7251390307442104,
-      "y": 6.70229815487378
+      "x": 0.7123390646436764,
+      "y": 4.339720100628832
     },
-    "rotation": 60.25511870305783
+    "rotation": -60.65379129252926
   },
   "command": {
     "type": "sequential",
@@ -30,28 +30,15 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Pickup"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "High Drive Out"
-                }
-              }
-            ]
+            "pathName": "Low Drive Out"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "High Shoot Rotate"
+            "pathName": "Low Pickup Aim"
           }
         },
         {
@@ -79,7 +66,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Hi Pickup to Mid Pickup"
+                  "pathName": "Low ML Pickup"
                 }
               }
             ]
@@ -88,13 +75,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Mid Pickup Aim"
+            "pathName": "ML to Low Aim"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot_MidPickup"
+            "name": "ShootHighPickup"
           }
         },
         {

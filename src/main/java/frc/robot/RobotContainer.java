@@ -87,7 +87,7 @@ public class RobotContainer {
                                 () -> m_driveController.getRawAxis(OIConstants.kDriverYAxis),
                                 () -> m_driveController.getRawAxis(OIConstants.kDriverXAxis),
                                 () -> -m_driveController.getRawAxis(OIConstants.kDriverRotAxis),
-                                () -> !m_driveController.getRawButton(5))); // LB
+                                () -> !m_driveController.getRawButton(6))); // RB
 
                  //Register named commands
               // NamedCommands.registerCommand("AprilTagAlignCmd", new AprilTagAlignCmd(swerveSubsystem));
@@ -98,7 +98,8 @@ public class RobotContainer {
               NamedCommands.registerCommand("Pickup", new SetShoot(m_Lift, new Pickup(m_IPFSSub), LiftConstants.Setpoint.PICKUP));
               NamedCommands.registerCommand("FireSpeaker", new SetShoot(m_Lift, new FeedandFireSpeak(m_IPFSSub), LiftConstants.Setpoint.SPEAKER));
               NamedCommands.registerCommand("ShootHighPickup", new SetShoot(m_Lift, new FeedandFireSpeak(m_IPFSSub), LiftConstants.Setpoint.SPEAKPickupSide));
-              NamedCommands.registerCommand("ShootMidPickup", new SetShoot(m_Lift, new FeedandFireSpeak(m_IPFSSub), LiftConstants.Setpoint.SPEAKPickupMid));
+              //NamedCommands.registerCommand("ShootMidPickup", new SetShoot(m_Lift, new FeedandFireSpeak(m_IPFSSub), LiftConstants.Setpoint.SPEAKPickupMid));
+              NamedCommands.registerCommand("Shoot_MidPickup", new SetShoot(m_Lift, new FeedandFireSpeak(m_IPFSSub), LiftConstants.Setpoint.SPEAKPickupMid));
               // NamedCommands.registerCommand("NoteAlignedCmd", new NoteAlignCmd(swerveSubsystem));
               // NamedCommands.registerCommand("ClimberHigh", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.PICKTOP)));
               // NamedCommands.registerCommand("ClimberLow", new InstantCommand(() -> m_Lift.setLiftPID(LiftConstants.Setpoint.PICKBOTTOM)));
@@ -154,8 +155,8 @@ public class RobotContainer {
     OPMenu.onTrue(new InstantCommand(() -> m_Lift.setLiftPID(Setpoint.STOW)));
     OPlBumper.whileTrue(new FeedandFireSpeak(m_IPFSSub));
     OPaButton.onTrue(new SetShoot(m_Lift, new FeedandFireAmp(m_IPFSSub), LiftConstants.Setpoint.AMP));
-    OPbButton.whileTrue(new SetShoot(m_Lift, new Pickup(m_IPFSSub), LiftConstants.Setpoint.PICKUP));
-    OPxButton.onTrue(new SetShoot(m_Lift, new FeedandFireSpeak(m_IPFSSub), LiftConstants.Setpoint.SPEAKPickupSide));
+    //OPbButton.whileTrue(new SetShoot(m_Lift, new Pickup(m_IPFSSub), LiftConstants.Setpoint.PICKUP));
+   //OPxButton.onTrue(new SetShoot(m_Lift, new FeedandFireSpeak(m_IPFSSub), LiftConstants.Setpoint.SPEAKPickupSide));
 
 
     Trigger OPuDPad = m_operatorController.povUp();
@@ -195,7 +196,7 @@ public class RobotContainer {
   //     new PathConstraints(1.0, 1.0, Units.degreesToRadians(180), Units.degreesToRadians(270)), 
   //     0.0));
 
-  OPxButton.whileTrue(AutoBuilder.pathfindThenFollowPath(
+  OPbButton.whileTrue(AutoBuilder.pathfindThenFollowPath(
       PathPlannerPath.fromPathFile("High Shoot Rotate - PathFind"), 
       new PathConstraints(3.5, 3.75, Units.degreesToRadians(540), Units.degreesToRadians(720)), 
       0.0));
@@ -205,7 +206,7 @@ public class RobotContainer {
       new PathConstraints(3.5, 3.75, Units.degreesToRadians(540), Units.degreesToRadians(720)), 
       0.0));
 
-  OPbButton.whileTrue(AutoBuilder.pathfindThenFollowPath(
+  OPxButton.whileTrue(AutoBuilder.pathfindThenFollowPath(
       PathPlannerPath.fromPathFile("Low Shoot Rotate - PathFind"), 
       new PathConstraints(3.5, 3.75, Units.degreesToRadians(540), Units.degreesToRadians(720)), 
       0.0));

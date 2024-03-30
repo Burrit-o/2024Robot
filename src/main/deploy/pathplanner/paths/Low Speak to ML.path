@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7123390646436764,
-        "y": 4.339720100628832
+        "x": 0.6816344588466624,
+        "y": 4.356431195030721
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.523709862070113,
-        "y": 3.9853215333511693
+        "x": 0.6933452953924437,
+        "y": 2.728624915167091
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.613922488900611,
-        "y": 4.016816935203058
+        "x": 8.586449127249182,
+        "y": 0.7846260485673593
       },
       "prevControl": {
-        "x": 1.668488056411324,
-        "y": 4.007637960130347
+        "x": 7.099172885934929,
+        "y": 0.38645760601079004
       },
       "nextControl": null,
       "isLocked": false,
@@ -35,26 +35,20 @@
       "rotateFast": false
     }
   ],
-  "constraintZones": [],
-  "eventMarkers": [
+  "constraintZones": [
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.05,
-      "command": {
-        "type": "deadline",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Pickup"
-              }
-            }
-          ]
-        }
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 0.7,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
       }
     }
   ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -69,7 +63,7 @@
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": -61.26385756738269,
+    "rotation": -60.2551187030578,
     "velocity": 0
   },
   "useDefaultConstraints": true

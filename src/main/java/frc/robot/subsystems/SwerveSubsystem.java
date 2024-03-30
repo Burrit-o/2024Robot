@@ -98,6 +98,10 @@ public class SwerveSubsystem extends SubsystemBase {
     private boolean updatingSet = false;
     private LEDs m_LEDs;
 
+    private boolean isUpdatingSet = false;
+    private boolean canSeeTagsSet = true;
+    private boolean elseSet = false;
+
     //private LimelightHelpers.LimelightResults results;
     private LimelightHelpers.PoseEstimate shootLimelightMeasurement;
     private LimelightHelpers.PoseEstimate tagsLimelightMeasurement;
@@ -336,12 +340,24 @@ public class SwerveSubsystem extends SubsystemBase {
             SmartDashboard.putBoolean("signalIsUpdating", signalIsUpdating);
             SmartDashboard.putBoolean("seesTags", shootLLPoseEstimate.tagCount > 0 || tagsLLPoseEstimate.tagCount > 0);
 
-        if(signalIsUpdating == true) {
-        }
-        else if((shootLLPoseEstimate.tagCount > 0 || tagsLLPoseEstimate.tagCount > 0)) {
-        }
-        else {
-        }
+        // if(signalIsUpdating && !isUpdatingSet) {
+        //     m_LEDs.signal(statusLED.STRIP2, ledMode.PURPLE);
+        //     isUpdatingSet = true;
+        //     canSeeTagsSet = false;
+        //     elseSet = false;
+        // }
+        // else if((shootLLPoseEstimate.tagCount > 0 || tagsLLPoseEstimate.tagCount > 0) && !canSeeTagsSet) {
+        //     m_LEDs.signal(statusLED.STRIP2, ledMode.ORANGE);
+        //     isUpdatingSet = false;
+        //     canSeeTagsSet = true;
+        //     elseSet = false;
+        // }  
+        // else if(!elseSet){
+        //     m_LEDs.signal(statusLED.STRIP2, ledMode.RED);
+        //     isUpdatingSet = false;
+        //     canSeeTagsSet = false;
+        //     elseSet = true;
+        // }
 
         /*
 
@@ -388,14 +404,14 @@ public class SwerveSubsystem extends SubsystemBase {
         //up: 0.713
 
         // This is not finished yet... :-)
-        if (isUpdating && !updatingSet) {
-            m_LEDs.signal(statusLED.STRIP3, ledMode.PURPLE);
-            updatingSet = true;
-        }
-        else if (!isUpdating && !updatingSet) {
-            m_LEDs.signal(statusLED.STRIP3, ledMode.ORANGE);
-            updatingSet = true;
-        }
+        // if (isUpdating && !isUpdatingSet) {
+        //     m_LEDs.signal(statusLED.STRIP3, ledMode.PURPLE);
+        //     isUpdatingSet = true;
+        // }
+        // else if (!isUpdating && !updatingSet) {
+        //     m_LEDs.signal(statusLED.STRIP3, ledMode.ORANGE);
+        //     updatingSet = true;
+        // }
     }
 
     public void stopModules() {

@@ -38,7 +38,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootMidPickup"
+            "name": "Shoot_MidPickup"
           }
         },
         {
